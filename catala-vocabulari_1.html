@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vocabulari català · 加泰罗尼亚语词汇</title>
+<style>
+  :root{
+    --paper:#FBFAF6;
+    --card:#FFFFFF;
+    --ink:#16171A;
+    --ink-soft:#6B6F76;
+    --grid:#CFD5DA;
+    --grid-soft:#E4E8EB;
+    --red:#C8392B;
+    --green:#2F7D52;
+    --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --han:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+    --emoji:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji","Twemoji Mozilla",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--paper);color:var(--ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;padding-bottom:96px;
+  }
+  .wrap{max-width:1220px;margin:0 auto;padding:0 24px}
+
+  /* capçalera */
+  header{padding:36px 0 0}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+  .title{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:10px 0 0}
+  .title h1{font-size:clamp(30px,5vw,44px);line-height:1;margin:0;font-weight:700;letter-spacing:-.03em}
+  .title .zh{font-family:var(--han);font-size:clamp(22px,4vw,32px);color:var(--red);font-weight:600}
+
+  nav{margin-top:26px;border-bottom:1px solid var(--grid);display:flex;gap:2px}
+  .tab{appearance:none;background:none;border:0;border-bottom:2px solid transparent;
+    font-family:var(--sans);font-size:14px;color:var(--ink-soft);padding:10px 14px;cursor:pointer;margin-bottom:-1px}
+  .tab .zh{font-family:var(--han);margin-left:7px;font-size:13px}
+  .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--red);font-weight:600}
+  .tab:disabled{opacity:.35;cursor:not-allowed}
+
+  /* filtre de temes */
+  .filters{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:18px 0 22px}
+  .chip{
+    appearance:none;cursor:pointer;border:1px solid var(--grid-soft);background:var(--card);
+    border-radius:100px;padding:7px 14px;font-family:var(--sans);font-size:13px;color:var(--ink-soft);
+    display:flex;align-items:center;gap:7px;transition:.15s;
+  }
+  .chip .zh{font-family:var(--han);font-size:12px;opacity:.8}
+  .chip .dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.55}
+  .chip:hover{border-color:var(--ink-soft);color:var(--ink)}
+  .chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:600}
+  .chip[aria-pressed="true"] .dot{opacity:1}
+  .spacer{flex:1;min-width:12px}
+  #newSet{
+    appearance:none;cursor:pointer;border:1px solid var(--ink);background:var(--card);color:var(--ink);
+    border-radius:2px;padding:9px 15px;font-family:var(--sans);font-size:13px;font-weight:600;
+    display:flex;align-items:center;gap:8px;transition:.15s;
+  }
+  #newSet .zh{font-family:var(--han);font-weight:400;font-size:12px;opacity:.7}
+  #newSet:hover{background:var(--ink);color:#fff}
+  #newSet svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round}
+
+  /* graella */
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--grid-soft);border:1px solid var(--grid-soft)}
+  @media(max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:540px){.grid{grid-template-columns:1fr}}
+
+  .card{
+    background:var(--card);padding:16px 16px 14px;position:relative;
+    display:flex;flex-direction:column;align-items:center;gap:9px;
+    opacity:0;transform:translateY(6px);animation:in .4s ease forwards;
+  }
+  @keyframes in{to{opacity:1;transform:none}}
+  .gen{position:absolute;top:10px;right:12px;font-family:var(--mono);font-size:10px;color:var(--grid);letter-spacing:.06em}
+  .theme{position:absolute;top:9px;left:12px;font-family:var(--han);font-size:11px;letter-spacing:.06em}
+  .plate{width:86px;height:86px;border-radius:16px;display:grid;place-items:center;margin-top:6px}
+  .plate span{font-family:var(--emoji);font-size:46px;line-height:1}
+  .hanzi{font-family:var(--han);font-size:27px;font-weight:600;line-height:1.1;letter-spacing:.04em;text-align:center}
+  .pinyin{font-family:var(--mono);font-size:12px;color:var(--ink-soft);letter-spacing:.06em;margin-top:-5px}
+
+  .answer{display:flex;align-items:center;gap:6px;width:100%;margin-top:4px}
+  .box{
+    position:relative;flex:1;height:48px;border:1px solid var(--grid);background-color:transparent;
+    background-image:
+      repeating-linear-gradient(to right,var(--grid) 0 5px,transparent 5px 11px),
+      repeating-linear-gradient(to bottom,var(--grid) 0 5px,transparent 5px 11px);
+    background-size:100% 1px,1px 100%;background-position:center,center;background-repeat:no-repeat;
+    transition:border-color .18s,background-color .18s;
+  }
+  .box input{width:100%;height:100%;border:0;background:transparent;font-family:var(--sans);
+    font-size:18px;text-align:center;color:var(--ink);letter-spacing:.02em}
+  .box input:focus{outline:none}
+  .box:focus-within{border-color:var(--red)}
+  .box.ok{border-color:var(--green);background-color:rgba(47,125,82,.06)}
+  .box.no{border-color:var(--red);background-color:rgba(200,57,43,.06)}
+  .box input.model{color:var(--grid);letter-spacing:.14em}
+
+  .mini{
+    appearance:none;border:1px solid var(--grid-soft);background:var(--card);border-radius:2px;
+    width:32px;height:32px;cursor:pointer;color:var(--ink-soft);display:grid;place-items:center;padding:0;transition:.15s;
+  }
+  .mini svg{width:15px;height:15px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .mini:hover:not(:disabled){border-color:var(--ink);color:var(--ink)}
+  .mini:disabled{opacity:.28;cursor:not-allowed}
+  .mini.check.ok{border-color:var(--green);color:var(--green)}
+  .mini.check.no{border-color:var(--red);color:var(--red)}
+
+  .sol{
+    min-height:17px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);
+    letter-spacing:.03em;opacity:0;transition:opacity .2s;text-align:center;
+  }
+  .sol.on{opacity:1}
+  .sol b{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink);letter-spacing:0}
+
+  /* barra inferior */
+  footer{position:fixed;left:0;right:0;bottom:0;background:var(--paper);border-top:1px solid var(--grid);z-index:5}
+  .bar{max-width:1220px;margin:0 auto;padding:13px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .score{font-family:var(--mono);font-size:15px;letter-spacing:.04em;margin-right:auto}
+  .score b{font-size:22px;font-weight:500}
+  .score .lab{color:var(--ink-soft);font-size:10px;letter-spacing:.12em;text-transform:uppercase;display:block}
+  button.act{appearance:none;border-radius:2px;cursor:pointer;padding:11px 18px;font-family:var(--sans);
+    font-size:14px;font-weight:600;line-height:1.2;display:flex;align-items:baseline;gap:8px;transition:.15s}
+  button.act .zh{font-family:var(--han);font-size:12px;font-weight:400;opacity:.75}
+  .primary{background:var(--red);color:#fff;border:1px solid var(--red)}
+  .primary:hover{background:#A82D21;border-color:#A82D21}
+  .ghost{background:transparent;color:var(--ink);border:1px solid var(--grid)}
+  .ghost:hover{border-color:var(--ink)}
+  .link{background:none;border:0;color:var(--ink-soft);font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+  .link:hover{color:var(--ink)}
+  button:focus-visible,input:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+  @media(prefers-reduced-motion:reduce){.card{animation:none;opacity:1;transform:none}*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">jiā tài luó ní yà yǔ · classe de català</div>
+    <div class="title"><h1>Vocabulari</h1><span class="zh">词汇</span></div>
+    <nav role="tablist">
+      <button class="tab" role="tab" aria-selected="true">Vocabulari<span class="zh">词汇</span></button>
+      <button class="tab" role="tab" aria-selected="false" disabled>Números<span class="zh">数字</span></button>
+      <button class="tab" role="tab" aria-selected="false" disabled>Frases<span class="zh">句子</span></button>
+    </nav>
+    <div class="filters" id="filters"></div>
+  </header>
+  <main><div class="grid" id="grid"></div></main>
+</div>
+
+<footer>
+  <div class="bar">
+    <div class="score"><span class="lab">Encerts 答对</span><b id="hits">0</b> / 16</div>
+    <button class="link" id="reset">Esborra-ho tot 清空</button>
+    <button class="act ghost" id="showAll">Mostra-ho tot<span class="zh">显示答案</span></button>
+    <button class="act primary" id="check">Corregeix-ho tot<span class="zh">全部检查</span></button>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   BANC DE PARAULES
+   Formes normatives, amb article i gènere a l'estil del DIEC.
+   Per afegir-ne: M('mot','article','gènere','emoji','汉字','pinyin')
+   ========================================================= */
+const M = (w,a,g,e,zh,py) => ({w,a,g,e,zh,py});
+
+const THEMES = [
+  { id:'menjar', ca:'Menjar i beguda', zh:'食物和饮料', color:'#E0932F', mots:[
+    M('pa','el','m','🍞','面包','miàn bāo'),
+    M('llet','la','f','🥛','牛奶','niú nǎi'),
+    M('aigua','l’','f','💧','水','shuǐ'),
+    M('poma','la','f','🍎','苹果','píng guǒ'),
+    M('plàtan','el','m','🍌','香蕉','xiāng jiāo'),
+    M('taronja','la','f','🍊','橙子','chéng zi'),
+    M('raïm','el','m','🍇','葡萄','pú tao'),
+    M('maduixa','la','f','🍓','草莓','cǎo méi'),
+    M('pera','la','f','🍐','梨','lí'),
+    M('síndria','la','f','🍉','西瓜','xī guā'),
+    M('cirera','la','f','🍒','樱桃','yīng táo'),
+    M('préssec','el','m','🍑','桃子','táo zi'),
+    M('llimona','la','f','🍋','柠檬','níng méng'),
+    M('meló','el','m','🍈','甜瓜','tián guā'),
+    M('tomàquet','el','m','🍅','番茄','fān qié'),
+    M('pastanaga','la','f','🥕','胡萝卜','hú luó bo'),
+    M('patata','la','f','🥔','土豆','tǔ dòu'),
+    M('blat de moro','el','m','🌽','玉米','yù mǐ'),
+    M('enciam','l’','m','🥬','生菜','shēng cài'),
+    M('bròquil','el','m','🥦','西兰花','xī lán huā'),
+    M('formatge','el','m','🧀','奶酪','nǎi lào'),
+    M('ou','l’','m','🥚','鸡蛋','jī dàn'),
+    M('pollastre','el','m','🍗','鸡肉','jī ròu'),
+    M('arròs','l’','m','🍚','米饭','mǐ fàn'),
+    M('sopa','la','f','🍲','汤','tāng'),
+    M('pastís','el','m','🍰','蛋糕','dàn gāo'),
+    M('galeta','la','f','🍪','饼干','bǐng gān'),
+    M('xocolata','la','f','🍫','巧克力','qiǎo kè lì'),
+    M('gelat','el','m','🍦','冰淇淋','bīng qí lín'),
+    M('mel','la','f','🍯','蜂蜜','fēng mì'),
+    M('suc','el','m','🧃','果汁','guǒ zhī'),
+    M('te','el','m','🍵','茶','chá'),
+    M('cafè','el','m','☕','咖啡','kā fēi')
+  ]},
+  { id:'animals', ca:'Animals', zh:'动物', color:'#3F7D52', mots:[
+    M('gos','el','m','🐶','狗','gǒu'),
+    M('gat','el','m','🐱','猫','māo'),
+    M('peix','el','m','🐟','鱼','yú'),
+    M('ocell','l’','m','🐦','鸟','niǎo'),
+    M('cavall','el','m','🐴','马','mǎ'),
+    M('vaca','la','f','🐮','奶牛','nǎi niú'),
+    M('porc','el','m','🐷','猪','zhū'),
+    M('ovella','l’','f','🐑','绵羊','mián yáng'),
+    M('gallina','la','f','🐔','母鸡','mǔ jī'),
+    M('pollet','el','m','🐤','小鸡','xiǎo jī'),
+    M('ànec','l’','m','🦆','鸭子','yā zi'),
+    M('conill','el','m','🐰','兔子','tù zi'),
+    M('ratolí','el','m','🐭','老鼠','lǎo shǔ'),
+    M('elefant','l’','m','🐘','大象','dà xiàng'),
+    M('lleó','el','m','🦁','狮子','shī zi'),
+    M('tigre','el','m','🐯','老虎','lǎo hǔ'),
+    M('girafa','la','f','🦒','长颈鹿','cháng jǐng lù'),
+    M('mico','el','m','🐵','猴子','hóu zi'),
+    M('ós','l’','m','🐻','熊','xióng'),
+    M('panda','el','m','🐼','熊猫','xióng māo'),
+    M('llop','el','m','🐺','狼','láng'),
+    M('guineu','la','f','🦊','狐狸','hú li'),
+    M('granota','la','f','🐸','青蛙','qīng wā'),
+    M('serp','la','f','🐍','蛇','shé'),
+    M('papallona','la','f','🦋','蝴蝶','hú dié'),
+    M('abella','l’','f','🐝','蜜蜂','mì fēng'),
+    M('formiga','la','f','🐜','蚂蚁','mǎ yǐ'),
+    M('aranya','l’','f','🕷️','蜘蛛','zhī zhū'),
+    M('cargol','el','m','🐌','蜗牛','wō niú'),
+    M('tortuga','la','f','🐢','乌龟','wū guī'),
+    M('cranc','el','m','🦀','螃蟹','páng xiè'),
+    M('dofí','el','m','🐬','海豚','hǎi tún'),
+    M('balena','la','f','🐳','鲸鱼','jīng yú'),
+    M('tauró','el','m','🦈','鲨鱼','shā yú'),
+    M('cocodril','el','m','🐊','鳄鱼','è yú'),
+    M('pingüí','el','m','🐧','企鹅','qǐ é')
+  ]},
+  { id:'escola', ca:'L’escola', zh:'学校', color:'#C8392B', mots:[
+    M('escola','l’','f','🏫','学校','xué xiào'),
+    M('llibre','el','m','📚','书','shū'),
+    M('llapis','el','m','✏️','铅笔','qiān bǐ'),
+    M('bolígraf','el','m','🖊️','圆珠笔','yuán zhū bǐ'),
+    M('cera','la','f','🖍️','蜡笔','là bǐ'),
+    M('pinzell','el','m','🖌️','画笔','huà bǐ'),
+    M('colors','els','m pl','🎨','颜色','yán sè'),
+    M('motxilla','la','f','🎒','书包','shū bāo'),
+    M('tisores','les','f pl','✂️','剪刀','jiǎn dāo'),
+    M('regle','el','m','📏','尺子','chǐ zi'),
+    M('paper','el','m','📄','纸','zhǐ'),
+    M('carpeta','la','f','📁','文件夹','wén jiàn jiā'),
+    M('quadern','el','m','📓','本子','běn zi'),
+    M('clip','el','m','📎','回形针','huí xíng zhēn'),
+    M('mapa','el','m','🗺️','地图','dì tú'),
+    M('rellotge','el','m','⏰','钟','zhōng'),
+    M('ordinador','l’','m','💻','电脑','diàn nǎo'),
+    M('timbre','el','m','🔔','铃','líng'),
+    M('pilota','la','f','⚽','球','qiú'),
+    M('música','la','f','🎵','音乐','yīn yuè'),
+    M('examen','l’','m','📝','考试','kǎo shì'),
+    M('mestre','el','m','🧑‍🏫','老师','lǎo shī'),
+    M('estudiant','l’','m/f','🧑‍🎓','学生','xué sheng'),
+    M('cadira','la','f','🪑','椅子','yǐ zi')
+  ]},
+  { id:'cos', ca:'El cos i la família', zh:'身体和家人', color:'#B0517A', mots:[
+    M('ull','l’','m','👁️','眼睛','yǎn jing'),
+    M('orella','l’','f','👂','耳朵','ěr duo'),
+    M('nas','el','m','👃','鼻子','bí zi'),
+    M('boca','la','f','👄','嘴','zuǐ'),
+    M('dent','la','f','🦷','牙齿','yá chǐ'),
+    M('llengua','la','f','👅','舌头','shé tou'),
+    M('cara','la','f','🙂','脸','liǎn'),
+    M('mà','la','f','✋','手','shǒu'),
+    M('dit','el','m','👆','手指','shǒu zhǐ'),
+    M('braç','el','m','💪','胳膊','gē bo'),
+    M('cama','la','f','🦵','腿','tuǐ'),
+    M('peu','el','m','🦶','脚','jiǎo'),
+    M('cor','el','m','❤️','心','xīn'),
+    M('cervell','el','m','🧠','大脑','dà nǎo'),
+    M('sang','la','f','🩸','血','xuè'),
+    M('nen','el','m','👦','男孩','nán hái'),
+    M('nena','la','f','👧','女孩','nǚ hái'),
+    M('bebè','el','m','👶','婴儿','yīng ér'),
+    M('mare','la','f','👩','妈妈','mā ma'),
+    M('pare','el','m','👨','爸爸','bà ba'),
+    M('avi','l’','m','👴','爷爷','yé ye'),
+    M('àvia','l’','f','👵','奶奶','nǎi nai'),
+    M('família','la','f','👨‍👩‍👧‍👦','家庭','jiā tíng'),
+    M('amic','l’','m','🧑‍🤝‍🧑','朋友','péng you')
+  ]},
+  { id:'casa', ca:'La casa', zh:'家里', color:'#4A6FA5', mots:[
+    M('casa','la','f','🏠','房子','fáng zi'),
+    M('porta','la','f','🚪','门','mén'),
+    M('finestra','la','f','🪟','窗户','chuāng hu'),
+    M('llit','el','m','🛏️','床','chuáng'),
+    M('sofà','el','m','🛋️','沙发','shā fā'),
+    M('escala','l’','f','🪜','梯子','tī zi'),
+    M('banyera','la','f','🛁','浴缸','yù gāng'),
+    M('dutxa','la','f','🚿','淋浴','lín yù'),
+    M('vàter','el','m','🚽','马桶','mǎ tǒng'),
+    M('sabó','el','m','🧼','肥皂','féi zào'),
+    M('raspall','el','m','🪥','牙刷','yá shuā'),
+    M('mirall','el','m','🪞','镜子','jìng zi'),
+    M('escombra','l’','f','🧹','扫帚','sào zhou'),
+    M('got','el','m','🥤','杯子','bēi zi'),
+    M('plat','el','m','🍽️','盘子','pán zi'),
+    M('cullera','la','f','🥄','勺子','sháo zi'),
+    M('forquilla','la','f','🍴','叉子','chā zi'),
+    M('ganivet','el','m','🔪','刀','dāo'),
+    M('paella','la','f','🍳','平底锅','píng dǐ guō'),
+    M('clau','la','f','🔑','钥匙','yào shi'),
+    M('bombeta','la','f','💡','灯泡','dēng pào'),
+    M('espelma','l’','f','🕯️','蜡烛','là zhú'),
+    M('televisió','la','f','📺','电视','diàn shì'),
+    M('telèfon','el','m','📱','手机','shǒu jī'),
+    M('caixa','la','f','📦','箱子','xiāng zi'),
+    M('cistella','la','f','🧺','篮子','lán zi'),
+    M('planta','la','f','🪴','植物','zhí wù')
+  ]},
+  { id:'transport', ca:'El transport', zh:'交通', color:'#2E7D8A', mots:[
+    M('cotxe','el','m','🚗','汽车','qì chē'),
+    M('taxi','el','m','🚕','出租车','chū zū chē'),
+    M('autobús','l’','m','🚌','公共汽车','gōng gòng qì chē'),
+    M('camió','el','m','🚚','卡车','kǎ chē'),
+    M('tractor','el','m','🚜','拖拉机','tuō lā jī'),
+    M('ambulància','l’','f','🚑','救护车','jiù hù chē'),
+    M('moto','la','f','🏍️','摩托车','mó tuō chē'),
+    M('bicicleta','la','f','🚲','自行车','zì xíng chē'),
+    M('patinet','el','m','🛴','滑板车','huá bǎn chē'),
+    M('monopatí','el','m','🛹','滑板','huá bǎn'),
+    M('tren','el','m','🚆','火车','huǒ chē'),
+    M('metro','el','m','🚇','地铁','dì tiě'),
+    M('tramvia','el','m','🚊','电车','diàn chē'),
+    M('avió','l’','m','✈️','飞机','fēi jī'),
+    M('helicòpter','l’','m','🚁','直升机','zhí shēng jī'),
+    M('coet','el','m','🚀','火箭','huǒ jiàn'),
+    M('vaixell','el','m','🚢','轮船','lún chuán'),
+    M('veler','el','m','⛵','帆船','fān chuán'),
+    M('àncora','l’','f','⚓','锚','máo'),
+    M('semàfor','el','m','🚦','红绿灯','hóng lǜ dēng'),
+    M('pont','el','m','🌉','桥','qiáo'),
+    M('globus','el','m','🎈','气球','qì qiú')
+  ]},
+  { id:'natura', ca:'La natura', zh:'大自然', color:'#6E8B3D', mots:[
+    M('sol','el','m','☀️','太阳','tài yáng'),
+    M('lluna','la','f','🌙','月亮','yuè liàng'),
+    M('estrella','l’','f','⭐','星星','xīng xing'),
+    M('núvol','el','m','☁️','云','yún'),
+    M('pluja','la','f','🌧️','雨','yǔ'),
+    M('tempesta','la','f','⛈️','暴风雨','bào fēng yǔ'),
+    M('llamp','el','m','⚡','闪电','shǎn diàn'),
+    M('neu','la','f','❄️','雪','xuě'),
+    M('gel','el','m','🧊','冰','bīng'),
+    M('vent','el','m','💨','风','fēng'),
+    M('boira','la','f','🌫️','雾','wù'),
+    M('arc de Sant Martí','l’','m','🌈','彩虹','cǎi hóng'),
+    M('arbre','l’','m','🌳','树','shù'),
+    M('bosc','el','m','🌲','森林','sēn lín'),
+    M('fulla','la','f','🍃','叶子','yè zi'),
+    M('herba','l’','f','🌿','草','cǎo'),
+    M('flor','la','f','🌸','花','huā'),
+    M('rosa','la','f','🌹','玫瑰','méi gui'),
+    M('tulipa','la','f','🌷','郁金香','yù jīn xiāng'),
+    M('gira-sol','el','m','🌻','向日葵','xiàng rì kuí'),
+    M('cactus','el','m','🌵','仙人掌','xiān rén zhǎng'),
+    M('fusta','la','f','🪵','木头','mù tou'),
+    M('pedra','la','f','🪨','石头','shí tou'),
+    M('muntanya','la','f','⛰️','山','shān'),
+    M('volcà','el','m','🌋','火山','huǒ shān'),
+    M('desert','el','m','🏜️','沙漠','shā mò'),
+    M('mar','el','m','🌊','海','hǎi'),
+    M('platja','la','f','🏖️','海滩','hǎi tān'),
+    M('illa','l’','f','🏝️','岛','dǎo'),
+    M('foc','el','m','🔥','火','huǒ'),
+    M('Terra','la','f','🌍','地球','dì qiú')
+  ]}
+];
+
+const ROUND = 16;
+const byId = Object.fromEntries(THEMES.map(t => [t.id, t]));
+let filter = 'tots';
+let last = new Set();
+
+/* ---------- filtres ---------- */
+const filters = document.getElementById('filters');
+function mkChip(id, ca, zh, color){
+  const b = document.createElement('button');
+  b.className = 'chip'; b.dataset.id = id;
+  b.setAttribute('aria-pressed', String(id === filter));
+  b.innerHTML = (color ? `<span class="dot" style="color:${color}"></span>` : '') +
+                `${ca}<span class="zh">${zh}</span>`;
+  b.onclick = () => {
+    filter = id;
+    filters.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.id === id)));
+    last = new Set();
+    newRound();
+  };
+  return b;
+}
+filters.appendChild(mkChip('tots','Tots','全部',''));
+THEMES.forEach(t => filters.appendChild(mkChip(t.id, t.ca, t.zh, t.color)));
+const sp = document.createElement('span'); sp.className = 'spacer'; filters.appendChild(sp);
+const nb = document.createElement('button');
+nb.id = 'newSet';
+nb.innerHTML = `<svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2 6"/><path d="M20 5v6h-6"/></svg>16 paraules noves<span class="zh">换一批</span>`;
+nb.onclick = () => newRound();
+filters.appendChild(nb);
+
+/* ---------- ronda ---------- */
+const grid = document.getElementById('grid');
+
+function pool(){
+  return filter === 'tots'
+    ? THEMES.flatMap(t => t.mots.map(m => Object.assign({}, m, {t})))
+    : byId[filter].mots.map(m => Object.assign({}, m, {t: byId[filter]}));
+}
+
+function pick(){
+  const all = pool();
+  const key = m => m.t.id + '/' + m.w;
+  const fresh = all.filter(m => !last.has(key(m)));
+  const src = fresh.length >= ROUND ? fresh : all;
+  const s = src.slice();
+  for(let i = s.length - 1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); const tmp = s[i]; s[i] = s[j]; s[j] = tmp; }
+  const out = s.slice(0, ROUND);
+  last = new Set(out.map(key));
+  return out;
+}
+
+const full = m => m.a.endsWith('’') ? m.a + m.w : m.a + ' ' + m.w;
+
+function newRound(){
+  grid.innerHTML = '';
+  pick().forEach((m, i) => {
+    const c = document.createElement('article');
+    c.className = 'card';
+    c.style.animationDelay = (i * 20) + 'ms';
+    c.dataset.w = m.w;
+    c.dataset.full = full(m);
+    c.innerHTML =
+      (filter === 'tots' ? `<span class="theme" style="color:${m.t.color}">${m.t.zh}</span>` : '') +
+      `<span class="gen">n. ${m.g}</span>
+      <div class="plate" style="background:${m.t.color}14"><span>${m.e}</span></div>
+      <div class="hanzi">${m.zh}</div>
+      <div class="pinyin">${m.py}</div>
+      <div class="answer">
+        <div class="box">
+          <input type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
+                 aria-label="Escriu en català: ${m.zh} ${m.py}">
+        </div>
+        <button class="mini check" title="Corregeix aquesta 检查这个">
+          <svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 7"/></svg>
+        </button>
+        <button class="mini say" disabled title="Escolta 听">
+          <svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9a4 4 0 0 1 0 6"/></svg>
+        </button>
+      </div>
+      <div class="sol"><b></b> · n. ${m.g}</div>`;
+    grid.appendChild(c);
+  });
+  bind();
+  document.getElementById('hits').textContent = '0';
+}
+
+/* ---------- lògica ---------- */
+const clean = s => s.toLowerCase().trim()
+  .replace(/[\u2019']/g,' ')
+  .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+  .replace(/[·.,!?-]/g,' ')
+  .replace(/\s+/g,' ')
+  .replace(/^(el|la|els|les|un|una|uns|unes|l)\s+/,'')
+  .trim();
+
+const isRight = (v, w) => v.trim() !== '' && clean(v) === clean(w);
+
+function paint(card, state){
+  const box = card.querySelector('.box'), btn = card.querySelector('.check');
+  box.classList.remove('ok','no'); btn.classList.remove('ok','no');
+  if(state){ box.classList.add(state); btn.classList.add(state); }
+}
+function solve(card, on){
+  const sol = card.querySelector('.sol');
+  sol.querySelector('b').textContent = card.dataset.full;
+  sol.classList.toggle('on', on);
+  card.querySelector('.say').disabled = !on;
+}
+function score(){
+  const n = Array.from(grid.querySelectorAll('.card')).filter(c => {
+    const i = c.querySelector('input');
+    return !i.classList.contains('model') && isRight(i.value, c.dataset.w);
+  }).length;
+  document.getElementById('hits').textContent = n;
+}
+function checkOne(card){
+  const inp = card.querySelector('input');
+  if(inp.value.trim() === ''){ inp.focus(); return false; }
+  inp.classList.remove('model');
+  const ok = isRight(inp.value, card.dataset.w);
+  paint(card, ok ? 'ok' : 'no');
+  if(ok) solve(card, true);
+  score();
+  return ok;
+}
+
+function bind(){
+  const cards = Array.from(grid.querySelectorAll('.card'));
+  const inputs = cards.map(c => c.querySelector('input'));
+  cards.forEach((c, i) => {
+    const inp = inputs[i];
+    c.querySelector('.check').onclick = () => checkOne(c);
+    c.querySelector('.say').onclick = () => {
+      if(!('speechSynthesis' in window)) return;
+      const u = new SpeechSynthesisUtterance(c.dataset.full.replace('’', "'"));
+      u.lang = 'ca-ES'; u.rate = .8;
+      speechSynthesis.cancel(); speechSynthesis.speak(u);
+    };
+    inp.addEventListener('input', () => { inp.classList.remove('model'); paint(c, null); });
+    inp.addEventListener('keydown', e => {
+      if(e.key !== 'Enter') return;
+      e.preventDefault();
+      checkOne(c);
+      const next = inputs.slice(i + 1).find(x => x.value.trim() === '') || inputs[(i + 1) % inputs.length];
+      next.focus();
+    });
+  });
+}
+
+document.getElementById('check').onclick = () => {
+  grid.querySelectorAll('.card').forEach(c => {
+    const inp = c.querySelector('input');
+    inp.classList.remove('model');
+    if(inp.value.trim() === ''){ paint(c, null); return; }
+    const ok = isRight(inp.value, c.dataset.w);
+    paint(c, ok ? 'ok' : 'no');
+    if(ok) solve(c, true);
+  });
+  score();
+};
+
+document.getElementById('showAll').onclick = () => {
+  grid.querySelectorAll('.card').forEach(c => {
+    const inp = c.querySelector('input');
+    const ok = isRight(inp.value, c.dataset.w);
+    if(ok){ paint(c, 'ok'); }
+    else { inp.value = c.dataset.w; inp.classList.add('model'); paint(c, null); }
+    solve(c, true);
+  });
+  score();
+};
+
+document.getElementById('reset').onclick = () => {
+  grid.querySelectorAll('.card').forEach(c => {
+    const inp = c.querySelector('input');
+    inp.value = ''; inp.classList.remove('model');
+    paint(c, null); solve(c, false);
+  });
+  document.getElementById('hits').textContent = '0';
+  grid.querySelector('input').focus();
+};
+
+newRound();
+</script>
+</body>
+</html>
