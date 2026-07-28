@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Del xinès al català · 30 frases</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#E2E6DC;
+    --card:#F7F8F3;
+    --ink:#191C17;
+    --muted:#6E7568;
+    --line:rgba(25,28,23,.14);
+    --seal:#A8352A;
+    --sans:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+    --han:"Noto Serif SC","Songti SC","SimSun",serif;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.5;
+    padding:0 20px 96px;
+  }
+  .wrap{max-width:720px;margin:0 auto}
+
+  /* ---------- capçalera ---------- */
+  header{padding:56px 0 34px}
+  .eyebrow{
+    font-family:var(--mono);font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--muted);
+    display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  }
+  h1{
+    font-family:var(--han);font-weight:700;
+    font-size:clamp(34px,7.2vw,52px);line-height:1.05;
+    letter-spacing:-.01em;margin:14px 0 0;
+  }
+  .lede{max-width:46ch;margin:16px 0 0;font-size:15px;color:var(--muted)}
+  #counter{color:var(--seal)}
+
+  /* ---------- targetes ---------- */
+  .card{
+    background:var(--card);
+    border:none;
+    border-top:2px solid var(--ink);
+    padding:30px 22px 28px;
+    position:relative;
+  }
+  .card:last-of-type{border-bottom:2px solid var(--ink)}
+  .card__top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px}
+  .num{
+    font-family:var(--mono);font-size:12px;font-weight:500;
+    color:var(--seal);flex:none;
+  }
+  .speak{
+    flex:none;background:none;border:1px solid var(--line);
+    width:38px;height:38px;border-radius:50%;cursor:pointer;
+    display:grid;place-items:center;color:var(--ink);
+    transition:background .18s ease,border-color .18s ease,color .18s ease;
+  }
+  .speak svg{width:17px;height:17px;display:block}
+  .speak:hover{background:var(--seal);border-color:var(--seal);color:#fff}
+  .speak[data-playing="1"]{background:var(--seal);border-color:var(--seal);color:#fff}
+
+  .zh-line{
+    font-family:var(--han);font-weight:500;
+    font-size:clamp(21px,4.4vw,27px);line-height:1.65;
+    letter-spacing:.02em;margin:0;
+  }
+  .py{
+    font-family:var(--mono);font-size:12.5px;line-height:1.6;
+    color:var(--muted);margin:10px 0 0;
+  }
+
+  textarea{
+    width:100%;margin-top:20px;min-height:82px;resize:vertical;
+    font-family:var(--sans);font-size:16px;line-height:1.55;color:var(--ink);
+    background:transparent;border:1px solid var(--line);border-left:2px solid var(--ink);
+    padding:12px 13px;
+    transition:border-color .18s ease,background .18s ease;
+  }
+  textarea::placeholder{color:#A8AEA1}
+  textarea:focus{outline:none;border-color:var(--ink);border-left-color:var(--seal);background:#fff}
+
+  .reveal-btn{
+    margin-top:12px;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;
+    text-transform:uppercase;background:none;border:1px solid var(--ink);
+    color:var(--ink);padding:9px 15px;cursor:pointer;
+    transition:background .18s ease,color .18s ease;
+  }
+  .reveal-btn:hover{background:var(--ink);color:var(--card)}
+  .card.open .reveal-btn:not(.hide-btn){display:none}
+  .hide-btn{margin-top:20px}
+
+  /* ---------- resposta ---------- */
+  .answer{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s ease}
+  .card.open .answer{grid-template-rows:1fr}
+  .answer__inner{overflow:hidden}
+  .answer__body{
+    margin-top:22px;padding-top:20px;border-top:1px solid var(--ink);
+    position:relative;
+  }
+  .label{
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 8px;
+  }
+  .ca{
+    font-size:clamp(17px,3.4vw,20px);line-height:1.45;font-weight:500;
+    margin:0;
+  }
+  .note{font-size:13.5px;color:var(--muted);margin:14px 0 0}
+  .vocab{margin:16px 0 0;padding:0;list-style:none;border-top:1px solid var(--line)}
+  .vocab li{
+    display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;
+    padding:7px 0;border-bottom:1px solid var(--line);font-size:14px;
+  }
+  .vocab .v-zh{font-family:var(--han);font-size:16px;min-width:80px}
+  .vocab .v-py{font-family:var(--mono);font-size:11.5px;color:var(--muted);min-width:110px}
+  .vocab .v-ca{flex:1}
+
+  footer{
+    margin-top:40px;padding-top:20px;border-top:1px solid var(--ink);
+    font-family:var(--mono);font-size:11px;line-height:1.9;color:var(--muted);
+    display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  }
+  .warn{
+    margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--seal);
+    display:none;
+  }
+  .warn.on{display:block}
+
+  button:focus-visible,textarea:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important}
+  }
+  @media (max-width:520px){
+    .card{padding:26px 16px 24px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">
+      <span>Traducció · 30 frases</span>
+      <span id="counter">0 / 30 comparades</span>
+    </div>
+    <h1>Del xinès al català</h1>
+    <p class="lede">Llegeix la frase, escolta-la, escriu-la en català i després compara-la amb la traducció model.</p>
+    <p class="warn" id="warn">El navegador no té cap veu xinesa instal·lada. Prova-ho amb Chrome o Edge.</p>
+  </header>
+
+  <main id="list"></main>
+
+  <footer>
+    <span>Pràctica de traducció · català per a estudiants xinesos</span>
+    <span>30 frases · ús quotidià i batxillerat</span>
+  </footer>
+
+</div>
+
+<script>
+const DATA = [
+ {zh:"每天早上我七点起床，然后去学校。",
+  py:"Měitiān zǎoshang wǒ qī diǎn qǐchuáng, ránhòu qù xuéxiào.",
+  ca:"Cada matí em llevo a les set i després vaig a l'escola.",
+  focus:"Present · verbs pronominals",
+  note:"«Llevar-se» és pronominal: em llevo, et lleves, es lleva. L'hora porta article: a les set.",
+  vocab:[["起床","qǐchuáng","llevar-se"],["然后","ránhòu","després"],["学校","xuéxiào","l'escola"]]},
+
+ {zh:"昨天我没去上课，因为我生病了。",
+  py:"Zuótiān wǒ méi qù shàngkè, yīnwèi wǒ shēngbìng le.",
+  ca:"Ahir no vaig anar a classe perquè estava malalt.",
+  focus:"Passat perifràstic · imperfet",
+  note:"El fet puntual va en passat (vaig anar); l'estat que durava, en imperfet (estava malalt). «Perquè» s'escriu junt quan explica la causa.",
+  vocab:[["上课","shàngkè","anar a classe"],["因为","yīnwèi","perquè"],["生病","shēngbìng","posar-se malalt"]]},
+
+ {zh:"我已经做完今天的作业了。",
+  py:"Wǒ yǐjīng zuòwán jīntiān de zuòyè le.",
+  ca:"Ja he acabat els deures d'avui.",
+  focus:"Pretèrit perfet",
+  note:"Per a accions d'avui fem servir he + participi. Amb «ja» el perfet és gairebé obligatori.",
+  vocab:[["已经","yǐjīng","ja"],["作业","zuòyè","els deures"],["做完","zuòwán","acabar (de fer)"]]},
+
+ {zh:"如果明天下雨，我们就不去海边了。",
+  py:"Rúguǒ míngtiān xià yǔ, wǒmen jiù bù qù hǎibiān le.",
+  ca:"Si demà plou, no anirem a la platja.",
+  focus:"Condició real · futur",
+  note:"En català, després de «si» de condició real hi va el present, mai el futur: si plou → no anirem.",
+  vocab:[["如果","rúguǒ","si"],["下雨","xià yǔ","ploure"],["海边","hǎibiān","la platja"]]},
+
+ {zh:"我想买一本新词典，但是太贵了。",
+  py:"Wǒ xiǎng mǎi yì běn xīn cídiǎn, dànshì tài guì le.",
+  ca:"Vull comprar un diccionari nou, però és massa car.",
+  focus:"Adversativa · adjectiu posposat",
+  note:"L'adjectiu va darrere del nom: un diccionari nou. «Massa» ja indica excés; no cal afegir-hi res més.",
+  vocab:[["词典","cídiǎn","el diccionari"],["但是","dànshì","però"],["贵","guì","car"]]},
+
+ {zh:"你能帮我一下吗？这个练习我不明白。",
+  py:"Nǐ néng bāng wǒ yíxià ma? Zhège liànxí wǒ bù míngbai.",
+  ca:"Em pots ajudar un moment? No entenc aquest exercici.",
+  focus:"Pronom feble «em» · demostratius",
+  note:"El pronom va davant del verb conjugat: em pots ajudar. «Aquest» per al que tens a prop, «aquell» per al que és lluny.",
+  vocab:[["帮","bāng","ajudar"],["一下","yíxià","un moment"],["练习","liànxí","l'exercici"]]},
+
+ {zh:"我姐姐在巴塞罗那大学学医学。",
+  py:"Wǒ jiějie zài Bāsāiluónà Dàxué xué yīxué.",
+  ca:"La meva germana gran estudia medicina a la Universitat de Barcelona.",
+  focus:"Possessius · article",
+  note:"El possessiu porta article davant: la meva germana. Amb noms de matèries no hi posem article: estudia medicina.",
+  vocab:[["姐姐","jiějie","la germana gran"],["大学","dàxué","la universitat"],["医学","yīxué","la medicina"]]},
+
+ {zh:"上个周末我和朋友们去看了一部电影。",
+  py:"Shàng ge zhōumò wǒ hé péngyoumen qù kànle yí bù diànyǐng.",
+  ca:"El cap de setmana passat vaig anar al cinema amb els amics.",
+  focus:"Passat perifràstic · contracció «al»",
+  note:"Vaig, vas, va, vam, vau, van + infinitiu. «a + el» sempre es contrau: al cinema.",
+  vocab:[["周末","zhōumò","el cap de setmana"],["朋友","péngyou","l'amic"],["电影","diànyǐng","la pel·lícula"]]},
+
+ {zh:"老师说下个星期我们要考试。",
+  py:"Lǎoshī shuō xià ge xīngqī wǒmen yào kǎoshì.",
+  ca:"El professor diu que la setmana que ve tindrem un examen.",
+  focus:"Subordinada amb «que» · futur",
+  note:"Darrere de «diu» hi va la conjunció «que», que no es pot ometre mai. Futur de tenir: tindré, tindràs, tindrà, tindrem.",
+  vocab:[["老师","lǎoshī","el professor"],["下个星期","xià ge xīngqī","la setmana que ve"],["考试","kǎoshì","l'examen"]]},
+
+ {zh:"我以前不喜欢加泰罗尼亚语，现在很喜欢。",
+  py:"Wǒ yǐqián bù xǐhuan Jiātàiluóníyàyǔ, xiànzài hěn xǐhuan.",
+  ca:"Abans no m'agradava el català, ara m'agrada molt.",
+  focus:"Imperfet · verb «agradar»",
+  note:"Amb «agradar» la persona porta pronom i la cosa és el subjecte: m'agrada el català. L'hàbit del passat va en imperfet: agradava.",
+  vocab:[["以前","yǐqián","abans"],["喜欢","xǐhuan","agradar"],["现在","xiànzài","ara"]]},
+
+ {zh:"请把窗户关上，有点儿冷。",
+  py:"Qǐng bǎ chuānghu guānshàng, yǒudiǎnr lěng.",
+  ca:"Tanca la finestra, si us plau, que fa una mica de fred.",
+  focus:"Imperatiu · «fer» meteorològic",
+  note:"Imperatiu de tancar: tanca (tu), tanqueu (vosaltres). El temps es diu amb «fer»: fa fred, fa calor, fa sol.",
+  vocab:[["窗户","chuānghu","la finestra"],["关上","guānshàng","tancar"],["冷","lěng","fred"]]},
+
+ {zh:"我住的地方离学校不远，走路十分钟。",
+  py:"Wǒ zhù de dìfang lí xuéxiào bù yuǎn, zǒulù shí fēnzhōng.",
+  ca:"Visc en un lloc que no és lluny de l'escola, a deu minuts a peu.",
+  focus:"Relativa amb «que» · locucions",
+  note:"«Lluny de», «a prop de» demanen la preposició «de». Els mitjans es diuen així: a peu, en metro, en bici.",
+  vocab:[["地方","dìfang","el lloc"],["远","yuǎn","lluny"],["走路","zǒulù","anar a peu"]]},
+
+ {zh:"昨天晚上你给我打电话的时候，我在洗澡。",
+  py:"Zuótiān wǎnshang nǐ gěi wǒ dǎ diànhuà de shíhou, wǒ zài xǐzǎo.",
+  ca:"Quan em vas trucar ahir al vespre, m'estava dutxant.",
+  focus:"Passat + imperfet · acció en curs",
+  note:"L'acció que interromp va en passat (vas trucar) i la que durava, en imperfet (estava dutxant). Amb el pronom davant: m'estava dutxant.",
+  vocab:[["晚上","wǎnshang","el vespre"],["打电话","dǎ diànhuà","trucar"],["洗澡","xǐzǎo","dutxar-se"]]},
+
+ {zh:"我还没决定以后要学什么。",
+  py:"Wǒ hái méi juédìng yǐhòu yào xué shénme.",
+  ca:"Encara no he decidit què vull estudiar més endavant.",
+  focus:"Perfet · interrogativa indirecta",
+  note:"Sense signe d'interrogació perquè la pregunta va dins la frase. «Encara no» sempre amb el perfet: encara no he decidit.",
+  vocab:[["还没","hái méi","encara no"],["决定","juédìng","decidir"],["以后","yǐhòu","més endavant"]]},
+
+ {zh:"这家餐厅的菜很好吃，而且不太贵。",
+  py:"Zhè jiā cāntīng de cài hěn hǎochī, érqiě bú tài guì.",
+  ca:"El menjar d'aquest restaurant és molt bo i, a més, no és gaire car.",
+  focus:"Comparació «molt / gaire»",
+  note:"En frases negatives fem servir «gaire», no «molt»: no és gaire car. En afirmatives, «molt»: és molt bo.",
+  vocab:[["餐厅","cāntīng","el restaurant"],["好吃","hǎochī","bo (de gust)"],["而且","érqiě","a més"]]},
+
+ {zh:"我每个星期二和星期四都去踢足球。",
+  py:"Wǒ měi ge xīngqī'èr hé xīngqīsì dōu qù tī zúqiú.",
+  ca:"Cada dimarts i dijous vaig a jugar a futbol.",
+  focus:"Hàbits · «jugar a»",
+  note:"«Jugar» demana la preposició «a»: jugar a futbol, jugar a bàsquet. Els dies de la setmana no porten article quan diem «cada».",
+  vocab:[["星期二","xīngqī'èr","dimarts"],["星期四","xīngqīsì","dijous"],["踢足球","tī zúqiú","jugar a futbol"]]},
+
+ {zh:"如果我有更多时间，我会去旅行。",
+  py:"Rúguǒ wǒ yǒu gèng duō shíjiān, wǒ huì qù lǚxíng.",
+  ca:"Si tingués més temps, viatjaria.",
+  focus:"Condicional irreal",
+  note:"Condició impossible o improbable: si + imperfet de subjuntiu (tingués) + condicional (viatjaria). Compara-ho amb la frase 4.",
+  vocab:[["更多","gèng duō","més"],["时间","shíjiān","el temps"],["旅行","lǚxíng","viatjar"]]},
+
+ {zh:"我妈妈要我今天早点回家。",
+  py:"Wǒ māma yào wǒ jīntiān zǎodiǎnr huí jiā.",
+  ca:"La meva mare vol que avui torni a casa d'hora.",
+  focus:"Present de subjuntiu",
+  note:"Quan hi ha dos subjectes diferents, «voler que» demana subjuntiu: vol que torni. Si el subjecte és el mateix, infinitiu: vull tornar.",
+  vocab:[["妈妈","māma","la mare"],["早点","zǎodiǎnr","d'hora"],["回家","huí jiā","tornar a casa"]]},
+
+ {zh:"下课以后我们一起去喝杯咖啡吧。",
+  py:"Xiàkè yǐhòu wǒmen yìqǐ qù hē bēi kāfēi ba.",
+  ca:"Després de classe anem a prendre un cafè junts.",
+  focus:"Proposta · «després de»",
+  note:"«Després de» + nom o infinitiu. El cafè es «pren», no es «beu», quan parlem de sortir a fer-ne un.",
+  vocab:[["下课","xiàkè","acabar la classe"],["一起","yìqǐ","junts"],["咖啡","kāfēi","el cafè"]]},
+
+ {zh:"我不知道他为什么没来上课。",
+  py:"Wǒ bù zhīdào tā wèishénme méi lái shàngkè.",
+  ca:"No sé per què no ha vingut a classe.",
+  focus:"Interrogativa indirecta · perfet",
+  note:"«Per què» separat quan pregunta; «perquè» junt quan respon. Participi irregular: venir → vingut.",
+  vocab:[["知道","zhīdào","saber"],["为什么","wèishénme","per què"],["来","lái","venir"]]},
+
+ {zh:"这个词我不认识，你能给我解释一下吗？",
+  py:"Zhège cí wǒ bú rènshi, nǐ néng gěi wǒ jiěshì yíxià ma?",
+  ca:"Aquesta paraula no la conec, me la pots explicar?",
+  focus:"Combinació de pronoms febles",
+  note:"Dos pronoms junts: «em + la» es converteix en «me la». Sempre davant del verb conjugat.",
+  vocab:[["词","cí","la paraula"],["认识","rènshi","conèixer"],["解释","jiěshì","explicar"]]},
+
+ {zh:"明年我想去中国看我的爷爷奶奶。",
+  py:"Míngnián wǒ xiǎng qù Zhōngguó kàn wǒ de yéye nǎinai.",
+  ca:"L'any que ve vull anar a la Xina a veure els meus avis.",
+  focus:"Finalitat · noms de països",
+  note:"«Anar a» + lloc, i «a» + infinitiu per a la finalitat: anar a veure. Els noms de països porten article: la Xina, el Japó.",
+  vocab:[["明年","míngnián","l'any que ve"],["中国","Zhōngguó","la Xina"],["爷爷奶奶","yéye nǎinai","els avis (paterns)"]]},
+
+ {zh:"虽然加泰罗尼亚语很难，但是我每天都练习。",
+  py:"Suīrán Jiātàiluóníyàyǔ hěn nán, dànshì wǒ měitiān dōu liànxí.",
+  ca:"Encara que el català és difícil, practico cada dia.",
+  focus:"Concessiva",
+  note:"En català només posem una conjunció: «encara que…, …». No repetim «però» a la segona part, com fa el xinès amb 虽然…但是.",
+  vocab:[["虽然","suīrán","encara que"],["难","nán","difícil"],["练习","liànxí","practicar"]]},
+
+ {zh:"我把书忘在家里了，明天再还给你。",
+  py:"Wǒ bǎ shū wàng zài jiā lǐ le, míngtiān zài huán gěi nǐ.",
+  ca:"M'he deixat el llibre a casa, demà te'l tornaré.",
+  focus:"Pronoms «te'l» · futur",
+  note:"«et + el» s'apostrofa i fa «te'l». «A casa» no porta article quan és la teva.",
+  vocab:[["忘","wàng","oblidar, deixar-se"],["书","shū","el llibre"],["还给","huán gěi","tornar (una cosa)"]]},
+
+ {zh:"你要不要来我家吃饭？我爸爸做饭做得很好。",
+  py:"Nǐ yào bú yào lái wǒ jiā chīfàn? Wǒ bàba zuòfàn zuò de hěn hǎo.",
+  ca:"Vols venir a casa a sopar? El meu pare cuina molt bé.",
+  focus:"Convidar · adverbi «bé»",
+  note:"«Bo» és adjectiu (un pare bo) i «bé» és adverbi (cuina bé). No els barregis.",
+  vocab:[["吃饭","chīfàn","menjar, sopar"],["爸爸","bàba","el pare"],["做饭","zuòfàn","cuinar"]]},
+
+ {zh:"考试的时候不能用手机。",
+  py:"Kǎoshì de shíhou bù néng yòng shǒujī.",
+  ca:"Durant l'examen no es pot fer servir el mòbil.",
+  focus:"Impersonal amb «es»",
+  note:"Per a normes generals: es pot, no es pot, es prohibeix. «Fer servir» és més habitual que «utilitzar» quan parles.",
+  vocab:[["的时候","de shíhou","durant, quan"],["用","yòng","fer servir"],["手机","shǒujī","el mòbil"]]},
+
+ {zh:"我们已经认识三年了。",
+  py:"Wǒmen yǐjīng rènshi sān nián le.",
+  ca:"Fa tres anys que ens coneixem.",
+  focus:"Durada amb «fa… que»",
+  note:"La durada es diu «fa + temps + que + present»: fa tres anys que ens coneixem. També pots dir: ens coneixem des de fa tres anys.",
+  vocab:[["认识","rènshi","conèixer-se"],["三年","sān nián","tres anys"],["已经","yǐjīng","ja"]]},
+
+ {zh:"昨天下了一整天雨，所以我们待在家里。",
+  py:"Zuótiān xiàle yì zhěng tiān yǔ, suǒyǐ wǒmen dāi zài jiā lǐ.",
+  ca:"Ahir va ploure tot el dia i per això ens vam quedar a casa.",
+  focus:"Consecutiva · passat perifràstic",
+  note:"«Quedar-se» és pronominal i el pronom va davant de «vam»: ens vam quedar. Alternatives a «per això»: així que, de manera que.",
+  vocab:[["一整天","yì zhěng tiān","tot el dia"],["所以","suǒyǐ","per això"],["待","dāi","quedar-se"]]},
+
+ {zh:"我觉得发音比语法难。",
+  py:"Wǒ juéde fāyīn bǐ yǔfǎ nán.",
+  ca:"Trobo que la pronunciació és més difícil que la gramàtica.",
+  focus:"Comparatiu",
+  note:"El comparatiu porta dues peces: «més… que». El xinès 比 no en necessita cap, així que és fàcil oblidar-se'n.",
+  vocab:[["觉得","juéde","trobar, pensar"],["发音","fāyīn","la pronunciació"],["语法","yǔfǎ","la gramàtica"]]},
+
+ {zh:"等我写完这封邮件，我们就出发。",
+  py:"Děng wǒ xiěwán zhè fēng yóujiàn, wǒmen jiù chūfā.",
+  ca:"Quan hagi acabat d'escriure aquest correu, sortirem.",
+  focus:"«Quan» de futur · subjuntiu",
+  note:"Si «quan» mira al futur, el català demana subjuntiu: quan hagi acabat, quan arribi, quan puguis. Mai futur darrere de «quan».",
+  vocab:[["等","děng","esperar; quan"],["邮件","yóujiàn","el correu"],["出发","chūfā","sortir, marxar"]]}
+];
+
+const SPEAKER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+
+const list = document.getElementById('list');
+const counter = document.getElementById('counter');
+
+DATA.forEach((item,i)=>{
+  const n = String(i+1).padStart(2,'0');
+  const card = document.createElement('section');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card__top">
+      <span class="num">${n}</span>
+      <button class="speak" type="button" aria-label="Escolta la frase en xinès">${SPEAKER}</button>
+    </div>
+    <p class="zh-line">${item.zh}</p>
+    <p class="py">${item.py}</p>
+    <textarea placeholder="Escriu-ho en català…" aria-label="La teva traducció"></textarea>
+    <button class="reveal-btn" type="button">Mostra la traducció</button>
+    <div class="answer">
+      <div class="answer__inner">
+        <div class="answer__body">
+          <p class="label">Traducció model</p>
+          <p class="ca">${item.ca}</p>
+          <p class="note">${item.note}</p>
+          <ul class="vocab">
+            ${item.vocab.map(v=>`<li><span class="v-zh">${v[0]}</span><span class="v-py">${v[1]}</span><span class="v-ca">${v[2]}</span></li>`).join('')}
+          </ul>
+          <button class="reveal-btn hide-btn" type="button">Amaga la traducció</button>
+        </div>
+      </div>
+    </div>`;
+
+  const ta = card.querySelector('textarea');
+  ta.addEventListener('input',()=>{ ta.style.height='auto'; ta.style.height=(ta.scrollHeight+2)+'px'; });
+
+  const showBtn = card.querySelector('.reveal-btn:not(.hide-btn)');
+  const hideBtn = card.querySelector('.hide-btn');
+  showBtn.addEventListener('click',()=>{ card.classList.add('open'); updateCounter(); });
+  hideBtn.addEventListener('click',()=>{
+    card.classList.remove('open');
+    updateCounter();
+    showBtn.focus();
+    if(card.getBoundingClientRect().top < 0) card.scrollIntoView({block:'start'});
+  });
+
+  card.querySelector('.speak').addEventListener('click',e=>speak(item.zh,e.currentTarget));
+  list.appendChild(card);
+});
+
+function updateCounter(){
+  const n = document.querySelectorAll('.card.open').length;
+  counter.textContent = `${n} / ${DATA.length} comparades`;
+}
+
+/* ---------- veu xinesa ---------- */
+let zhVoice = null;
+function pickVoice(){
+  const voices = speechSynthesis.getVoices();
+  zhVoice = voices.find(v=>/^zh[-_]CN/i.test(v.lang))
+         || voices.find(v=>/^zh/i.test(v.lang)) || null;
+  if(voices.length && !zhVoice) document.getElementById('warn').classList.add('on');
+}
+if('speechSynthesis' in window){
+  pickVoice();
+  speechSynthesis.onvoiceschanged = pickVoice;
+} else {
+  document.getElementById('warn').classList.add('on');
+}
+
+function speak(text,btn){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  document.querySelectorAll('.speak[data-playing]').forEach(b=>b.removeAttribute('data-playing'));
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'zh-CN';
+  u.rate = 0.82;
+  if(zhVoice) u.voice = zhVoice;
+  btn.dataset.playing = '1';
+  u.onend = u.onerror = ()=>btn.removeAttribute('data-playing');
+  speechSynthesis.speak(u);
+}
+</script>
+</body>
+</html>
