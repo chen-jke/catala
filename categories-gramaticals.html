@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Categories gramaticals · Català</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E9ECEF;
+  --surface:#FFFFFF;
+  --ink:#10161D;
+  --muted:#5E6B78;
+  --line:#D3D9DF;
+  --line-soft:#E7EBEF;
+
+  --NOM:#1B7F4B;
+  --ADJ:#C97400;
+  --VER:#CC2936;
+  --ADV:#7C3AED;
+  --PRO:#C2185B;
+  --PRE:#0E8A8A;
+  --CON:#6D6E24;
+  --DET:#2563C9;
+  --INT:#8B4A2B;
+
+  --bad:#CC2936;
+
+  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  --serif:'Source Serif 4',Georgia,'Times New Roman',serif;
+  --cjk:'Noto Sans SC','PingFang SC','Hiragino Sans GB',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);min-height:100dvh;display:flex;flex-direction:column}
+
+/* ---------- capçalera ---------- */
+.top{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line);padding:13px 20px 0}
+.top-row{display:flex;align-items:baseline;justify-content:space-between;gap:14px;max-width:1000px;margin:0 auto}
+.brand{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.brand b{color:var(--ink)}
+.top-tools{display:flex;gap:6px;align-items:center}
+.counter{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;margin-right:8px;white-space:nowrap}
+.counter b{color:var(--ink);font-weight:600}
+.tbtn{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:none;border:1px solid var(--line);color:var(--muted);padding:5px 10px;border-radius:2px;cursor:pointer;transition:.15s}
+.tbtn:hover{border-color:var(--ink);color:var(--ink)}
+.progress-track{max-width:1000px;margin:11px auto 0;height:2px;background:var(--line-soft);position:relative}
+.progress-fill{position:absolute;inset:0 auto 0 0;background:var(--ink);width:0;transition:width .35s cubic-bezier(.4,0,.2,1)}
+
+/* ---------- llista ---------- */
+.stage{flex:1;width:100%;max-width:1000px;margin:0 auto;padding:26px 20px 40px}
+.intro{font-size:14px;line-height:1.6;color:var(--muted);max-width:56ch;margin-bottom:26px}
+.intro b{color:var(--ink);font-weight:600}
+.list{background:var(--surface);border:1px solid var(--line);border-radius:3px}
+.row{display:grid;grid-template-columns:42px 1fr;gap:14px;padding:20px 24px;border-bottom:1px solid var(--line-soft)}
+.row:last-child{border-bottom:none}
+.num{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--muted);padding-top:7px;letter-spacing:.04em}
+.row.done .num{color:var(--ink)}
+.body{min-width:0}
+.sentence{display:flex;flex-wrap:wrap;gap:4px 3px;align-items:flex-start}
+.grp{display:flex;align-items:flex-start}
+
+/* ---------- paraula ---------- */
+.w{position:relative;display:flex;flex-direction:column;align-items:center;background:none;border:none;padding:0 2px;font-family:var(--serif);font-size:19px;line-height:1.3;color:var(--ink);cursor:pointer}
+.w .txt{padding:1px 3px 3px;border-bottom:2.5px solid var(--line-soft);transition:border-color .15s,background .15s;white-space:nowrap}
+.w .tag{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.08em;margin-top:4px;height:12px;line-height:12px;color:transparent;transition:color .15s;white-space:nowrap}
+.w[data-cat] .tag{color:var(--c)}
+.w[data-cat] .txt{border-bottom-color:var(--c)}
+.w.focus .txt{background:#EDF0F3}
+.w.focus::after{content:'';position:absolute;left:1px;right:1px;top:-5px;height:2px;background:var(--ink)}
+.w:not([data-cat]):not(.checked):hover .txt{border-bottom-color:var(--muted)}
+.w.ko .txt{border-bottom-color:var(--bad);background:#FDEEEF}
+.w.ko .tag{color:var(--bad);text-decoration:line-through}
+.w .fix{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.08em;color:var(--c);height:0;overflow:hidden;transition:height .15s}
+.w.ko .fix{height:12px;line-height:12px;margin-top:1px}
+.w.checked{cursor:default}
+.punct{font-family:var(--serif);font-size:19px;color:var(--muted);padding-top:1px}
+
+/* ---------- peu de frase ---------- */
+.foot{display:flex;align-items:center;gap:12px;margin-top:12px;min-height:26px}
+.mini{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;background:none;border:1px solid var(--line);color:var(--muted);padding:5px 11px;border-radius:2px;cursor:pointer;transition:.15s}
+.mini:hover{border-color:var(--ink);color:var(--ink)}
+.mini[hidden]{display:none}
+.tally{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.tally.perfect{color:var(--NOM)}
+.tally.some{color:var(--bad)}
+.mini.solve{border-style:dashed}
+.tally.shown{color:var(--muted)}
+
+/* ---------- resultat ---------- */
+.results{display:none;background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:30px 26px;margin-top:22px}
+.results.show{display:block}
+.res-num{font-family:var(--serif);font-size:clamp(48px,11vw,76px);line-height:.9;font-weight:600;letter-spacing:-.02em}
+.res-num span{font-size:.38em;color:var(--muted);margin-left:5px}
+.res-sub{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:11px}
+.bars{margin-top:26px;display:flex;flex-direction:column;gap:9px}
+.bar-row{display:grid;grid-template-columns:112px 1fr 42px;align-items:center;gap:12px}
+.bar-lbl{font-size:13px;font-weight:500}
+.bar-track{height:7px;background:var(--line-soft);border-radius:1px;overflow:hidden}
+.bar-fill{height:100%;background:var(--c);width:0;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.bar-val{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right}
+.res-actions{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+
+/* ---------- paleta ---------- */
+.palette{position:sticky;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);padding:11px 20px calc(11px + env(safe-area-inset-bottom))}
+.palette-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(9,1fr);gap:5px}
+.chip{display:flex;align-items:center;gap:6px;background:none;border:1px solid var(--line);border-radius:2px;padding:9px 7px;cursor:pointer;transition:.15s;font-family:var(--sans);font-size:12.5px;font-weight:500;color:var(--ink);text-align:left;min-width:0}
+.chip .k{font-family:var(--mono);font-size:10px;font-weight:600;color:#fff;background:var(--c);width:17px;height:17px;border-radius:2px;display:grid;place-items:center;flex-shrink:0}
+.chip .lbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip:hover{border-color:var(--c)}
+.chip.on{border-color:var(--c);background:var(--c);color:#fff}
+.chip.on .k{background:rgba(255,255,255,.25)}
+
+.btn{font-family:var(--sans);font-size:14px;font-weight:600;padding:11px 20px;border-radius:2px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;transition:.15s}
+.btn:hover{background:#000}
+.btn.ghost{background:none;color:var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:#fff}
+
+/* ---------- ajuda ---------- */
+.overlay{position:fixed;inset:0;background:rgba(16,22,29,.55);display:none;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;z-index:50}
+.overlay.show{display:flex}
+.modal{background:var(--surface);max-width:660px;width:100%;border-radius:3px;padding:30px 30px 24px;margin:auto}
+.modal h2{font-family:var(--serif);font-size:26px;font-weight:600;margin-bottom:4px}
+.modal .sub{font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.55}
+.legend{width:100%;border-collapse:collapse}
+.legend td{padding:9px 6px;border-bottom:1px solid var(--line-soft);vertical-align:top;font-size:14px}
+.legend tr:last-child td{border-bottom:none}
+.lg-name{font-weight:600;white-space:nowrap;color:var(--c)}
+.lg-cjk{font-family:var(--cjk);color:var(--muted);white-space:nowrap}
+.lg-ex{color:var(--muted);font-family:var(--serif);font-size:15px}
+.kbd-help{margin-top:16px;padding-top:14px;border-top:1px solid var(--line-soft);font-size:13px;color:var(--muted);line-height:1.8}
+kbd{font-family:var(--mono);font-size:11px;background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:1px 5px;color:var(--ink)}
+.modal-close{margin-top:20px;width:100%}
+
+@media(max-width:760px){
+  .palette-inner{grid-template-columns:repeat(3,1fr)}
+  .row{grid-template-columns:1fr;gap:6px;padding:18px 16px}
+  .num{padding-top:0}
+  .stage{padding:20px 12px 32px}
+  .top{padding:11px 14px 0}
+  .counter{display:none}
+  .bar-row{grid-template-columns:92px 1fr 38px}
+  .modal{padding:24px 20px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-row">
+    <div class="brand"><b>Categories gramaticals</b> · Català</div>
+    <div class="top-tools">
+      <span class="counter" id="counter"><b>0</b> / 50 frases</span>
+      <button class="tbtn" id="btnHelp">Categories</button>
+      <button class="tbtn" id="btnReset">Reinicia</button>
+    </div>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="prog"></div></div>
+</header>
+
+<main class="stage">
+  <p class="intro">Tria una categoria a la paleta de baix i marca les paraules de cada frase. Després, <b>Comprova</b> corregeix la frase i <b>Mostra la solució</b> la resol sense puntuar. L'article (<b>el, la, un, les…</b>) no és una categoria a part: forma part dels determinants.</p>
+  <div class="list" id="list"></div>
+
+  <div class="results" id="results">
+    <div class="res-num" id="resNum">0<span>%</span></div>
+    <div class="res-sub" id="resSub"></div>
+    <div class="bars" id="bars"></div>
+    <div class="res-actions">
+      <button class="btn ghost" id="btnRedo">Repeteix les frases amb errors</button>
+      <button class="btn" id="btnAgain">Torna a començar</button>
+    </div>
+  </div>
+</main>
+
+<nav class="palette"><div class="palette-inner" id="paletteInner"></div></nav>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h2>Les nou categories</h2>
+    <p class="sub">Els articles no formen una categoria a part: són determinants, com els demostratius, els possessius o els numerals.</p>
+    <table class="legend" id="legend"></table>
+    <div class="kbd-help">
+      <b>Teclat:</b> <kbd>1</kbd>–<kbd>9</kbd> marquen la paraula activa i salten a la següent ·
+      <kbd>←</kbd> <kbd>→</kbd> canvien de paraula · <kbd>⌫</kbd> esborra · <kbd>Enter</kbd> comprova la frase.
+    </div>
+    <button class="btn modal-close" id="btnCloseHelp">Entesos</button>
+  </div>
+</div>
+
+<script>
+/* ================= CATEGORIES ================= */
+const CATS=[
+ {id:'NOM',name:'Nom',        cjk:'名词',  ex:'casa, Barcelona, paciència, fred'},
+ {id:'ADJ',name:'Adjectiu',   cjk:'形容词',ex:'gran, vermelles, difícils, nadius'},
+ {id:'VER',name:'Verb',       cjk:'动词',  ex:'és, va arribar, havia oblidat, sortir'},
+ {id:'ADV',name:'Adverbi',    cjk:'副词',  ex:'no, sempre, molt, ràpidament, on'},
+ {id:'PRO',name:'Pronom',     cjk:'代词',  ex:'jo, em, es, hi, ningú, que (relatiu)'},
+ {id:'PRE',name:'Preposició', cjk:'介词',  ex:'a, de, amb, en, per, sota, durant'},
+ {id:'CON',name:'Conjunció',  cjk:'连词',  ex:'i, però, que, perquè, si, quan, mentre'},
+ {id:'DET',name:'Determinant',cjk:'限定词',ex:'el, la, un, aquest, meu, dos, moltes'},
+ {id:'INT',name:'Interjecció',cjk:'感叹词',ex:'ai, uf, ep'}
+];
+const KEYS=['1','2','3','4','5','6','7','8','9'];
+
+/* ================= FRASES =================
+   format: paraula|CAT|puntuació   ·   ^ davant = s'enganxa a la paraula anterior */
+const DATA=[
+{s:"Quan|CON la|DET Marta|NOM va|VER arribar|VER a|PRE casa|NOM|, es|PRO va|VER adonar|VER que|CON havia|VER oblidat|VER les|DET claus|NOM dins|PRE el|DET cotxe|NOM|."},
+{s:"Els|DET estudiants|NOM que|PRO van|VER aprovar|VER l'|DET ^examen|NOM final|ADJ celebraran|VER la|DET nota|NOM amb|PRE els|DET seus|DET companys|NOM|."},
+{s:"Plovia|VER molt|ADV fort|ADV|, però|CON vam|VER decidir|VER sortir|VER a|PRE caminar|VER per|PRE la|DET muntanya|NOM|."},
+{s:"La|DET meva|DET germana|NOM petita|ADJ sempre|ADV em|PRO demana|VER que|CON li|PRO expliqui|VER un|DET conte|NOM llarg|ADJ cada|DET nit|NOM|."},
+{s:"Aquest|DET matí|NOM hem|VER visitat|VER un|DET museu|NOM petit|ADJ on|ADV hi|PRO havia|VER moltes|DET pintures|NOM modernes|ADJ|."},
+{s:"Si|CON tinguessis|VER més|DET temps|NOM lliure|ADJ|, podries|VER aprendre|VER a|PRE tocar|VER el|DET piano|NOM amb|PRE nosaltres|PRO|."},
+{s:"El|DET professor|NOM ens|PRO va|VER explicar|VER pacientment|ADV totes|DET les|DET regles|NOM que|PRO no|ADV enteníem|VER|."},
+{s:"Ahir|ADV vaig|VER comprar|VER dos|DET llibres|NOM nous|ADJ i|CON tres|DET quaderns|NOM grocs|ADJ en|PRE una|DET llibreria|NOM petita|ADJ|."},
+{s:"Uf|INT|, quina|DET calor|NOM feia|VER ahir|ADV a|PRE la|DET platja|NOM mentre|CON esperàvem|VER el|DET nostre|DET autobús|NOM|!"},
+{s:"No|ADV sé|VER si|CON vindrà|VER a|PRE la|DET festa|NOM|, però|CON l'|PRO ^he|VER convidat|VER perquè|CON és|VER un|DET bon|ADJ amic|NOM|."},
+{s:"Quan|CON siguis|VER gran|ADJ entendràs|VER que|CON la|DET paciència|NOM és|VER la|DET virtut|NOM més|ADV important|ADJ de|PRE totes|PRO|."},
+{s:"Els|DET nens|NOM petits|ADJ corren|VER alegrement|ADV per|PRE un|DET jardí|NOM ple|ADJ de|PRE flors|NOM blanques|ADJ|."},
+{s:"Encara|ADV no|ADV hem|VER decidit|VER on|ADV passarem|VER les|DET vacances|NOM d'|PRE ^aquest|DET estiu|NOM tan|ADV calorós|ADJ|."},
+{s:"La|DET casa|NOM que|PRO vam|VER veure|VER diumenge|NOM era|VER massa|ADV cara|ADJ|, però|CON era|VER molt|ADV bonica|ADJ|."},
+{s:"Ella|PRO li|PRO va|VER donar|VER el|DET seu|DET número|NOM de|PRE telèfon|NOM perquè|CON la|PRO truqués|VER aquella|DET mateixa|DET tarda|NOM|."},
+{s:"Ep|INT|! Algú|PRO ha|VER deixat|VER una|DET motxilla|NOM vermella|ADJ sota|PRE la|DET taula|NOM de|PRE la|DET cuina|NOM|."},
+{s:"Mentre|CON ell|PRO cuinava|VER el|DET sopar|NOM|, jo|PRO endreçava|VER tranquil·lament|ADV tots|DET els|DET papers|NOM de|PRE l'|DET ^escriptori|NOM|."},
+{s:"Aquesta|DET pel·lícula|NOM que|PRO em|PRO vas|VER recomanar|VER m'|PRO ^ha|VER agradat|VER molt|ADV|, però|CON el|DET final|NOM és|VER massa|ADV trist|ADJ|."},
+{s:"Els|DET meus|DET pares|NOM viuen|VER molt|ADV lluny|ADV i|CON només|ADV els|PRO puc|VER visitar|VER durant|PRE les|DET vacances|NOM|."},
+{s:"Ai|INT|, m'|PRO ^he|VER tallat|VER el|DET dit|NOM mentre|CON pelava|VER aquestes|DET patates|NOM tan|ADV dures|ADJ|!"},
+{s:"Tothom|PRO sap|VER que|CON estudiar|VER cada|DET dia|NOM és|VER la|DET millor|ADJ manera|NOM d'|PRE ^aprendre|VER una|DET llengua|NOM nova|ADJ|."},
+{s:"El|DET gos|NOM negre|ADJ borda|VER cada|DET nit|NOM i|CON no|ADV ens|PRO deixa|VER dormir|VER tranquil·lament|ADV|."},
+{s:"Vaig|VER conèixer|VER aquella|DET noia|NOM simpàtica|ADJ en|PRE una|DET festa|NOM i|CON ara|ADV som|VER molt|ADV bons|ADJ amics|NOM|."},
+{s:"Quantes|DET hores|NOM dediques|VER cada|DET setmana|NOM a|PRE preparar|VER les|DET classes|NOM de|PRE català|NOM|?"},
+{s:"Si|CON no|ADV plou|VER demà|ADV|, anirem|VER a|PRE la|DET muntanya|NOM amb|PRE les|DET bicicletes|NOM noves|ADJ que|PRO vam|VER comprar|VER|."},
+{s:"La|DET professora|NOM de|PRE xinès|NOM ens|PRO va|VER dir|VER que|CON havíem|VER de|PRE practicar|VER la|DET pronunciació|NOM diàriament|ADV|."},
+{s:"Aquell|DET home|NOM alt|ADJ que|PRO porta|VER un|DET abric|NOM gris|ADJ és|VER el|DET director|NOM de|PRE la|DET nostra|DET empresa|NOM|."},
+{s:"No|ADV hi|PRO ha|VER ningú|PRO a|PRE l'|DET ^oficina|NOM perquè|CON avui|ADV és|VER festa|NOM i|CON tothom|PRO descansa|VER|."},
+{s:"Les|DET meves|DET amigues|NOM han|VER viatjat|VER a|PRE Xina|NOM tres|DET vegades|NOM i|CON sempre|ADV tornen|VER molt|ADV contentes|ADJ|."},
+{s:"Ho|PRO vaig|VER entendre|VER tot|PRO perfectament|ADV quan|CON em|PRO van|VER explicar|VER el|DET problema|NOM una|DET altra|DET vegada|NOM|."},
+{s:"Malauradament|ADV|, el|DET tren|NOM va|VER arribar|VER molt|ADV tard|ADV i|CON vam|VER perdre|VER la|DET connexió|NOM de|PRE Girona|NOM|."},
+{s:"Aquests|DET exercicis|NOM són|VER difícils|ADJ|, però|CON si|CON els|PRO fas|VER amb|PRE calma|NOM els|PRO entendràs|VER ràpidament|ADV|."},
+{s:"El|DET nen|NOM petit|ADJ va|VER caure|VER de|PRE la|DET bicicleta|NOM|, però|CON no|ADV es|PRO va|VER fer|VER mal|NOM i|CON ara|ADV ja|ADV està|VER bé|ADV|."},
+{s:"Quan|CON acabis|VER de|PRE llegir|VER aquest|DET capítol|NOM|, escriu|VER un|DET resum|NOM breu|ADJ amb|PRE les|DET teves|DET paraules|NOM|."},
+{s:"Hi|PRO havia|VER molta|DET gent|NOM a|PRE la|DET plaça|NOM esperant|VER que|CON comencés|VER el|DET concert|NOM gratuït|ADJ|."},
+{s:"Aquesta|PRO és|VER la|DET meva|DET ciutat|NOM preferida|ADJ perquè|CON aquí|ADV vaig|VER passar|VER tota|DET la|DET meva|DET infància|NOM|."},
+{s:"Els|DET alumnes|NOM xinesos|ADJ aprenen|VER català|NOM ràpidament|ADV quan|CON practiquen|VER amb|PRE parlants|NOM nadius|ADJ|."},
+{s:"No|ADV em|PRO van|VER avisar|VER que|CON la|DET reunió|NOM s'|PRO ^havia|VER ajornat|VER fins|PRE la|DET setmana|NOM vinent|ADJ|."},
+{s:"Compra|VER tres|DET pomes|NOM vermelles|ADJ|, quatre|DET plàtans|NOM madurs|ADJ i|CON dos|DET pans|NOM integrals|ADJ|."},
+{s:"Quan|CON viatjo|VER sol|ADJ|, sempre|ADV porto|VER una|DET llibreta|NOM petita|ADJ per|PRE escriure|VER les|DET meves|DET impressions|NOM|."},
+{s:"El|DET restaurant|NOM on|ADV vam|VER sopar|VER ahir|ADV servia|VER un|DET peix|NOM boníssim|ADJ a|PRE un|DET preu|NOM molt|ADV raonable|ADJ|."},
+{s:"Tots|DET els|DET meus|DET companys|NOM em|PRO van|VER felicitar|VER quan|CON van|VER saber|VER la|DET bona|ADJ notícia|NOM|."},
+{s:"Aquell|DET dia|NOM feia|VER fred|NOM i|CON ningú|PRO no|ADV volia|VER sortir|VER de|PRE casa|NOM|."},
+{s:"La|DET nova|ADJ exposició|NOM de|PRE fotografia|NOM s'|PRO ^inaugurarà|VER divendres|NOM a|PRE la|DET tarda|NOM amb|PRE música|NOM i|CON pastissos|NOM|."},
+{s:"Vosaltres|PRO heu|VER treballat|VER molt|ADV bé|ADV aquest|DET trimestre|NOM|, però|CON encara|ADV podeu|VER millorar|VER la|DET pronunciació|NOM|."},
+{s:"Em|PRO vaig|VER llevar|VER molt|ADV aviat|ADV perquè|CON volia|VER veure|VER sortir|VER el|DET sol|NOM darrere|PRE les|DET muntanyes|NOM blaves|ADJ|."},
+{s:"Aquest|DET cap|NOM de|PRE setmana|NOM anirem|VER a|PRE Saragossa|NOM amb|PRE uns|DET amics|NOM catalans|ADJ que|PRO viuen|VER allà|ADV|."},
+{s:"Ningú|PRO no|ADV sabia|VER que|CON aquella|DET senyora|NOM gran|ADJ havia|VER estat|VER una|DET cantant|NOM molt|ADV famosa|ADJ|."},
+{s:"Renta|VER ^'t|PRO les|DET mans|NOM i|CON seu|VER a|PRE taula|NOM amb|PRE els|DET altres|DET convidats|NOM|."},
+{s:"Quan|CON vaig|VER arribar|VER a|PRE Barcelona|NOM no|ADV coneixia|VER ningú|PRO|, però|CON ara|ADV tinc|VER molts|DET amics|NOM aquí|ADV|."}
+];
+
+/* ================= ESTAT ================= */
+const $=id=>document.getElementById(id);
+const listEl=$('list');
+let items=[],flat=[],brush=null,focus=0,stats={},source=DATA;
+
+function parse(d){
+  return{
+    tokens:d.s.split(' ').map(t=>{
+      const p=t.split('|');
+      let w=p[0],join=false;
+      if(w[0]==='^'){join=true;w=w.slice(1)}
+      return{w,cat:p[1],punct:p[2]||'',join};
+    })
+  };
+}
+
+function build(list){
+  source=list;
+  items=list.map(parse);
+  flat=[];brush=null;focus=0;
+  stats={};CATS.forEach(c=>stats[c.id]={ok:0,n:0});
+  listEl.innerHTML='';
+  $('results').classList.remove('show');
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+
+  items.forEach((it,si)=>{
+    it.answers=it.tokens.map(()=>null);
+    it.checked=false;it.revealed=false;it.ok=0;
+    const row=document.createElement('div');
+    row.className='row';
+    row.innerHTML='<div class="num">'+String(si+1).padStart(2,'0')+'</div><div class="body"><div class="sentence"></div><div class="foot"><button class="mini act-check">Comprova</button><button class="mini solve act-solve">Mostra la solució</button><button class="mini act-again" hidden>Torna a fer</button><span class="tally"></span></div></div>';
+    const sen=row.querySelector('.sentence');
+    let grp=null;
+    it.tokens.forEach((t,ti)=>{
+      if(!t.join||!grp){grp=document.createElement('div');grp.className='grp';sen.appendChild(grp)}
+      const b=document.createElement('button');
+      b.className='w';b.type='button';
+      b.innerHTML='<span class="txt">'+t.w+'</span><span class="tag"></span><span class="fix"></span>';
+      const idx=flat.length;
+      flat.push({si,ti,el:b});
+      b.addEventListener('click',()=>{if(items[si].checked)return;focus=idx;if(brush)assign(idx,brush);else paintFocus()});
+      grp.appendChild(b);
+      if(t.punct){const p=document.createElement('span');p.className='punct';p.textContent=t.punct;grp.appendChild(p)}
+    });
+    row.querySelector('.act-check').addEventListener('click',()=>check(si));
+    row.querySelector('.act-solve').addEventListener('click',()=>reveal(si));
+    row.querySelector('.act-again').addEventListener('click',()=>redo(si));
+    it.row=row;
+    listEl.appendChild(row);
+  });
+  paintFocus(false);
+  updateHeader();
+}
+
+function assign(idx,cat){
+  const f=flat[idx],it=items[f.si];
+  if(it.checked)return;
+  if(it.answers[f.ti]===cat){
+    it.answers[f.ti]=null;f.el.removeAttribute('data-cat');f.el.style.removeProperty('--c');f.el.querySelector('.tag').textContent='';
+  }else{
+    it.answers[f.ti]=cat;
+    f.el.dataset.cat=cat;f.el.style.setProperty('--c','var(--'+cat+')');
+    f.el.querySelector('.tag').textContent=cat;
+    let n=flat.findIndex((g,x)=>x>idx&&!items[g.si].checked&&items[g.si].answers[g.ti]===null);
+    if(n===-1)n=Math.min(idx+1,flat.length-1);
+    focus=n;
+  }
+  paintFocus();
+}
+
+function paintFocus(scroll=true){
+  flat.forEach((f,x)=>f.el.classList.toggle('focus',x===focus&&!items[f.si].checked));
+  const f=flat[focus];
+  if(scroll&&f){
+    const r=f.el.getBoundingClientRect();
+    if(r.top<80||r.bottom>window.innerHeight-110)f.el.scrollIntoView({block:'center',behavior:'smooth'});
+  }
+}
+
+function check(si){
+  const it=items[si];
+  if(it.checked)return;
+  let ok=0;
+  it.tokens.forEach((t,ti)=>{
+    const el=flat.find(f=>f.si===si&&f.ti===ti).el;
+    el.classList.add('checked');
+    el.style.setProperty('--c','var(--'+t.cat+')');
+    stats[t.cat].n++;
+    if(it.answers[ti]===t.cat){ok++;stats[t.cat].ok++;el.dataset.cat=t.cat;el.querySelector('.tag').textContent=t.cat}
+    else{el.classList.add('ko');el.querySelector('.tag').textContent=it.answers[ti]||'?';el.querySelector('.fix').textContent=t.cat}
+  });
+  it.checked=true;it.ok=ok;
+  lock(it);
+  const tally=it.row.querySelector('.tally');
+  tally.textContent=(ok===it.tokens.length)?'Tot correcte':ok+' / '+it.tokens.length+' correctes';
+  tally.className='tally '+(ok===it.tokens.length?'perfect':'some');
+  if(items[flat[focus].si].checked){
+    const n=flat.findIndex(f=>!items[f.si].checked);
+    if(n>-1)focus=n;
+  }
+  paintFocus(false);
+  updateHeader();
+}
+
+function lock(it){
+  it.row.classList.add('done');
+  it.row.querySelector('.act-check').hidden=true;
+  it.row.querySelector('.act-solve').hidden=true;
+  it.row.querySelector('.act-again').hidden=false;
+}
+
+function recalcStats(){
+  CATS.forEach(c=>stats[c.id]={ok:0,n:0});
+  items.forEach(it=>{
+    if(!it.checked||it.revealed)return;
+    it.tokens.forEach((t,ti)=>{stats[t.cat].n++;if(it.answers[ti]===t.cat)stats[t.cat].ok++});
+  });
+}
+
+function redo(si){
+  const it=items[si];
+  it.checked=false;it.revealed=false;it.ok=0;
+  it.answers=it.tokens.map(()=>null);
+  it.tokens.forEach((t,ti)=>{
+    const el=flat.find(f=>f.si===si&&f.ti===ti).el;
+    el.className='w';
+    el.removeAttribute('data-cat');
+    el.style.removeProperty('--c');
+    el.querySelector('.tag').textContent='';
+    el.querySelector('.fix').textContent='';
+  });
+  it.row.classList.remove('done');
+  it.row.querySelector('.act-check').hidden=false;
+  it.row.querySelector('.act-solve').hidden=false;
+  it.row.querySelector('.act-again').hidden=true;
+  const tally=it.row.querySelector('.tally');
+  tally.textContent='';tally.className='tally';
+  $('results').classList.remove('show');
+  focus=flat.findIndex(f=>f.si===si);
+  recalcStats();
+  paintFocus();
+  updateHeader();
+}
+
+function reveal(si){
+  const it=items[si];
+  if(it.checked)return;
+  it.tokens.forEach((t,ti)=>{
+    const el=flat.find(f=>f.si===si&&f.ti===ti).el;
+    el.classList.add('checked');
+    el.dataset.cat=t.cat;
+    el.style.setProperty('--c','var(--'+t.cat+')');
+    el.querySelector('.tag').textContent=t.cat;
+  });
+  it.checked=true;it.revealed=true;it.ok=0;
+  lock(it);
+  const tally=it.row.querySelector('.tally');
+  tally.textContent='Solució mostrada';
+  tally.className='tally shown';
+  if(items[flat[focus].si].checked){
+    const n=flat.findIndex(f=>!items[f.si].checked);
+    if(n>-1)focus=n;
+  }
+  paintFocus(false);
+  updateHeader();
+}
+
+function updateHeader(){
+  const done=items.filter(i=>i.checked);
+  const scored=done.filter(i=>!i.revealed);
+  const ok=scored.reduce((a,i)=>a+i.ok,0);
+  const tot=scored.reduce((a,i)=>a+i.tokens.length,0);
+  $('counter').innerHTML='<b>'+done.length+'</b> / '+items.length+' frases'+(tot?' · <b>'+ok+'</b> / '+tot+' encerts':'');
+  $('prog').style.width=(done.length/items.length*100)+'%';
+  if(done.length===items.length&&items.length)showResults(ok,tot);
+}
+
+function showResults(ok,tot){
+  const pct=tot?Math.round(ok/tot*100):0;
+  $('resNum').innerHTML=pct+'<span>%</span>';
+  const shown=items.filter(i=>i.revealed).length;
+  $('resSub').textContent=ok+' paraules ben classificades de '+tot+(shown?' · '+shown+' frases amb la solució mostrada':'');
+  const bars=$('bars');bars.innerHTML='';
+  CATS.slice().sort((a,b)=>{
+    const pa=stats[a.id].n?stats[a.id].ok/stats[a.id].n:1,pb=stats[b.id].n?stats[b.id].ok/stats[b.id].n:1;
+    return pa-pb;
+  }).forEach(c=>{
+    const st=stats[c.id];if(!st.n)return;
+    const p=Math.round(st.ok/st.n*100);
+    const row=document.createElement('div');
+    row.className='bar-row';row.style.setProperty('--c','var(--'+c.id+')');
+    row.innerHTML='<div class="bar-lbl">'+c.name+'</div><div class="bar-track"><div class="bar-fill"></div></div><div class="bar-val">'+p+'%</div>';
+    bars.appendChild(row);
+    requestAnimationFrame(()=>row.querySelector('.bar-fill').style.width=p+'%');
+  });
+  const wrong=items.map((it,x)=>(it.revealed||it.ok<it.tokens.length)?x:-1).filter(x=>x>-1);
+  const src=source;
+  $('btnRedo').style.display=wrong.length?'':'none';
+  $('btnRedo').onclick=()=>{build(wrong.map(x=>src[x]));window.scrollTo({top:0,behavior:'smooth'})};
+  $('results').classList.add('show');
+  $('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ================= PALETA ================= */
+const pal=$('paletteInner');
+CATS.forEach((c,n)=>{
+  const b=document.createElement('button');
+  b.className='chip';b.type='button';b.dataset.cat=c.id;
+  b.style.setProperty('--c','var(--'+c.id+')');
+  b.innerHTML='<span class="k">'+KEYS[n]+'</span><span class="lbl">'+c.name+'</span>';
+  b.addEventListener('click',()=>pick(c.id));
+  pal.appendChild(b);
+});
+function pick(cat){
+  brush=cat;
+  pal.querySelectorAll('.chip').forEach(el=>el.classList.toggle('on',el.dataset.cat===cat));
+  const f=flat[focus];
+  if(f&&!items[f.si].checked)assign(focus,cat);
+}
+
+/* ================= LLEGENDA ================= */
+$('legend').innerHTML=CATS.map((c,n)=>
+ '<tr style="--c:var(--'+c.id+')"><td class="lg-name">'+KEYS[n]+' · '+c.name+'</td><td class="lg-cjk">'+c.cjk+'</td><td class="lg-ex">'+c.ex+'</td></tr>').join('');
+
+/* ================= CONTROLS ================= */
+function restart(){build(DATA);window.scrollTo({top:0,behavior:'smooth'})}
+$('btnReset').addEventListener('click',restart);
+$('btnAgain').addEventListener('click',restart);
+$('btnHelp').addEventListener('click',()=>$('overlay').classList.add('show'));
+$('btnCloseHelp').addEventListener('click',()=>$('overlay').classList.remove('show'));
+$('overlay').addEventListener('click',e=>{if(e.target===$('overlay'))$('overlay').classList.remove('show')});
+
+document.addEventListener('keydown',e=>{
+  if($('overlay').classList.contains('show')){if(e.key==='Escape')$('overlay').classList.remove('show');return}
+  const f=flat[focus];if(!f)return;
+  if(e.key==='ArrowRight'){e.preventDefault();focus=Math.min(focus+1,flat.length-1);paintFocus();return}
+  if(e.key==='ArrowLeft'){e.preventDefault();focus=Math.max(focus-1,0);paintFocus();return}
+  if(e.key==='Enter'){e.preventDefault();const it=items[f.si];if(!it.checked&&it.answers.every(a=>a!==null))check(f.si);return}
+  if(items[f.si].checked)return;
+  const n=KEYS.indexOf(e.key);
+  if(n>-1){e.preventDefault();pick(CATS[n].id);return}
+  if(e.key==='Backspace'||e.key==='Delete'){e.preventDefault();const a=items[f.si].answers[f.ti];if(a)assign(focus,a)}
+});
+
+build(DATA);
+</script>
+</body>
+</html>
