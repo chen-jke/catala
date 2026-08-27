@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Les nou categories gramaticals · Català</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=Source+Serif+4:opsz,wght@8..60,400..600&family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1A1A17; --mut:#67655D; --line:#D2CFC6;
+  --paper:#E9E8E2; --card:#FCFBF9;
+  --c:#1A1A17;
+  --sp:clamp(1.1rem,4vw,2rem);
+  --serif:"Source Serif 4",Georgia,serif;
+  --sans:"Archivo","Noto Sans SC",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--sans); font-size:17px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px; margin:0 auto; padding:0 var(--sp)}
+.col{max-width:860px}
+
+/* ================= HEADER ================= */
+header.top{padding:clamp(2.4rem,7vw,4.5rem) 0 0}
+h1{
+  font-size:clamp(2.4rem,8.5vw,5.4rem); line-height:.93; margin:0;
+  font-weight:800; font-variation-settings:"wdth" 118; letter-spacing:-.022em;
+  text-transform:uppercase;
+}
+.sentence{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(1.4rem,4.4vw,2.4rem); line-height:1.6;
+  display:flex; flex-wrap:wrap; gap:.1em .3em; align-items:baseline;
+  margin:clamp(2.2rem,6vw,3.4rem) 0 0;
+}
+.w{
+  border:0; background:none; padding:.02em .16em .06em; margin:0;
+  font:inherit; color:var(--wc); cursor:pointer;
+  border-bottom:.11em solid var(--wc);
+  border-radius:3px; transition:background .18s ease;
+  opacity:0; animation:pop .5s ease forwards; animation-delay:var(--d,0s);
+}
+.w:hover{background:color-mix(in srgb,var(--wc) 15%,transparent)}
+.w:focus-visible{outline:2px solid var(--wc); outline-offset:3px}
+@keyframes pop{from{opacity:0; transform:translateY(.2em)}to{opacity:1; transform:none}}
+
+.intro{
+  margin:clamp(2.6rem,6vw,3.8rem) 0 0; padding-top:2rem; border-top:1px solid var(--line);
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:1.8rem 2.2rem;
+}
+.intro h2{font-size:1.02rem; margin:0 0 .55rem; font-weight:700}
+.intro p{margin:0; font-size:1rem; line-height:1.6; color:#35342E}
+.intro b{font-weight:700}
+
+/* ================= NAV ================= */
+nav.chips{
+  position:sticky; top:0; z-index:20; margin-top:clamp(2.4rem,6vw,3.6rem);
+  background:color-mix(in srgb,var(--paper) 90%,transparent);
+  backdrop-filter:blur(12px);
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+}
+.chips-in{
+  max-width:1080px; margin:0 auto; padding:.6rem var(--sp);
+  display:flex; flex-wrap:wrap; gap:.4rem;
+}
+.chip{
+  display:flex; align-items:center; gap:.45rem;
+  border:1px solid var(--line); background:var(--card); border-radius:8px;
+  padding:.45rem .6rem .45rem .45rem; cursor:pointer;
+  font-family:inherit; font-size:.82rem; font-weight:600; color:var(--ink);
+  transition:border-color .15s, background .15s;
+}
+.chip:hover{border-color:var(--k)}
+.chip:focus-visible{outline:2px solid var(--k); outline-offset:2px}
+.chip .num{
+  width:1.4rem; height:1.4rem; border-radius:5px; flex:0 0 auto;
+  background:var(--k); color:#fff; display:grid; place-items:center;
+  font-size:.74rem; font-weight:700;
+}
+.chip[aria-selected="true"]{background:var(--k); border-color:var(--k); color:#fff}
+.chip[aria-selected="true"] .num{background:rgba(255,255,255,.25)}
+
+/* ================= PANEL ================= */
+main.wrap{padding-top:0; padding-bottom:4rem}
+.panel{display:none; padding-top:clamp(4rem,9vw,7.5rem)}
+.panel.on{display:block; animation:fade .3s ease both}
+@keyframes fade{from{opacity:0; transform:translateY(8px)}to{opacity:1; transform:none}}
+
+.phead{display:flex; align-items:center; gap:clamp(.8rem,2.2vw,1.3rem); flex-wrap:wrap}
+.phead .big{
+  width:clamp(2.8rem,8vw,4rem); height:clamp(2.8rem,8vw,4rem);
+  background:var(--c); color:#fff; border-radius:10px; display:grid; place-items:center;
+  font-size:clamp(1.4rem,4vw,2.1rem); font-weight:800;
+}
+.phead h2{
+  margin:0; font-size:clamp(2rem,7vw,3.6rem); line-height:1; font-weight:800;
+  font-variation-settings:"wdth" 116; letter-spacing:-.02em; text-transform:uppercase; color:var(--c);
+}
+.phead .tag{
+  font-size:.72rem; letter-spacing:.11em; text-transform:uppercase; font-weight:700;
+  color:var(--c); border:1.5px solid var(--c); border-radius:99px; padding:.25rem .7rem;
+  align-self:center; white-space:nowrap;
+}
+
+/* definició */
+.def{
+  font-family:var(--serif); font-size:clamp(1.35rem,3.6vw,2.05rem); line-height:1.32;
+  margin:clamp(1.5rem,4vw,2.3rem) 0 0; font-weight:400; letter-spacing:-.01em;
+}
+.use{font-size:1.05rem; line-height:1.55; margin:1rem 0 0; color:#3A3932; max-width:62ch}
+
+.exlist{margin:clamp(1.5rem,4vw,2.1rem) 0 0; border-top:2px solid var(--c)}
+.exlist .ex{
+  font-family:var(--serif); font-size:clamp(1.15rem,3vw,1.55rem); line-height:1.45;
+  padding:.8rem 0; border-bottom:1px solid var(--line); margin:0;
+}
+.exlist .ex .gl{display:block; font-family:var(--sans); font-size:.82rem; color:var(--mut); margin-top:.25rem}
+
+/* marca de paraula */
+mark.t{
+  background:color-mix(in srgb,var(--c) 14%,transparent);
+  color:var(--c); font-weight:600; padding:.02em .22em .06em;
+  border-radius:4px 4px 0 0; border-bottom:2px solid var(--c);
+  box-decoration-break:clone; -webkit-box-decoration-break:clone;
+}
+/* èmfasi dins d'exemples: sempre amb color + pes + subratllat */
+.s b, .ex b, .def b, .zex b{
+  font-weight:700; color:var(--c);
+  text-decoration:underline; text-decoration-thickness:.09em; text-underline-offset:.16em;
+}
+
+/* seccions */
+.sec{margin:clamp(2.4rem,6vw,3.4rem) 0 0}
+.sec > h3{
+  font-size:1.15rem; font-weight:700; margin:0 0 1rem; color:var(--c);
+  display:flex; align-items:center; gap:.55rem; letter-spacing:-.01em;
+}
+.sec > h3::before{content:""; width:.7rem; height:.7rem; background:var(--c); border-radius:2px}
+
+/* tipus */
+.types{display:grid; gap:.7rem}
+.type{
+  background:var(--card); border:1px solid var(--line); border-left:4px solid var(--c);
+  border-radius:0 10px 10px 0; padding:.85rem 1rem;
+}
+.type b{font-size:1.02rem; display:block; margin-bottom:.15rem}
+.type span{font-size:.95rem; color:#3A3932}
+.type .exs{font-family:var(--serif); font-size:1.05rem; margin-top:.35rem; display:block; color:var(--ink)}
+
+/* proves */
+.tests{list-style:none; margin:0; padding:0; display:grid; gap:.7rem; counter-reset:t}
+.tests li{
+  background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:.9rem 1.1rem .9rem 3rem; position:relative; font-size:1.02rem; line-height:1.5;
+}
+.tests li::before{
+  content:counter(t); counter-increment:t; position:absolute; left:1rem; top:.92rem;
+  width:1.5rem; height:1.5rem; border-radius:50%; background:var(--c); color:#fff;
+  display:grid; place-items:center; font-size:.8rem; font-weight:700;
+}
+.tests .s{font-family:var(--serif); font-size:1.06em}
+
+/* confusions */
+.cmp{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:clamp(1rem,3vw,1.4rem); margin-bottom:.9rem}
+.cmp h4{margin:0 0 .5rem; font-size:1.08rem; font-weight:700}
+.cmp .rule{font-size:.97rem; margin:0 0 1rem; color:#3A3932}
+.cmpgrid{display:grid; grid-template-columns:1fr 1fr; gap:.5rem 1rem}
+.cmpgrid .hd{
+  font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; font-weight:700;
+  padding-bottom:.35rem; border-bottom:2px solid currentColor;
+}
+.cmpgrid .a{color:var(--c)}
+.cmpgrid .b{color:var(--mut)}
+.cmpgrid .s{font-family:var(--serif); font-size:1.1rem; line-height:1.4; padding:.35rem 0; color:var(--ink)}
+.cmpgrid .s.b mark.t{background:rgba(0,0,0,.06); color:#4A483F; border-bottom-color:#8B887E}
+@media(max-width:620px){
+  .cmpgrid{grid-template-columns:1fr; gap:.15rem}
+  .cmpgrid .hd{margin-top:.8rem}
+}
+
+/* exemples explicats */
+.exx{display:grid; gap:.7rem; counter-reset:x}
+.exi{
+  background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:1rem 1.1rem 1rem 3.1rem; position:relative;
+}
+.exi::before{
+  content:counter(x); counter-increment:x; position:absolute; left:1.05rem; top:1.05rem;
+  font-size:.78rem; font-weight:700; color:var(--c);
+  border:1.5px solid var(--c); border-radius:5px; width:1.4rem; height:1.4rem;
+  display:grid; place-items:center;
+}
+.exi .q{font-family:var(--serif); font-size:clamp(1.12rem,2.7vw,1.38rem); line-height:1.4; margin:0 0 .45rem}
+.exi .a{margin:0; font-size:.96rem; color:#3A3932}
+.exi .a b{font-weight:700}
+
+/* xinès */
+.zh{
+  margin:clamp(2.8rem,7vw,4rem) 0 0; padding:clamp(1.2rem,3.5vw,1.8rem);
+  border:1px dashed var(--line); border-radius:14px; background:#F4F3EF;
+}
+.zh > h3{font-size:1.05rem; font-weight:700; margin:0 0 1.2rem; color:var(--mut)}
+.zh > h3 .han{font-family:"Noto Sans SC",sans-serif; color:var(--ink)}
+.zitem + .zitem{margin-top:1.2rem}
+.zitem h4{margin:0 0 .35rem; font-size:1rem; font-weight:700}
+.zitem p{margin:0; font-size:.97rem; color:#3A3932}
+.zex{
+  font-family:var(--serif); font-size:1.1rem; margin:.5rem 0 0;
+  padding-left:.75rem; border-left:2.5px solid var(--c); color:var(--ink);
+}
+.han{font-family:"Noto Sans SC",sans-serif; white-space:nowrap}
+
+footer{color:var(--mut); font-size:.85rem; padding:3rem 0 4rem; line-height:1.6; border-top:1px solid var(--line); margin-top:3rem}
+footer a{color:var(--mut)}
+
+@media(max-width:760px){
+  nav.chips{position:static}
+  .chip{flex:1 1 auto; font-size:.78rem}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms !important}}
+@media print{nav.chips{display:none} .panel{display:block !important; break-before:page} body{background:#fff}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Les nou<br>categories<br>gramaticals</h1>
+    <p class="sentence" id="sentence"></p>
+
+    <section class="intro">
+      <div>
+        <h2>Què és una categoria gramatical</h2>
+        <p>És la classe a la qual pertany una paraula. Es decideix mirant <b>com canvia de forma</b>, <b>on pot anar</b> dins la frase i <b>què hi fa</b>. No es decideix pel significat.</p>
+      </div>
+      <div>
+        <h2>N'hi ha nou</h2>
+        <p>Cinc <b>canvien de forma</b>: nom, adjectiu, determinant, pronom i verb. Quatre <b>no canvien mai</b>: adverbi, preposició, conjunció i interjecció.</p>
+      </div>
+      <div>
+        <h2>Depèn sempre de la frase</h2>
+        <p>La mateixa paraula pot canviar de categoria: <b>aquest</b> llibre és un determinant, però <b>aquest</b> és meu és un pronom. Mira sempre com funciona a la frase.</p>
+      </div>
+    </section>
+  </header>
+</div>
+
+<nav class="chips" aria-label="Categories"><div class="chips-in" id="chips" role="tablist"></div></nav>
+
+<main class="wrap" id="panels"></main>
+
+<div class="wrap">
+  <footer>
+    <p><b>Fonts normatives:</b> Gramàtica de la llengua catalana (GIEC, IEC 2016) · Gramàtica essencial (GEIEC, IEC 2018) · Gramàtica bàsica i d'ús (GBU, IEC 2019) · Ortografia catalana (IEC 2017) · Optimot i DIEC2.<br>
+    <a href="https://geiec.iec.cat/text" target="_blank" rel="noopener">geiec.iec.cat</a> · <a href="https://giec.iec.cat" target="_blank" rel="noopener">giec.iec.cat</a> · <a href="https://aplicacions.llengua.gencat.cat/llc/AppJava/index.html" target="_blank" rel="noopener">Optimot</a> · <a href="https://dlc.iec.cat" target="_blank" rel="noopener">DIEC2</a></p>
+  </footer>
+</div>
+
+<script>
+/* =========================================================================
+   DADES · [[paraula]] = paraula marcada amb el color de la categoria
+   ========================================================================= */
+const DATA = [
+
+/* ------------------------------------------------------------------ 1 NOM */
+{
+n:1, id:"nom", ca:"Nom", zhn:"名词", py:"míngcí", c:"#2F7A50", tag:"Canvia de forma",
+def:`El nom anomena les coses: persones, animals, objectes, llocs, idees i sentiments.`,
+use:`El fas servir sempre que vols dir <b>què</b> és una cosa. El nom és el centre del grup de paraules: el determinant i l'adjectiu s'hi han d'adaptar.`,
+ex:[
+ [`La [[Marta]] estudia [[medicina]].`],
+ [`Vull un [[got]] d'[[aigua]].`],
+ [`Tinc molta [[gana]].`]
+],
+types:[
+ [`Comú i propi`,`El comú anomena una classe de coses; el propi, un individu concret.`,`un gos, una ciutat · en Bruno, Girona`],
+ [`Concret i abstracte`,`El concret es pot tocar o veure; l'abstracte és una idea.`,`la taula, el pa · la llibertat, l'amor`],
+ [`Comptable i no comptable`,`El comptable es pot contar; el no comptable es mesura.`,`dos llibres · molta aigua`],
+ [`Individual i col·lectiu`,`El col·lectiu és singular però parla d'un grup.`,`un arbre · un bosc, la gent`]
+],
+tests:[
+ `Hi pots posar <b>el, la, un</b> o <b>una</b> al davant: <span class="s">el gos, la casa, un dubte</span>.`,
+ `Té un gènere que no canvia mai i pot fer plural: <span class="s">la taula → les taules</span>.`,
+ `Respon a la pregunta <b>qui?</b> o <b>què?</b>`
+],
+confuse:[
+ {t:`Nom o adjectiu?`,
+  rule:`El nom té un gènere propi que no canvia. L'adjectiu canvia de gènere per adaptar-se al nom que acompanya.`,
+  labA:`Nom`, labB:`Adjectiu`,
+  pairs:[[`una [[casa]] gran`,`una casa [[gran]]`],[`la [[professora]] simpàtica`,`la professora [[simpàtica]]`]]},
+ {t:`Nom o verb?`,
+  rule:`Si hi pots posar un article al davant, és un nom. Els infinitius sovint es converteixen en noms.`,
+  labA:`Nom`, labB:`Verb`,
+  pairs:[[`El [[dinar]] ja és a taula.`,`Vull [[dinar]] aviat.`],[`El [[poder]] canvia la gent.`,`No [[puc]] venir.`]]}
+],
+explained:[
+ [`La [[Marta]] viu a Girona.`,`<b>Marta</b> anomena una persona concreta: és un nom propi. Per això s'escriu amb majúscula i no fa plural.`],
+ [`Vull dos [[cafès]], si us plau.`,`<b>Cafès</b> es pot contar i fa plural. Els noms comptables admeten un numeral al davant.`],
+ [`Tinc [[por]] dels gossos.`,`<b>Por</b> no es pot tocar ni veure, però hi pots posar article (la por): és un nom abstracte.`],
+ [`El [[dinar]] ja és a taula.`,`Aquí <b>dinar</b> no és un verb sinó un nom: porta l'article el i podries dir el dinar calent.`],
+ [`La [[gent]] espera a fora.`,`<b>Gent</b> parla de moltes persones però és singular: un nom col·lectiu. Per això el verb va en singular.`]
+],
+zh:[
+ [`El gènere`,`En xinès un nom és només un nom. En català cada nom és masculí o femení, i tot el que l'acompanya s'hi ha d'adaptar. Apunta sempre l'article amb el nom, com si fossin una sola paraula.`,`el gos negre · la gossa negra`],
+ [`El plural`,`El xinès no marca el plural enlloc; el català el marca a totes les paraules del grup.`,`<span class="han">三本书</span> → tres llibres`],
+ [`Els classificadors`,`On el xinès posa un classificador, el català posa un determinant. I no el pots ometre mai.`,`<span class="han">我去学校</span> → Vaig a l'escola`]
+]},
+
+/* ------------------------------------------------------------ 2 ADJECTIU */
+{
+n:2, id:"adjectiu", ca:"Adjectiu", zhn:"形容词", py:"xíngróngcí", c:"#CE8B22", tag:"Canvia de forma",
+def:`L'adjectiu diu com és el nom: una qualitat, una característica, una manera de ser.`,
+use:`El fas servir per descriure. Sempre concorda amb el nom: si el nom és femení plural, l'adjectiu també.`,
+ex:[
+ [`Una casa [[gran]] i [[blanca]].`],
+ [`Uns exercicis molt [[difícils]].`],
+ [`El cafè és [[fred]].`]
+],
+types:[
+ [`Qualificatius`,`Diuen una qualitat. Poden anar davant o darrere del nom i admeten graus.`,`blanc, vell, tranquil, difícil`],
+ [`De relació`,`Relacionen el nom amb un àmbit. Van sempre darrere i no admeten graus.`,`la política econòmica, la xarxa elèctrica`]
+],
+tests:[
+ `Canvia de forma segons el nom: <span class="s">alt · alta · alts · altes</span>.`,
+ `El pots treure i la frase encara funciona: <span class="s">Aquesta camisa (blanca) et queda bé.</span>`,
+ `Hi pots posar <b>molt</b> al davant: <span class="s">molt alt, molt difícil</span>.`
+],
+confuse:[
+ {t:`Adjectiu o determinant?`,
+  rule:`L'adjectiu es pot treure i la frase segueix dreta. El determinant no: si el treus, la frase es trenca.`,
+  labA:`Adjectiu`, labB:`Determinant`,
+  pairs:[[`Aquesta camisa [[blanca]] em va bé.`,`[[Aquesta]] camisa em va bé.`],[`Sense l'adjectiu: <i>Aquesta camisa em va bé.</i> ✓`,`Sense el determinant: <i>Camisa em va bé.</i> ✗`]]},
+ {t:`Adjectiu o adverbi?`,
+  rule:`L'adjectiu acompanya un nom i hi concorda. L'adverbi acompanya un verb o un adjectiu i no canvia mai de forma.`,
+  labA:`Adjectiu`, labB:`Adverbi`,
+  pairs:[[`Estan [[cansats]].`,`Estan [[molt]] cansats.`],[`És un noi [[bo]].`,`Canta [[bé]].`]]}
+],
+explained:[
+ [`Una casa [[gran]].`,`<b>Gran</b> diu com és la casa i el pots treure sense trencar la frase: <i>una casa</i> segueix funcionant.`],
+ [`Les taules són [[blanques]].`,`<b>Blanques</b> copia el gènere i el nombre de taules. Aquesta concordança només la fan els adjectius.`],
+ [`Un [[gran]] home.`,`Davant del nom, <b>gran</b> canvia de sentit: no vol dir alt, vol dir admirable. Segueix sent un adjectiu.`],
+ [`La política [[econòmica]] del govern.`,`<b>Econòmica</b> no diu una qualitat sinó un àmbit: és un adjectiu de relació. Per això no pots dir <i>molt econòmica</i> en aquest sentit.`],
+ [`El cafè està [[fred]].`,`L'adjectiu no sempre toca el nom: aquí va darrere del verb estar, però encara concorda amb cafè.`]
+],
+zh:[
+ [`Fa falta un verb`,`En xinès l'adjectiu ja fa de predicat ell sol. En català sempre hi ha d'haver un verb pel mig.`,`<span class="han">她很高</span> → Ella <b>és</b> molt alta`],
+ [`L'ordre és a l'inrevés`,`El xinès posa la descripció davant del nom; el català la posa darrere.`,`<span class="han">红色的书</span> → el llibre vermell`],
+ [`Compte amb <span class="han">很</span>`,`En xinès és quasi obligatori i sovint no vol dir «molt». Si poses molt cada vegada, en català sona exagerat.`,`<span class="han">她很高</span> → És alta`]
+]},
+
+/* --------------------------------------------------------- 3 DETERMINANT */
+{
+n:3, id:"determinant", ca:"Determinant", zhn:"限定词", py:"xiàndìngcí", c:"#1663D6", tag:"Canvia de forma",
+def:`El determinant va davant del nom i diu de quin nom parlem: si ja el coneixem, de qui és, o quants n'hi ha.`,
+use:`El fas servir gairebé sempre que hi ha un nom. Sense determinant, la majoria de frases no funcionen.`,
+ex:[
+ [`[[La]] professora ens va posar [[uns]] exercicis.`],
+ [`[[Aquest]] llibre és de [[la]] Marta.`],
+ [`No tinc [[cap]] dubte.`]
+],
+types:[
+ [`Article`,`Diu si el nom és conegut o nou.`,`el, la, els, les · un, una, uns, unes`],
+ [`Article personal`,`Va davant dels noms de persona.`,`en Joan, na Maria, l'Anna · el Joan, la Maria`],
+ [`Demostratius`,`Diuen si és a prop o lluny.`,`aquest, aquesta · aquell, aquella`],
+ [`Possessius`,`Diuen de qui és.`,`el meu, la teva, els seus · mon pare, ta mare`],
+ [`Numerals`,`Diuen quants o en quin ordre.`,`dos, tres · primer, segon`],
+ [`Quantitatius i indefinits`,`Diuen una quantitat imprecisa.`,`molt, poc, massa, gaire · algun, cap, cada, tot`]
+],
+tests:[
+ `Va sempre <b>davant</b> del nom.`,
+ `Si el treus, la frase es trenca: <span class="s">Aquesta camisa et queda bé → <i>Camisa et queda bé</i></span>.`,
+ `Concorda amb el nom: <span class="s">el llibre → els llibres</span>.`
+],
+confuse:[
+ {t:`Determinant o pronom?`,
+  rule:`És la confusió més freqüent. El determinant <b>acompanya</b> un nom; el pronom hi va <b>sol</b>, perquè el substitueix.`,
+  labA:`Determinant`, labB:`Pronom`,
+  pairs:[[`[[Aquest]] llibre és car.`,`[[Aquest]] és car.`],[`Tinc [[molts]] amics.`,`En tinc [[molts]].`],[`No hi ha [[cap]] cadira.`,`No n'hi ha [[cap]].`]]},
+ {t:`Determinant o adjectiu?`,
+  rule:`Tots dos acompanyen el nom, però el determinant obre el grup i no es pot treure; l'adjectiu descriu i sí que es pot treure.`,
+  labA:`Determinant`, labB:`Adjectiu`,
+  pairs:[[`[[Els]] meus amics`,`Uns amics [[simpàtics]]`]]}
+],
+explained:[
+ [`[[La]] professora ha arribat.`,`<b>La</b> va davant del nom i diu que ja sabem de quina professora parlem: és l'article definit.`],
+ [`Vull [[un]] got d'aigua.`,`<b>Un</b> presenta el nom com una cosa nova. Si el treus, <i>Vull got d'aigua</i> no funciona.`],
+ [`[[Aquest]] llibre és meu.`,`<b>Aquest</b> acompanya llibre i el situa a prop de qui parla. Acompanyar el nom és el que el fa determinant.`],
+ [`No he trobat [[cap]] error.`,`<b>Cap</b> indica una quantitat zero i va davant del nom: els quantificadors també són determinants.`],
+ [`Han vingut els [[teus]] amics.`,`<b>Teus</b> diu de qui són. En català el possessiu tònic demana article davant: els teus, mai <i>teus amics</i>.`]
+],
+zh:[
+ [`El xinès no té articles`,`En català has de triar entre «conegut» i «nou», i la tria canvia el sentit de la frase.`,`El llibre és a la taula · Un llibre és a la taula`],
+ [`Els classificadors desapareixen`,`On el xinès posa un classificador, el català no posa res entre el determinant i el nom.`,`<span class="han">这本书</span> → aquest llibre`],
+ [`El possessiu porta article`,`L'article no es pot treure mai davant d'un possessiu tònic.`,`<span class="han">我的父亲</span> → <b>el</b> meu pare`]
+]},
+
+/* -------------------------------------------------------------- 4 PRONOM */
+{
+n:4, id:"pronom", ca:"Pronom", zhn:"代词", py:"dàicí", c:"#C21F5B", tag:"Canvia de forma",
+def:`El pronom substitueix un nom que ja coneixem, per no haver-lo de repetir.`,
+use:`El fas servir quan ja saps de què parles. Els pronoms febles (em, el, en, hi, ho…) van sempre enganxats a un verb i són la peça més característica del català.`,
+ex:[
+ [`— Has vist la Marta? — Sí, [[l']]he vista.`],
+ [`No [[en]] tinc.`,`en = de pomes, de temps, del que sigui`],
+ [`[[Hi]] vaig cada dia.`,`hi = a aquell lloc`]
+],
+types:[
+ [`Personals forts`,`Van sols i es poden pronunciar amb força.`,`jo, tu, ell, nosaltres, vosaltres, ells · vostè, vós · mi, ti`],
+ [`Personals febles`,`Van enganxats al verb, sempre.`,`em, et, es, ens, us, el, la, els, les, li, en, hi, ho`],
+ [`Demostratius`,`Assenyalen sense anomenar.`,`això, allò, aquest, aquell`],
+ [`Relatius`,`Uneixen dues frases repetint un element.`,`que, què, qui, el qual, on`],
+ [`Interrogatius`,`Pregunten.`,`qui, què, quin, quant`],
+ [`Indefinits`,`Parlen de gent o coses sense precisar.`,`algú, ningú, res, tot, tothom, cadascú`]
+],
+tests:[
+ `Va <b>sol</b>: no té cap nom al costat.`,
+ `Els febles van <b>enganxats al verb</b>: <span class="s">Em veu · Veure'm · Mira'm</span>.`,
+ `Si el treus, no saps de qui o de què es parla.`
+],
+confuse:[
+ {t:`Pronom feble o article?`,
+  rule:`Les formes <b>el, la, els, les</b> serveixen per a totes dues coses. Mira què ve després: si ve un <b>nom</b>, és article; si ve un <b>verb</b>, és pronom.`,
+  labA:`Pronom`, labB:`Article (determinant)`,
+  pairs:[[`[[El]] veig cada dia.`,`[[El]] gos és negre.`],[`[[La]] conec molt bé.`,`[[La]] casa és gran.`]]},
+ {t:`Pronom o determinant?`,
+  rule:`Aquest, molts, cap, tot… poden ser les dues coses. Si acompanyen un nom, són determinants. Si van sols, són pronoms.`,
+  labA:`Pronom`, labB:`Determinant`,
+  pairs:[[`[[Aquest]] és meu.`,`[[Aquest]] llibre és meu.`],[`No en vull [[cap]].`,`No vull [[cap]] llibre.`]]}
+],
+explained:[
+ [`— Has vist la Marta? — Sí, [[l']]he vista.`,`<b>L'</b> substitueix la Marta i va enganxat al verb: és un pronom feble de complement directe.`],
+ [`[[Jo]] no hi vaig.`,`<b>Jo</b> va sol i no descriu ningú: només assenyala qui parla. És un pronom personal fort.`],
+ [`No [[en]] tinc.`,`<b>En</b> recull una cosa que ja sabem (de pomes, de temps). És un dels dos pronoms més característics del català.`],
+ [`[[Hi]] vaig cada dia.`,`<b>Hi</b> substitueix un lloc: a la feina, a Girona. Sense ell la frase queda coixa.`],
+ [`La noia [[que]] ha trucat és la meva germana.`,`<b>Que</b> uneix dues frases i, alhora, repeteix la noia: per això és un pronom relatiu i no una conjunció.`]
+],
+zh:[
+ [`En xinès l'objecte s'omet`,`El català no pot deixar el buit: hi ha d'haver un pronom feble que reculli el que ja s'ha dit.`,`— Has vist la Marta? — Sí, <b>l'</b>he vista.`],
+ [`La regla pràctica`,`Si en xinès diries la frase sense repetir res, en català gairebé segur que necessites <b>el, la, en, hi</b> o <b>ho</b>.`,``],
+ [`El lloc va enganxat al verb`,`El català recull el lloc amb hi, davant del verb.`,`<span class="han">我每天去那里</span> → <b>Hi</b> vaig cada dia`]
+]},
+
+/* ---------------------------------------------------------------- 5 VERB */
+{
+n:5, id:"verb", ca:"Verb", zhn:"动词", py:"dòngcí", c:"#D2413A", tag:"Canvia de forma",
+def:`El verb diu què passa: una acció, un procés o un estat.`,
+use:`Cada frase en necessita un. La seva terminació ja diu qui fa l'acció i quan passa, i per això el subjecte es pot ometre.`,
+ex:[
+ [`La Marta [[estudia]] català.`],
+ [`Ahir [[vam anar]] al cinema.`,`vam anar = passat, no futur`],
+ [`[[Estic]] cansat.`]
+],
+types:[
+ [`Primera conjugació · -ar`,`La més nombrosa i la més regular.`,`cantar → canto, cantava, cantaré`],
+ [`Segona conjugació · -er / -re`,`La que té més irregularitats.`,`témer → temo · perdre → perdo`],
+ [`Tercera conjugació · -ir`,`Té dos models: pur i incoatiu, amb -eix-.`,`dormir → dormo · servir → serveixo`]
+],
+tests:[
+ `Canvia segons <b>qui</b> fa l'acció i <b>quan</b> passa: <span class="s">canto · cantaves · cantarem</span>.`,
+ `Sempre hi pots posar un subjecte al davant: <span class="s">(jo) canto</span>.`,
+ `Sense verb no hi ha frase completa.`
+],
+confuse:[
+ {t:`Verb o nom?`,
+  rule:`Els infinitius es poden convertir en noms. Si hi pots posar un article al davant, ja no funciona com a verb.`,
+  labA:`Verb`, labB:`Nom`,
+  pairs:[[`Vull [[dinar]] aviat.`,`El [[dinar]] és a taula.`],[`No [[puc]] venir.`,`El [[poder]] canvia la gent.`]]},
+ {t:`Verb o adjectiu?`,
+  rule:`El participi pot ser verb o adjectiu. Si va amb <b>haver</b>, és verb i no canvia. Si va amb <b>ser</b> o <b>estar</b>, és adjectiu i concorda.`,
+  labA:`Verb`, labB:`Adjectiu`,
+  pairs:[[`Han [[tancat]] la porta.`,`La porta està [[tancada]].`],[`Hem [[fet]] les feines.`,`Les feines estan [[fetes]].`]]}
+],
+explained:[
+ [`La Marta [[estudia]] català.`,`<b>Estudia</b> diu l'acció i canvia segons qui la fa: estudio, estudies, estudia.`],
+ [`Ahir [[vam anar]] al cinema.`,`<b>Vam anar</b> són dues paraules però una sola forma verbal: el passat perifràstic. És passat, mai futur.`],
+ [`[[Cal]] estudiar més.`,`<b>Cal</b> és un verb impersonal: no té subjecte, però sense ell la frase no existiria.`],
+ [`[[Estic]] cansat.`,`<b>Estic</b> no diu cap acció sinó un estat. Els verbs també serveixen per a això.`],
+ [`Han [[tancat]] la porta.`,`<b>Tancat</b> va amb haver: forma part del verb i no concorda. Si diguessis <i>la porta està tancada</i>, seria un adjectiu.`]
+],
+zh:[
+ [`El verb xinès no canvia; el català sí`,`En xinès el temps es marca amb partícules o amb paraules de temps. En català la informació va dins del verb.`,`<span class="han">我昨天吃了</span> → Ahir <b>vaig menjar</b>`],
+ [`No n'hi ha prou amb dir «ahir»`,`És l'error més repetit: posar la paraula de temps i deixar el verb en present. La marca de temps ha de ser també al verb.`,`Ahir menjo paella ✗ · Ahir vaig menjar paella ✓`],
+ [`El subjecte es pot ometre`,`Com en xinès, no cal repetir jo, tu, ell: la terminació ja ho diu.`,`Estudio català`]
+]},
+
+/* ------------------------------------------------------------- 6 ADVERBI */
+{
+n:6, id:"adverbi", ca:"Adverbi", zhn:"副词", py:"fùcí", c:"#8A4FE0", tag:"No canvia mai",
+def:`L'adverbi diu com, quan, on o quant. No canvia mai de forma.`,
+use:`El fas servir per afegir una circumstància a un verb, a un adjectiu, a un altre adverbi o a tota la frase.`,
+ex:[
+ [`Parla [[bé]].`,`com?`],
+ [`Vindré [[demà]].`,`quan?`],
+ [`És [[molt]] alt.`,`quant?`]
+],
+types:[
+ [`Manera`,`Diuen com es fa una cosa.`,`bé, malament, així, de pressa, a poc a poc`],
+ [`Temps`,`Diuen quan.`,`ara, ahir, avui, demà, aviat, tard, sempre, mai, ja, encara`],
+ [`Lloc`,`Diuen on.`,`aquí, allà, amunt, avall, arreu, enlloc, dins, fora, lluny`],
+ [`Quantitat`,`Diuen quant.`,`molt, poc, bastant, massa, prou, gaire, gens, força, més`],
+ [`Afirmació, negació i dubte`,`Diuen si sí o si no.`,`sí, també, no, tampoc, potser, segurament`]
+],
+tests:[
+ `<b>No canvia mai</b>: ni gènere ni nombre. Si canvia, no és un adverbi.`,
+ `Respon a: <b>com? quan? on? quant?</b>`,
+ `El pots treure i la frase segueix sent correcta.`
+],
+confuse:[
+ {t:`Adverbi o adjectiu?`,
+  rule:`Aquesta és la confusió més freqüent, perquè algunes paraules serveixen per a les dues coses. L'adjectiu <b>concorda</b> amb un nom; l'adverbi <b>no canvia mai</b>.`,
+  labA:`Adverbi`, labB:`Adjectiu`,
+  pairs:[[`Estan [[molt]] cansats.`,`Tinc [[moltes]] coses.`],[`Canta [[bé]].`,`És un noi [[bo]].`],[`Corre [[massa]].`,`Hi ha [[massa]] gent.`]]},
+ {t:`Adverbi o preposició?`,
+  rule:`L'adverbi va <b>sol</b>. La preposició sempre porta alguna cosa darrere.`,
+  labA:`Adverbi`, labB:`Preposició`,
+  pairs:[[`Viu [[a prop]].`,`Viu [[a prop de]] l'escola.`],[`Queda't [[fora]].`,`Queda't [[fora de]] casa.`]]}
+],
+explained:[
+ [`Parla [[bé]].`,`<b>Bé</b> diu com parla i no canvia mai: no existeix <i>bés</i> ni <i>bea</i>.`],
+ [`Vindré [[demà]].`,`<b>Demà</b> situa el verb en el temps. El pots treure i la frase segueix sent correcta.`],
+ [`És [[molt]] alt.`,`Aquí <b>molt</b> no acompanya cap nom sinó l'adjectiu alt, i per això no concorda amb res.`],
+ [`[[Evidentment]], no hi aniré.`,`<b>Evidentment</b> no modifica cap paraula concreta: comenta tota la frase.`],
+ [`No m'agrada [[gaire]].`,`<b>Gaire</b> només apareix en frases negatives, interrogatives o condicionals. En una frase afirmativa diries molt.`]
+],
+zh:[
+ [`La posició canvia`,`En xinès l'adverbi de manera va davant del verb o amb 得 darrere; en català va normalment després del verb.`,`<span class="han">他说得很好</span> → Parla molt bé`],
+ [`Els de temps són lliures`,`Poden anar al principi o al final de la frase, com en xinès.`,`Ahir hi vaig anar · Hi vaig anar ahir`]
+]},
+
+/* ---------------------------------------------------------- 7 PREPOSICIÓ */
+{
+n:7, id:"preposicio", ca:"Preposició", zhn:"介词", py:"jiècí", c:"#1E7B79", tag:"No canvia mai",
+def:`La preposició uneix una paraula amb el seu complement i diu quina relació hi ha: lloc, temps, causa, companyia, finalitat.`,
+use:`El fas servir davant d'un nom, d'un pronom o d'un infinitiu. Mai va sola: sempre porta alguna cosa darrere.`,
+ex:[
+ [`El llibre [[de]] la Marta.`],
+ [`Vaig [[a]] Girona.`],
+ [`Parlo [[amb]] tu.`]
+],
+types:[
+ [`Àtones`,`Les més curtes i les més freqüents.`,`a, amb, de, en, per, per a`],
+ [`Tòniques`,`Es pronuncien amb força pròpia.`,`contra, entre, fins, malgrat, segons, sense, sobre, sota`],
+ [`Compostes`,`Fetes de dues o més paraules.`,`cap a, des de, fins a, a prop de, per damunt de`]
+],
+tests:[
+ `<b>Sempre porta alguna cosa darrere.</b> Si va sola, no és una preposició.`,
+ `No canvia mai de forma.`,
+ `El que ve darrere és un <b>nom</b>, un <b>pronom</b> o un <b>infinitiu</b>: mai un verb conjugat.`
+],
+confuse:[
+ {t:`Preposició o conjunció?`,
+  rule:`És la confusió més habitual, perquè moltes van per parelles. La regla és senzilla: darrere de la <b>preposició</b> hi ha un nom o un infinitiu; darrere de la <b>conjunció</b> hi ha una oració amb el verb conjugat.`,
+  labA:`Preposició`, labB:`Conjunció`,
+  pairs:[
+   [`Ho faig [[per]] tu.`,`Ho faig [[perquè]] t'estimo.`],
+   [`[[Abans de]] sopar.`,`[[Abans que]] sopis.`],
+   [`[[Malgrat]] la pluja.`,`[[Malgrat que]] plovia.`],
+   [`[[Sense]] dir res.`,`[[Sense que]] digui res.`]]},
+ {t:`Preposició o adverbi?`,
+  rule:`Si darrere no hi ha res, és un adverbi. Si hi ha un complement, és una preposició o una locució prepositiva.`,
+  labA:`Preposició`, labB:`Adverbi`,
+  pairs:[[`Viu [[a prop de]] l'escola.`,`Viu [[a prop]].`],[`És [[dins de]] la caixa.`,`És [[dins]].`]]}
+],
+explained:[
+ [`El llibre [[de]] la Marta.`,`<b>De</b> uneix llibre amb la Marta i diu de qui és. Sola no vol dir res: sempre necessita un complement.`],
+ [`Vaig [[a]] Girona.`,`<b>A</b> introdueix la destinació. Amb verbs de moviment el català sempre fa servir a.`],
+ [`Ho faig [[per]] tu.`,`Darrere de <b>per</b> hi ha un pronom, no un verb conjugat. Això és el que la fa preposició i no conjunció.`],
+ [`Ha marxat [[sense]] dir res.`,`<b>Sense</b> porta un infinitiu (dir). Les preposicions poden anar davant d'infinitiu; les conjuncions, no.`],
+ [`Viu [[a prop de]] l'escola.`,`<b>A prop de</b> són tres paraules que funcionen com una sola preposició: és una locució prepositiva.`]
+],
+zh:[
+ [`El xinès la posa davant del verb`,`En català el grup preposicional va darrere del verb, al final de la frase.`,`<span class="han">我在图书馆学习</span> → Estudio a la biblioteca`],
+ [`El possessiu canvia d'ordre`,`El xinès posa primer el propietari; el català el posa després, amb de.`,`<span class="han">玛尔塔的书</span> → el llibre <b>de</b> la Marta`],
+ [`Cada verb demana la seva`,`No hi ha una regla general: s'aprenen amb el verb.`,`pensar <b>en</b> · parlar <b>de</b> · jugar <b>a</b>`]
+]},
+
+/* ----------------------------------------------------------- 8 CONJUNCIÓ */
+{
+n:8, id:"conjuncio", ca:"Conjunció", zhn:"连词", py:"liáncí", c:"#79812E", tag:"No canvia mai",
+def:`La conjunció uneix dues parts de la frase i diu quina relació hi ha entre elles: suma, oposició, causa, condició.`,
+use:`El fas servir per lligar paraules o, sobretot, oracions senceres. Darrere hi sol haver un verb conjugat.`,
+ex:[
+ [`Plou [[i]] fa fred.`],
+ [`No surto [[perquè]] plou.`],
+ [`[[Encara que]] plogui, sortiré.`]
+],
+types:[
+ [`Copulatives i disjuntives`,`Sumen o donen a triar.`,`i, ni · o, o bé`],
+ [`Adversatives`,`Oposen dues idees.`,`però, sinó, sinó que, tanmateix, ara bé`],
+ [`Causals`,`Diuen el perquè.`,`perquè, com que, ja que, atès que`],
+ [`Finals`,`Diuen per a què. Demanen subjuntiu.`,`perquè, per tal que, a fi que`],
+ [`Condicionals`,`Posen una condició.`,`si, sempre que, en cas que, mentre`],
+ [`Concessives`,`Diuen un obstacle que no impedeix res.`,`encara que, tot i que, malgrat que`],
+ [`Temporals`,`Situen en el temps.`,`quan, mentre, abans que, després que, així que`]
+],
+tests:[
+ `Uneix <b>dues</b> coses. Si la treus, queden dues frases separades.`,
+ `Darrere hi sol haver un <b>verb conjugat</b>.`,
+ `No canvia mai de forma.`
+],
+confuse:[
+ {t:`Conjunció o preposició?`,
+  rule:`Mira què ve darrere: si hi ha un <b>verb conjugat</b>, és una conjunció; si hi ha un <b>nom</b> o un <b>infinitiu</b>, és una preposició.`,
+  labA:`Conjunció`, labB:`Preposició`,
+  pairs:[
+   [`Ho faig [[perquè]] t'estimo.`,`Ho faig [[per]] tu.`],
+   [`[[Abans que]] sopis.`,`[[Abans de]] sopar.`],
+   [`[[Malgrat que]] plovia.`,`[[Malgrat]] la pluja.`]]},
+ {t:`perquè, per què o el perquè?`,
+  rule:`Sonen igual, però són tres coses diferents.`,
+  labA:`Conjunció`, labB:`Altres categories`,
+  pairs:[
+   [`No vinc [[perquè]] estic malalt.`,`[[Per què]] no véns? <i>(interrogatiu)</i>`],
+   [`T'ho dic [[perquè]] ho sàpigues.`,`No entenc el [[perquè]]. <i>(nom)</i>`]]}
+],
+explained:[
+ [`Plou [[i]] fa fred.`,`<b>I</b> uneix dues frases completes. Si la treus, en queden dues de separades.`],
+ [`No surto [[perquè]] plou.`,`Darrere de <b>perquè</b> hi ha un verb conjugat (plou). Això la fa conjunció; amb un nom seria la preposició per.`],
+ [`[[Encara que]] plogui, sortiré.`,`<b>Encara que</b> introdueix un obstacle que no impedeix res. Demana subjuntiu: plogui, no plou.`],
+ [`[[Com que]] plovia, no vaig sortir.`,`Quan la causa va al principi de la frase, la conjunció és <b>com que</b>, mai com sol.`],
+ [`No és blanc, [[sinó]] negre.`,`<b>Sinó</b> corregeix el que s'acaba de negar. No és el mateix que si no, que posa una condició.`]
+],
+zh:[
+ [`En xinès van per parelles`,`因为…所以… i 虽然…但是… necessiten les dues meitats. El català només en posa una.`,`Com que plovia, no vaig sortir`],
+ [`Amb una n'hi ha prou`,`Si en poses dues, la frase és incorrecta.`,`Encara que plogui, però sortiré ✗`]
+]},
+
+/* -------------------------------------------------------- 9 INTERJECCIÓ */
+{
+n:9, id:"interjeccio", ca:"Interjecció", zhn:"感叹词", py:"gǎntàncí", c:"#8A4B2B", tag:"No canvia mai",
+def:`La interjecció expressa una emoció o crida l'atenció. Funciona ella sola, com una frase sencera.`,
+use:`La fas servir sobretot parlant. No es relaciona gramaticalment amb la resta: va aïllada, amb una coma o amb signes d'exclamació.`,
+ex:[
+ [`[[Ep!]] Que et cau la cartera.`],
+ [`[[Uf]], quin dia.`],
+ [`[[Déu n'hi do!]]`,`admiració per una quantitat o un mèrit`]
+],
+types:[
+ [`Pròpies`,`Només existeixen com a interjecció.`,`ah, oh, ep, ei, ai, apa, au, uf, ecs, bah, ui`],
+ [`Impròpies`,`Vénen d'altres categories i s'hi han convertit.`,`Home! · Vinga! · Va! · Alça! · Mare meva!`],
+ [`Onomatopeies`,`Imiten un so.`,`bum, patapam, nyam, xit`]
+],
+tests:[
+ `Va <b>sola</b>: no depèn de cap altra paraula.`,
+ `Pot ser una frase sencera ella mateixa.`,
+ `Es reconeix per l'entonació i pels signes d'exclamació.`
+],
+confuse:[
+ {t:`Interjecció o la categoria d'origen?`,
+  rule:`Moltes interjeccions són noms o verbs que han canviat de funció. Si la paraula va aïllada i només expressa emoció, és una interjecció.`,
+  labA:`Interjecció`, labB:`Categoria d'origen`,
+  pairs:[[`[[Home!]] Quina sorpresa.`,`Aquell [[home]] és alt. <i>(nom)</i>`],[`[[Va!]] Afanya't.`,`La Marta [[va]] a l'escola. <i>(verb)</i>`]]}
+],
+explained:[
+ [`[[Ep!]] Que et cau la cartera.`,`<b>Ep</b> no forma part de la frase que ve després: serveix només per cridar l'atenció.`],
+ [`[[Uf]], quin dia.`,`<b>Uf</b> expressa cansament ell sol. El podries dir sense res més i s'entendria igual.`],
+ [`Fa fred, [[oi?]]`,`<b>Oi</b> demana confirmació al final de la frase. És una de les més catalanes de totes.`],
+ [`[[Déu n'hi do!]]`,`Tres paraules que funcionen com una sola interjecció. Expressa admiració i no es pot traduir literalment.`],
+ [`[[Vinga!]] Que fem tard.`,`<b>Vinga</b> ve del verb venir, però aquí ja no funciona com a verb: només empeny a actuar.`]
+],
+zh:[
+ [`Les partícules finals xineses`,`吧, 呢, 啊 i 吗 van enganxades al final de la frase. La interjecció catalana és independent i se separa amb coma o exclamació.`,``],
+ [`Equivalències útils`,`Val la pena aprendre'n unes quantes de memòria.`,`<span class="han">…对吧？</span> → …oi? · <span class="han">哎呀！</span> → Ai! · <span class="han">哇！</span> → Caram!`],
+ [`Fan sonar natural`,`Un «oi?» o un «Déu n'hi do!» ben posats fan que el teu català soni de veritat.`,``]
+]}
+];
+
+const SENTENCE = [
+ ["Ep!",9],["Ahir",6],["la",3],["professora",1],["més",6],["simpàtica",2],
+ ["ens",4],["va posar",5],["uns",3],["exercicis",1],["molt",6],["difícils,",2],
+ ["però",8],["els",4],["vam fer",5],["amb",7],["calma.",1]
+];
+
+/* ========================================================== RENDER ====== */
+const byN={}; DATA.forEach(d=>byN[d.n]=d);
+const mk = s => s.replace(/\[\[(.+?)\]\]/g,'<mark class="t">$1</mark>');
+
+const sEl=document.getElementById("sentence");
+SENTENCE.forEach(([w,n],i)=>{
+  const b=document.createElement("button");
+  b.className="w"; b.type="button";
+  b.style.setProperty("--wc",byN[n].c);
+  b.style.setProperty("--d",(0.2+i*0.05)+"s");
+  b.textContent=w; b.title=byN[n].ca;
+  b.setAttribute("aria-label",w+" — "+byN[n].ca);
+  b.addEventListener("click",()=>select(n,true));
+  sEl.appendChild(b);
+});
+
+const chipsEl=document.getElementById("chips");
+DATA.forEach(d=>{
+  const b=document.createElement("button");
+  b.className="chip"; b.type="button"; b.setAttribute("role","tab");
+  b.id="chip-"+d.id; b.style.setProperty("--k",d.c);
+  b.setAttribute("aria-selected","false");
+  b.setAttribute("aria-controls","panel-"+d.id);
+  b.innerHTML='<span class="num">'+d.n+'</span><span class="nm">'+d.ca+'</span>';
+  b.addEventListener("click",()=>select(d.n,true));
+  chipsEl.appendChild(b);
+});
+
+const panelsEl=document.getElementById("panels");
+DATA.forEach(d=>{
+  const s=document.createElement("section");
+  s.className="panel"; s.id="panel-"+d.id;
+  s.setAttribute("role","tabpanel"); s.setAttribute("aria-labelledby","chip-"+d.id);
+  s.style.setProperty("--c",d.c);
+
+  let h='<div class="col">';
+
+  h+='<div class="phead"><div class="big">'+d.n+'</div><h2>'+d.ca+'</h2>'+
+     '<span class="tag">'+d.tag+'</span></div>';
+
+  h+='<p class="def">'+d.def+'</p><p class="use">'+d.use+'</p>';
+  h+='<div class="exlist">'+d.ex.map(e=>'<p class="ex">'+mk(e[0])+(e[1]?'<span class="gl">'+e[1]+'</span>':'')+'</p>').join('')+'</div>';
+
+  if(d.types&&d.types.length){
+    h+='<section class="sec"><h3>Tipus</h3><div class="types">'+
+      d.types.map(t=>'<div class="type"><b>'+t[0]+'</b><span>'+t[1]+'</span><span class="exs">'+t[2]+'</span></div>').join('')+
+      '</div></section>';
+  }
+
+  h+='<section class="sec"><h3>Com el reconeixes en una frase</h3><ol class="tests">'+
+     d.tests.map(t=>'<li>'+t+'</li>').join('')+'</ol></section>';
+
+  h+='<section class="sec"><h3>No el confonguis amb…</h3>'+
+    d.confuse.map(cf=>{
+      let g='<div class="cmpgrid"><div class="hd a">'+cf.labA+'</div><div class="hd b">'+cf.labB+'</div>';
+      cf.pairs.forEach(p=>{ g+='<div class="s a">'+mk(p[0])+'</div><div class="s b">'+mk(p[1])+'</div>'; });
+      g+='</div>';
+      return '<div class="cmp"><h4>'+cf.t+'</h4><p class="rule">'+cf.rule+'</p>'+g+'</div>';
+    }).join('')+'</section>';
+
+  h+='<section class="sec"><h3>Exemples explicats</h3><div class="exx">'+
+    d.explained.map(e=>'<div class="exi"><p class="q">'+mk(e[0])+'</p><p class="a">'+e[1]+'</p></div>').join('')+
+    '</div></section>';
+
+  h+='<section class="zh"><h3>Si la teva llengua és el xinès · <span class="han">中文对照</span></h3>'+
+    d.zh.map(z=>'<div class="zitem"><h4>'+z[0]+'</h4><p>'+z[1]+'</p>'+
+      (z[2]?'<p class="zex">'+z[2]+'</p>':'')+'</div>').join('')+'</section>';
+
+  h+='</div>';
+  s.innerHTML=h;
+  panelsEl.appendChild(s);
+});
+
+let current=null;
+function select(n,scroll){
+  DATA.forEach(x=>{
+    const on=x.n===n;
+    document.getElementById("chip-"+x.id).setAttribute("aria-selected",on?"true":"false");
+    document.getElementById("panel-"+x.id).classList.toggle("on",on);
+  });
+  current=n;
+  try{ history.replaceState(null,"","#"+byN[n].id); }catch(e){}
+  if(scroll){
+    const y=document.querySelector("nav.chips").getBoundingClientRect().top+window.scrollY;
+    window.scrollTo({top:y,behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"});
+  }
+}
+chipsEl.addEventListener("keydown",e=>{
+  if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft") return;
+  e.preventDefault();
+  const o=DATA.map(d=>d.n), i=o.indexOf(current);
+  const j=(i+(e.key==="ArrowRight"?1:-1)+o.length)%o.length;
+  select(o[j],false);
+  document.getElementById("chip-"+byN[o[j]].id).focus();
+});
+
+const hash=location.hash.replace("#","");
+const st=DATA.find(d=>d.id===hash);
+select(st?st.n:1,false);
+</script>
+</body>
+</html>
