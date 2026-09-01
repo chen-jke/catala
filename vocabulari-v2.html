@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vocabulari 2 · Català</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E9ECEF;
+  --surface:#FFFFFF;
+  --ink:#10161D;
+  --muted:#5E6B78;
+  --line:#D3D9DF;
+  --line-soft:#E7EBEF;
+  --ok:#1B7F4B;
+  --near:#C97400;
+  --bad:#CC2936;
+  --shown:#5E6B78;
+  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  --serif:'Source Serif 4',Georgia,'Times New Roman',serif;
+  --cjk:'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+  --emoji:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);min-height:100dvh}
+
+/* ---------- capçalera ---------- */
+.top{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line);padding:13px 20px 0}
+.top-row{display:flex;align-items:baseline;justify-content:space-between;gap:14px;max-width:1180px;margin:0 auto;flex-wrap:wrap}
+.brand{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.brand b{color:var(--ink)}
+.top-tools{display:flex;gap:6px;align-items:center}
+.counter{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;margin-right:8px;white-space:nowrap}
+.counter b{color:var(--ink);font-weight:600}
+.tbtn{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:none;border:1px solid var(--line);color:var(--muted);padding:5px 10px;border-radius:2px;cursor:pointer;transition:.15s}
+.tbtn:hover{border-color:var(--ink);color:var(--ink)}
+.tbtn.on{border-color:var(--ink);color:var(--ink);background:var(--line-soft)}
+.progress-track{max-width:1180px;margin:11px auto 0;height:2px;background:var(--line-soft);position:relative}
+.progress-fill{position:absolute;inset:0 auto 0 0;background:var(--ink);width:0;transition:width .35s cubic-bezier(.4,0,.2,1)}
+
+/* ---------- graella ---------- */
+.stage{max-width:1180px;margin:0 auto;padding:24px 20px 60px}
+.intro{font-size:14px;line-height:1.6;color:var(--muted);max-width:58ch;margin-bottom:22px}
+.intro b{color:var(--ink);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
+.cell{background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:20px 18px 16px;display:flex;flex-direction:column;align-items:center;position:relative;transition:border-color .15s}
+.kind{position:absolute;top:9px;left:11px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.idx{position:absolute;top:9px;right:11px;font-family:var(--mono);font-size:9px;color:var(--line)}
+.pic{font-family:var(--emoji);font-size:62px;line-height:1;margin:16px 0 14px;user-select:none}
+.zh{font-family:var(--cjk);font-size:22px;font-weight:500;letter-spacing:.06em;margin-bottom:12px;text-align:center}
+.ans{width:100%;font-family:var(--serif);font-size:19px;text-align:center;padding:7px 6px;border:none;border-bottom:2px solid var(--line);background:none;color:var(--ink);border-radius:0;transition:border-color .15s}
+.ans:focus{outline:none;border-bottom-color:var(--ink)}
+.ans::placeholder{color:#C3CAD1;font-family:var(--sans);font-size:14px}
+.acts{display:flex;gap:6px;margin-top:11px;width:100%}
+.act{flex:1;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;background:none;border:1px solid var(--line);color:var(--muted);padding:6px 4px;border-radius:2px;cursor:pointer;transition:.15s}
+.act:hover{border-color:var(--ink);color:var(--ink)}
+.act.redo{flex:1}
+.fb{font-family:var(--mono);font-size:10px;letter-spacing:.04em;margin-top:9px;min-height:13px;line-height:13px;color:transparent;text-align:center}
+
+.cell.ok{border-color:var(--ok)}
+.cell.ok .ans{border-bottom-color:var(--ok);color:var(--ok)}
+.cell.ok .fb{color:var(--ok)}
+.cell.near{border-color:var(--near)}
+.cell.near .ans{border-bottom-color:var(--near)}
+.cell.near .fb{color:var(--near)}
+.cell.ko{border-color:var(--bad)}
+.cell.ko .ans{border-bottom-color:var(--bad)}
+.cell.ko .fb{color:var(--bad)}
+.cell.shown .ans{border-bottom-color:var(--shown);color:var(--muted)}
+.cell.shown .fb{color:var(--muted)}
+.cell.done .ans{pointer-events:none}
+
+/* ---------- resultat ---------- */
+.results{display:none;background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:28px 26px;margin-top:22px;align-items:baseline;gap:22px;flex-wrap:wrap}
+.results.show{display:flex}
+.res-num{font-family:var(--serif);font-size:clamp(42px,9vw,64px);line-height:.9;font-weight:600;letter-spacing:-.02em}
+.res-num span{font-size:.4em;color:var(--muted);margin-left:5px}
+.res-sub{font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.btn{font-family:var(--sans);font-size:14px;font-weight:600;padding:11px 20px;border-radius:2px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;transition:.15s;margin-left:auto}
+.btn:hover{background:#000}
+
+@media(max-width:600px){
+  .grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .stage{padding:18px 12px 48px}
+  .top{padding:11px 14px 0}
+  .counter{width:100%;margin:0 0 4px}
+  .pic{font-size:42px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-row">
+    <div class="brand"><b>Vocabulari 2</b> · Català → 加泰罗尼亚语</div>
+    <div class="top-tools">
+      <span class="counter" id="counter"><b>0</b> / 100 encertades</span>
+      <button class="tbtn" id="fAll">Tot</button>
+      <button class="tbtn" id="fNom">Noms</button>
+      <button class="tbtn" id="fVerb">Verbs</button>
+      <button class="tbtn" id="fAdj">Adjectius</button>
+      <button class="tbtn" id="btnReset">Reinicia-ho tot</button>
+    </div>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="prog"></div></div>
+</header>
+
+<main class="stage">
+  <p class="intro">Mira el dibuix i la paraula xinesa, i escriu la paraula catalana. Els verbs s'escriuen en <b>infinitiu</b> (saludar, somriure) i els adjectius en <b>masculí singular</b> (content, blau), però també s'accepten les altres formes. Cada targeta té <b>Comprova</b> i <b>Mostra</b>; els accents compten.</p>
+  <div class="grid" id="grid"></div>
+  <div class="results" id="results">
+    <div>
+      <div class="res-num" id="resNum">0<span>%</span></div>
+      <div class="res-sub" id="resSub"></div>
+    </div>
+    <button class="btn" id="btnAgain">Torna a començar</button>
+  </div>
+</main>
+
+<script>
+/* =============== VOCABULARI ===============
+   ca: paraula · zh: xinès · e: dibuix · k: nom|verb · alt: altres formes acceptades */
+const WORDS=[
+/* --- noms --- */
+{ca:"bufanda",zh:"围巾",e:"🧣",k:"nom"},
+{ca:"guants",zh:"手套",e:"🧤",k:"nom",alt:["guant"]},
+{ca:"vestit",zh:"连衣裙",e:"👗",k:"nom"},
+{ca:"bossa",zh:"手提包",e:"👜",k:"nom"},
+{ca:"moneder",zh:"钱包",e:"👛",k:"nom"},
+{ca:"martell",zh:"锤子",e:"🔨",k:"nom"},
+{ca:"escala",zh:"梯子",e:"🪜",k:"nom"},
+{ca:"sofà",zh:"沙发",e:"🛋️",k:"nom"},
+{ca:"paper",zh:"纸",e:"📄",k:"nom"},
+{ca:"sobre",zh:"信封",e:"✉️",k:"nom"},
+{ca:"diari",zh:"报纸",e:"📰",k:"nom"},
+{ca:"quadern",zh:"笔记本",e:"📓",k:"nom"},
+{ca:"calendari",zh:"日历",e:"📅",k:"nom"},
+{ca:"mapa",zh:"地图",e:"🗺️",k:"nom"},
+{ca:"globus",zh:"气球",e:"🎈",k:"nom"},
+{ca:"espelma",zh:"蜡烛",e:"🕯️",k:"nom"},
+{ca:"piano",zh:"钢琴",e:"🎹",k:"nom"},
+{ca:"auriculars",zh:"耳机",e:"🎧",k:"nom",alt:["auricular"]},
+{ca:"sopa",zh:"汤",e:"🍲",k:"nom"},
+{ca:"amanida",zh:"沙拉",e:"🥗",k:"nom"},
+{ca:"entrepà",zh:"三明治",e:"🥪",k:"nom"},
+{ca:"galeta",zh:"饼干",e:"🍪",k:"nom",alt:["galetes"]},
+{ca:"mel",zh:"蜂蜜",e:"🍯",k:"nom"},
+{ca:"ceba",zh:"洋葱",e:"🧅",k:"nom"},
+{ca:"all",zh:"大蒜",e:"🧄",k:"nom"},
+{ca:"bolet",zh:"蘑菇",e:"🍄",k:"nom",alt:["bolets"]},
+{ca:"raïm",zh:"葡萄",e:"🍇",k:"nom"},
+{ca:"síndria",zh:"西瓜",e:"🍉",k:"nom"},
+{ca:"llimona",zh:"柠檬",e:"🍋",k:"nom"},
+{ca:"cirera",zh:"樱桃",e:"🍒",k:"nom",alt:["cireres"]},
+{ca:"te",zh:"茶",e:"🍵",k:"nom"},
+{ca:"suc",zh:"果汁",e:"🧃",k:"nom"},
+{ca:"pollastre",zh:"鸡肉",e:"🍗",k:"nom"},
+{ca:"ovella",zh:"羊",e:"🐑",k:"nom"},
+{ca:"abella",zh:"蜜蜂",e:"🐝",k:"nom"},
+{ca:"formiga",zh:"蚂蚁",e:"🐜",k:"nom"},
+{ca:"granota",zh:"青蛙",e:"🐸",k:"nom"},
+{ca:"tortuga",zh:"乌龟",e:"🐢",k:"nom"},
+{ca:"ós",zh:"熊",e:"🐻",k:"nom"},
+{ca:"guineu",zh:"狐狸",e:"🦊",k:"nom"},
+{ca:"elefant",zh:"大象",e:"🐘",k:"nom"},
+{ca:"núvol",zh:"云",e:"☁️",k:"nom",alt:["núvols"]},
+{ca:"llamp",zh:"闪电",e:"⚡",k:"nom"},
+{ca:"església",zh:"教堂",e:"⛪",k:"nom"},
+{ca:"castell",zh:"城堡",e:"🏰",k:"nom"},
+{ca:"avió",zh:"飞机",e:"✈️",k:"nom"},
+{ca:"tren",zh:"火车",e:"🚆",k:"nom"},
+{ca:"camió",zh:"卡车",e:"🚚",k:"nom"},
+{ca:"semàfor",zh:"红绿灯",e:"🚦",k:"nom"},
+{ca:"avi",zh:"爷爷",e:"👴",k:"nom"},
+{ca:"àvia",zh:"奶奶",e:"👵",k:"nom"},
+{ca:"metge",zh:"医生",e:"🧑‍⚕️",k:"nom",alt:["metgessa"]},
+{ca:"cor",zh:"心",e:"❤️",k:"nom"},
+{ca:"cervell",zh:"大脑",e:"🧠",k:"nom"},
+{ca:"boca",zh:"嘴",e:"👄",k:"nom"},
+{ca:"cama",zh:"腿",e:"🦵",k:"nom",alt:["cames"]},
+{ca:"sort",zh:"运气",e:"🍀",k:"nom"},
+/* --- verbs --- */
+{ca:"saludar",zh:"打招呼",e:"👋",k:"verb"},
+{ca:"somriure",zh:"微笑",e:"😊",k:"verb"},
+{ca:"besar",zh:"亲吻",e:"😘",k:"verb",alt:["fer un petó"]},
+{ca:"assenyalar",zh:"指",e:"👉",k:"verb"},
+{ca:"donar",zh:"给",e:"🤲",k:"verb"},
+{ca:"ensenyar",zh:"教",e:"🧑‍🏫",k:"verb"},
+{ca:"explicar",zh:"解释",e:"💬",k:"verb"},
+{ca:"mentir",zh:"说谎",e:"🤥",k:"verb"},
+{ca:"amagar-se",zh:"躲起来",e:"🙈",k:"verb",alt:["amagarse","amagar"]},
+{ca:"descansar",zh:"休息",e:"🛌",k:"verb"},
+{ca:"llevar-se",zh:"起床",e:"🌅",k:"verb",alt:["llevarse","llevar"]},
+{ca:"maquillar-se",zh:"化妆",e:"💄",k:"verb",alt:["maquillarse","maquillar"]},
+{ca:"afaitar-se",zh:"刮胡子",e:"🪒",k:"verb",alt:["afaitarse","afaitar"]},
+{ca:"raspallar-se",zh:"刷牙",e:"🪥",k:"verb",alt:["raspallarse","raspallar","rentar-se les dents"]},
+{ca:"esquiar",zh:"滑雪",e:"⛷️",k:"verb"},
+{ca:"patinar",zh:"滑冰",e:"⛸️",k:"verb"},
+{ca:"entrenar",zh:"锻炼",e:"🏋️",k:"verb",alt:["entrenar-se","entrenarse"]},
+{ca:"votar",zh:"投票",e:"🗳️",k:"verb"},
+{ca:"reciclar",zh:"回收",e:"♻️",k:"verb"},
+{ca:"curar",zh:"治疗",e:"🩹",k:"verb"},
+{ca:"aparcar",zh:"停车",e:"🅿️",k:"verb"},
+{ca:"navegar",zh:"航行",e:"⛵",k:"verb"},
+{ca:"acabar",zh:"结束",e:"🏁",k:"verb",alt:["acabar-se"]},
+{ca:"repetir",zh:"重复",e:"🔁",k:"verb"},
+{ca:"somiar",zh:"做梦",e:"💭",k:"verb"},
+{ca:"estimar",zh:"爱",e:"💕",k:"verb"},
+{ca:"regar",zh:"浇水",e:"💦",k:"verb"},
+{ca:"fregir",zh:"煎",e:"🍳",k:"verb"},
+{ca:"recollir",zh:"收拾",e:"🧺",k:"verb"},
+{ca:"olorar",zh:"闻",e:"👃",k:"verb",alt:["ensumar"]},
+/* --- adjectius --- */
+{ca:"content",zh:"高兴",e:"😄",k:"adjectiu",alt:["contenta","contents","contentes"]},
+{ca:"trist",zh:"伤心",e:"😢",k:"adjectiu",alt:["trista","tristos","tristes"]},
+{ca:"cansat",zh:"累",e:"🥱",k:"adjectiu",alt:["cansada","cansats","cansades"]},
+{ca:"enfadat",zh:"生气",e:"😠",k:"adjectiu",alt:["enfadada","enfadats","enfadades"]},
+{ca:"espantat",zh:"害怕",e:"😱",k:"adjectiu",alt:["espantada","espantats","espantades"]},
+{ca:"sorprès",zh:"惊讶",e:"😲",k:"adjectiu",alt:["sorpresa","sorpresos","sorpreses"]},
+{ca:"malalt",zh:"生病",e:"🤒",k:"adjectiu",alt:["malalta","malalts","malaltes"]},
+{ca:"vermell",zh:"红色",e:"🔴",k:"adjectiu",alt:["vermella","vermells","vermelles"]},
+{ca:"blau",zh:"蓝色",e:"🔵",k:"adjectiu",alt:["blava","blaus","blaves"]},
+{ca:"verd",zh:"绿色",e:"🟢",k:"adjectiu",alt:["verda","verds","verdes"]},
+{ca:"groc",zh:"黄色",e:"🟡",k:"adjectiu",alt:["groga","grocs","grogues"]},
+{ca:"negre",zh:"黑色",e:"⚫",k:"adjectiu",alt:["negra","negres"]},
+{ca:"blanc",zh:"白色",e:"⚪",k:"adjectiu",alt:["blanca","blancs","blanques"]}
+];
+
+/* =============== ESTAT =============== */
+const $=id=>document.getElementById(id);
+const gridEl=$('grid');
+let cards=[],filter='all';
+
+const clean=s=>s.toLowerCase().trim().replace(/\s+/g,' ').replace(/[’']/g,"'");
+const bare=s=>clean(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/·/g,'').replace(/-/g,'');
+
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+function build(){
+  cards=shuffle(WORDS).map(w=>({w,state:'idle'}));
+  gridEl.innerHTML='';
+  $('results').classList.remove('show');
+  cards.forEach((c,i)=>{
+    const cell=document.createElement('div');
+    cell.className='cell';
+    cell.dataset.kind=c.w.k;
+    cell.innerHTML=
+      '<span class="kind">'+c.w.k+'</span>'+
+      '<span class="idx">'+String(i+1).padStart(2,'0')+'</span>'+
+      '<div class="pic">'+c.w.e+'</div>'+
+      '<div class="zh">'+c.w.zh+'</div>'+
+      '<input class="ans" type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" placeholder="escriu-ho aquí">'+
+      '<div class="acts"><button class="act act-check">Comprova</button><button class="act act-show">Mostra</button></div>'+
+      '<div class="fb">·</div>';
+    const input=cell.querySelector('.ans');
+    input.addEventListener('keydown',e=>{
+      if(e.key==='Enter'){e.preventDefault();check(i);const n=cards.findIndex((x,j)=>j>i&&x.state!=='ok'&&x.state!=='shown');if(n>-1)cards[n].cell.querySelector('.ans').focus()}
+    });
+    input.addEventListener('input',()=>{if(c.state==='ko'||c.state==='near'){c.state='idle';cell.className='cell';cell.querySelector('.fb').textContent='·'}});
+    cell.querySelector('.act-check').addEventListener('click',()=>check(i));
+    cell.querySelector('.act-show').addEventListener('click',()=>show(i));
+    c.cell=cell;
+    gridEl.appendChild(cell);
+  });
+  applyFilter();
+  update();
+}
+
+function setState(i,state,msg){
+  const c=cards[i];
+  c.state=state;
+  c.cell.className='cell '+state+((state==='ok'||state==='shown')?' done':'');
+  c.cell.querySelector('.fb').textContent=msg;
+  const acts=c.cell.querySelector('.acts');
+  if(state==='ok'||state==='shown'){
+    acts.innerHTML='<button class="act redo act-redo">Torna a fer</button>';
+    acts.querySelector('.act-redo').addEventListener('click',()=>reset(i));
+  }
+  update();
+}
+
+function check(i){
+  const c=cards[i];
+  if(c.state==='ok'||c.state==='shown')return;
+  const val=c.cell.querySelector('.ans').value;
+  if(!clean(val)){setState(i,'idle','·');return}
+  const good=[c.w.ca].concat(c.w.alt||[]);
+  if(good.some(g=>clean(g)===clean(val))){setState(i,'ok','Correcte');return}
+  if(good.some(g=>bare(g)===bare(val))){setState(i,'near','Revisa accents i guions');return}
+  setState(i,'ko','Torna-hi');
+}
+
+function show(i){
+  const c=cards[i];
+  if(c.state==='ok')return;
+  c.cell.querySelector('.ans').value=c.w.ca;
+  setState(i,'shown','Solució');
+}
+
+function reset(i){
+  const c=cards[i];
+  c.state='idle';
+  c.cell.className='cell';
+  c.cell.querySelector('.ans').value='';
+  c.cell.querySelector('.fb').textContent='·';
+  const acts=c.cell.querySelector('.acts');
+  acts.innerHTML='<button class="act act-check">Comprova</button><button class="act act-show">Mostra</button>';
+  acts.querySelector('.act-check').addEventListener('click',()=>check(i));
+  acts.querySelector('.act-show').addEventListener('click',()=>show(i));
+  c.cell.querySelector('.ans').focus();
+  update();
+}
+
+function update(){
+  const ok=cards.filter(c=>c.state==='ok').length;
+  const sh=cards.filter(c=>c.state==='shown').length;
+  $('counter').innerHTML='<b>'+ok+'</b> / '+cards.length+' encertades'+(sh?' · '+sh+' vistes':'');
+  $('prog').style.width=((ok+sh)/cards.length*100)+'%';
+  if(ok+sh===cards.length&&cards.length){
+    const pct=Math.round(ok/cards.length*100);
+    $('resNum').innerHTML=pct+'<span>%</span>';
+    $('resSub').textContent=ok+' encertades sense ajuda · '+sh+' amb la solució';
+    $('results').classList.add('show');
+  }else $('results').classList.remove('show');
+}
+
+/* =============== FILTRE =============== */
+function applyFilter(){
+  cards.forEach(c=>{c.cell.style.display=(filter==='all'||c.w.k===filter)?'':'none'});
+  [['all','fAll'],['nom','fNom'],['verb','fVerb'],['adjectiu','fAdj']].forEach(([f,id])=>$(id).classList.toggle('on',filter===f));
+}
+$('fAll').addEventListener('click',()=>{filter='all';applyFilter()});
+$('fNom').addEventListener('click',()=>{filter='nom';applyFilter()});
+$('fVerb').addEventListener('click',()=>{filter='verb';applyFilter()});
+$('fAdj').addEventListener('click',()=>{filter='adjectiu';applyFilter()});
+
+$('btnReset').addEventListener('click',()=>{build();window.scrollTo({top:0,behavior:'smooth'})});
+$('btnAgain').addEventListener('click',()=>{build();window.scrollTo({top:0,behavior:'smooth'})});
+
+build();
+</script>
+</body>
+</html>
