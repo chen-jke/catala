@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Categories gramaticals · Català</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E9ECEF;
+  --surface:#FFFFFF;
+  --ink:#10161D;
+  --muted:#5E6B78;
+  --line:#D3D9DF;
+  --line-soft:#E7EBEF;
+
+  --NOM:#1B7F4B;
+  --ADJ:#C97400;
+  --VER:#CC2936;
+  --ADV:#7C3AED;
+  --PRO:#C2185B;
+  --PRE:#0E8A8A;
+  --CON:#6D6E24;
+  --DET:#2563C9;
+  --INT:#8B4A2B;
+
+  --bad:#CC2936;
+
+  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  --serif:'Source Serif 4',Georgia,'Times New Roman',serif;
+  --cjk:'Noto Sans SC','PingFang SC','Hiragino Sans GB',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);min-height:100dvh;display:flex;flex-direction:column}
+
+/* ---------- capçalera ---------- */
+.top{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line);padding:13px 20px 0}
+.top-row{display:flex;align-items:baseline;justify-content:space-between;gap:14px;max-width:1000px;margin:0 auto}
+.brand{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.brand b{color:var(--ink)}
+.top-tools{display:flex;gap:6px;align-items:center}
+.counter{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;margin-right:8px;white-space:nowrap}
+.counter b{color:var(--ink);font-weight:600}
+.tbtn{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:none;border:1px solid var(--line);color:var(--muted);padding:5px 10px;border-radius:2px;cursor:pointer;transition:.15s}
+.tbtn:hover{border-color:var(--ink);color:var(--ink)}
+.progress-track{max-width:1000px;margin:11px auto 0;height:2px;background:var(--line-soft);position:relative}
+.progress-fill{position:absolute;inset:0 auto 0 0;background:var(--ink);width:0;transition:width .35s cubic-bezier(.4,0,.2,1)}
+
+/* ---------- llista ---------- */
+.stage{flex:1;width:100%;max-width:1000px;margin:0 auto;padding:26px 20px 40px}
+.intro{font-size:14px;line-height:1.6;color:var(--muted);max-width:56ch;margin-bottom:26px}
+.intro b{color:var(--ink);font-weight:600}
+.list{background:var(--surface);border:1px solid var(--line);border-radius:3px}
+.row{display:grid;grid-template-columns:42px 1fr;gap:14px;padding:20px 24px;border-bottom:1px solid var(--line-soft)}
+.row:last-child{border-bottom:none}
+.num{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--muted);padding-top:7px;letter-spacing:.04em}
+.row.done .num{color:var(--ink)}
+.body{min-width:0}
+.sentence{display:flex;flex-wrap:wrap;gap:4px 3px;align-items:flex-start}
+.grp{display:flex;align-items:flex-start}
+
+/* ---------- paraula ---------- */
+.w{position:relative;display:flex;flex-direction:column;align-items:center;background:none;border:none;padding:0 2px;font-family:var(--serif);font-size:19px;line-height:1.3;color:var(--ink);cursor:pointer}
+.w .txt{padding:1px 3px 3px;border-bottom:2.5px solid var(--line-soft);transition:border-color .15s,background .15s;white-space:nowrap}
+.w .tag{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.08em;margin-top:4px;height:12px;line-height:12px;color:transparent;transition:color .15s;white-space:nowrap}
+.w[data-cat] .tag{color:var(--c)}
+.w[data-cat] .txt{border-bottom-color:var(--c)}
+.w.focus .txt{background:#EDF0F3}
+.w.focus::after{content:'';position:absolute;left:1px;right:1px;top:-5px;height:2px;background:var(--ink)}
+.w:not([data-cat]):not(.checked):hover .txt{border-bottom-color:var(--muted)}
+.w.ko .txt{border-bottom-color:var(--bad);background:#FDEEEF}
+.w.ko .tag{color:var(--bad);text-decoration:line-through}
+.w .fix{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.08em;color:var(--c);height:0;overflow:hidden;transition:height .15s}
+.w.ko .fix{height:12px;line-height:12px;margin-top:1px}
+.w.checked{cursor:default}
+.punct{font-family:var(--serif);font-size:19px;color:var(--muted);padding-top:1px}
+
+/* ---------- peu de frase ---------- */
+.foot{display:flex;align-items:center;gap:12px;margin-top:12px;min-height:26px}
+.mini{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;background:none;border:1px solid var(--line);color:var(--muted);padding:5px 11px;border-radius:2px;cursor:pointer;transition:.15s}
+.mini:hover{border-color:var(--ink);color:var(--ink)}
+.mini[hidden]{display:none}
+.tally{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.tally.perfect{color:var(--NOM)}
+.tally.some{color:var(--bad)}
+.mini.solve{border-style:dashed}
+.tally.shown{color:var(--muted)}
+
+/* ---------- explicacions ---------- */
+.why{display:none;margin-top:14px;padding-top:13px;border-top:1px solid var(--line-soft)}
+.why.show{display:block}
+.why-h{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.why-item{display:grid;grid-template-columns:126px 1fr;gap:14px;padding:8px 6px 8px 11px;border-left:2px solid var(--c);margin-bottom:3px;transition:background .2s}
+.why-item.hit{background:#EDF0F3}
+.why-w{font-family:var(--serif);font-size:16px;line-height:1.25;display:block;word-break:break-word}
+.why-cat{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--c);display:block;margin-top:3px}
+.why-tx{font-size:13.5px;line-height:1.6;color:var(--muted)}
+.why-miss{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--bad);margin-top:5px}
+
+/* ---------- resultat ---------- */
+.results{display:none;background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:30px 26px;margin-top:22px}
+.results.show{display:block}
+.res-num{font-family:var(--serif);font-size:clamp(48px,11vw,76px);line-height:.9;font-weight:600;letter-spacing:-.02em}
+.res-num span{font-size:.38em;color:var(--muted);margin-left:5px}
+.res-sub{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:11px}
+.bars{margin-top:26px;display:flex;flex-direction:column;gap:9px}
+.bar-row{display:grid;grid-template-columns:112px 1fr 42px;align-items:center;gap:12px}
+.bar-lbl{font-size:13px;font-weight:500}
+.bar-track{height:7px;background:var(--line-soft);border-radius:1px;overflow:hidden}
+.bar-fill{height:100%;background:var(--c);width:0;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.bar-val{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right}
+.res-actions{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+
+/* ---------- paleta ---------- */
+.palette{position:sticky;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);padding:11px 20px calc(11px + env(safe-area-inset-bottom))}
+.palette-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(9,1fr);gap:5px}
+.chip{display:flex;align-items:center;gap:6px;background:none;border:1px solid var(--line);border-radius:2px;padding:9px 7px;cursor:pointer;transition:.15s;font-family:var(--sans);font-size:12.5px;font-weight:500;color:var(--ink);text-align:left;min-width:0}
+.chip .k{font-family:var(--mono);font-size:10px;font-weight:600;color:#fff;background:var(--c);width:17px;height:17px;border-radius:2px;display:grid;place-items:center;flex-shrink:0}
+.chip .lbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip:hover{border-color:var(--c)}
+.chip.on{border-color:var(--c);background:var(--c);color:#fff}
+.chip.on .k{background:rgba(255,255,255,.25)}
+
+.btn{font-family:var(--sans);font-size:14px;font-weight:600;padding:11px 20px;border-radius:2px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;transition:.15s}
+.btn:hover{background:#000}
+.btn.ghost{background:none;color:var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:#fff}
+
+/* ---------- ajuda ---------- */
+.overlay{position:fixed;inset:0;background:rgba(16,22,29,.55);display:none;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;z-index:50}
+.overlay.show{display:flex}
+.modal{background:var(--surface);max-width:660px;width:100%;border-radius:3px;padding:30px 30px 24px;margin:auto}
+.modal h2{font-family:var(--serif);font-size:26px;font-weight:600;margin-bottom:4px}
+.modal .sub{font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.55}
+.legend{width:100%;border-collapse:collapse}
+.legend td{padding:9px 6px;border-bottom:1px solid var(--line-soft);vertical-align:top;font-size:14px}
+.legend tr:last-child td{border-bottom:none}
+.lg-name{font-weight:600;white-space:nowrap;color:var(--c)}
+.lg-cjk{font-family:var(--cjk);color:var(--muted);white-space:nowrap}
+.lg-ex{color:var(--muted);font-family:var(--serif);font-size:15px}
+.kbd-help{margin-top:16px;padding-top:14px;border-top:1px solid var(--line-soft);font-size:13px;color:var(--muted);line-height:1.8}
+kbd{font-family:var(--mono);font-size:11px;background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:1px 5px;color:var(--ink)}
+.modal-close{margin-top:20px;width:100%}
+
+@media(max-width:760px){
+  .palette-inner{grid-template-columns:repeat(3,1fr)}
+  .row{grid-template-columns:1fr;gap:6px;padding:18px 16px}
+  .num{padding-top:0}
+  .stage{padding:20px 12px 32px}
+  .top{padding:11px 14px 0}
+  .counter{display:none}
+  .bar-row{grid-template-columns:92px 1fr 38px}
+  .why-item{grid-template-columns:1fr;gap:4px}
+  .why-key{display:flex;align-items:baseline;gap:9px}
+  .why-cat{margin-top:0}
+  .modal{padding:24px 20px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-row">
+    <div class="brand"><b>Categories gramaticals</b> · Català</div>
+    <div class="top-tools">
+      <span class="counter" id="counter"><b>0</b> / 50 frases</span>
+      <button class="tbtn" id="btnHelp">Categories</button>
+      <button class="tbtn" id="btnReset">Reinicia</button>
+    </div>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="prog"></div></div>
+</header>
+
+<main class="stage">
+  <p class="intro">Tria una categoria a la paleta de baix i marca les paraules de cada frase. Després, <b>Comprova</b> corregeix la frase i <b>Mostra la solució</b> la resol sense puntuar. L'article (<b>el, la, un, les…</b>) no és una categoria a part: forma part dels determinants. Un cop corregida la frase, sota hi surt <b>el perquè</b> de cada paraula.</p>
+  <div class="list" id="list"></div>
+
+  <div class="results" id="results">
+    <div class="res-num" id="resNum">0<span>%</span></div>
+    <div class="res-sub" id="resSub"></div>
+    <div class="bars" id="bars"></div>
+    <div class="res-actions">
+      <button class="btn ghost" id="btnRedo">Repeteix les frases amb errors</button>
+      <button class="btn" id="btnAgain">Torna a començar</button>
+    </div>
+  </div>
+</main>
+
+<nav class="palette"><div class="palette-inner" id="paletteInner"></div></nav>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h2>Les nou categories</h2>
+    <p class="sub">Els articles no formen una categoria a part: són determinants, com els demostratius, els possessius o els numerals.</p>
+    <table class="legend" id="legend"></table>
+    <div class="kbd-help">
+      <b>Teclat:</b> <kbd>1</kbd>–<kbd>9</kbd> marquen la paraula activa i salten a la següent ·
+      <kbd>←</kbd> <kbd>→</kbd> canvien de paraula · <kbd>⌫</kbd> esborra · <kbd>Enter</kbd> comprova la frase.
+    </div>
+    <button class="btn modal-close" id="btnCloseHelp">Entesos</button>
+  </div>
+</div>
+
+<script>
+/* ================= CATEGORIES ================= */
+const CATS=[
+ {id:'NOM',name:'Nom',        cjk:'名词',  ex:'casa, Barcelona, paciència, fred'},
+ {id:'ADJ',name:'Adjectiu',   cjk:'形容词',ex:'gran, vermelles, difícils, nadius'},
+ {id:'DET',name:'Determinant',cjk:'限定词',ex:'el, la, un, aquest, meu, dos, moltes'},
+ {id:'VER',name:'Verb',       cjk:'动词',  ex:'és, va arribar, havia oblidat, sortir'},
+ {id:'ADV',name:'Adverbi',    cjk:'副词',  ex:'no, sempre, molt, ràpidament, on'},
+ {id:'PRO',name:'Pronom',     cjk:'代词',  ex:'jo, em, es, hi, ningú, que (relatiu)'},
+ {id:'PRE',name:'Preposició', cjk:'介词',  ex:'a, de, amb, en, per, sota, durant'},
+ {id:'CON',name:'Conjunció',  cjk:'连词',  ex:'i, però, que, perquè, si, quan, mentre'},
+ {id:'INT',name:'Interjecció',cjk:'感叹词',ex:'ai, uf, ep'}
+];
+const KEYS=['1','2','3','4','5','6','7','8','9'];
+
+/* ================= FRASES =================
+   format: paraula|CAT|puntuació   ·   ^ davant = s'enganxa a la paraula anterior */
+const DATA=[
+{s:"Quan|CON la|DET Marta|NOM va|VER arribar|VER a|PRE casa|NOM|, es|PRO va|VER adonar|VER que|CON havia|VER oblidat|VER les|DET claus|NOM dins|PRE el|DET cotxe|NOM|."},
+{s:"Els|DET estudiants|NOM que|PRO van|VER aprovar|VER l'|DET ^examen|NOM final|ADJ celebraran|VER la|DET nota|NOM amb|PRE els|DET seus|DET companys|NOM|."},
+{s:"Plovia|VER molt|ADV fort|ADV|, però|CON vam|VER decidir|VER sortir|VER a|PRE caminar|VER per|PRE la|DET muntanya|NOM|."},
+{s:"La|DET meva|DET germana|NOM petita|ADJ sempre|ADV em|PRO demana|VER que|CON li|PRO expliqui|VER un|DET conte|NOM llarg|ADJ cada|DET nit|NOM|."},
+{s:"Aquest|DET matí|NOM hem|VER visitat|VER un|DET museu|NOM petit|ADJ on|ADV hi|PRO havia|VER moltes|DET pintures|NOM modernes|ADJ|."},
+{s:"Si|CON tinguessis|VER més|DET temps|NOM lliure|ADJ|, podries|VER aprendre|VER a|PRE tocar|VER el|DET piano|NOM amb|PRE nosaltres|PRO|."},
+{s:"El|DET professor|NOM ens|PRO va|VER explicar|VER pacientment|ADV totes|DET les|DET regles|NOM que|PRO no|ADV enteníem|VER|."},
+{s:"Ahir|ADV vaig|VER comprar|VER dos|DET llibres|NOM nous|ADJ i|CON tres|DET quaderns|NOM grocs|ADJ en|PRE una|DET llibreria|NOM petita|ADJ|."},
+{s:"Uf|INT|, quina|DET calor|NOM feia|VER ahir|ADV a|PRE la|DET platja|NOM mentre|CON esperàvem|VER el|DET nostre|DET autobús|NOM|!"},
+{s:"No|ADV sé|VER si|CON vindrà|VER a|PRE la|DET festa|NOM|, però|CON l'|PRO ^he|VER convidat|VER perquè|CON és|VER un|DET bon|ADJ amic|NOM|."},
+{s:"Quan|CON siguis|VER gran|ADJ entendràs|VER que|CON la|DET paciència|NOM és|VER la|DET virtut|NOM més|ADV important|ADJ de|PRE totes|PRO|."},
+{s:"Els|DET nens|NOM petits|ADJ corren|VER alegrement|ADV per|PRE un|DET jardí|NOM ple|ADJ de|PRE flors|NOM blanques|ADJ|."},
+{s:"Encara|ADV no|ADV hem|VER decidit|VER on|ADV passarem|VER les|DET vacances|NOM d'|PRE ^aquest|DET estiu|NOM tan|ADV calorós|ADJ|."},
+{s:"La|DET casa|NOM que|PRO vam|VER veure|VER diumenge|NOM era|VER massa|ADV cara|ADJ|, però|CON era|VER molt|ADV bonica|ADJ|."},
+{s:"Ella|PRO li|PRO va|VER donar|VER el|DET seu|DET número|NOM de|PRE telèfon|NOM perquè|CON la|PRO truqués|VER aquella|DET mateixa|DET tarda|NOM|."},
+{s:"Ep|INT|! Algú|PRO ha|VER deixat|VER una|DET motxilla|NOM vermella|ADJ sota|PRE la|DET taula|NOM de|PRE la|DET cuina|NOM|."},
+{s:"Mentre|CON ell|PRO cuinava|VER el|DET sopar|NOM|, jo|PRO endreçava|VER tranquil·lament|ADV tots|DET els|DET papers|NOM de|PRE l'|DET ^escriptori|NOM|."},
+{s:"Aquesta|DET pel·lícula|NOM que|PRO em|PRO vas|VER recomanar|VER m'|PRO ^ha|VER agradat|VER molt|ADV|, però|CON el|DET final|NOM és|VER massa|ADV trist|ADJ|."},
+{s:"Els|DET meus|DET pares|NOM viuen|VER molt|ADV lluny|ADV i|CON només|ADV els|PRO puc|VER visitar|VER durant|PRE les|DET vacances|NOM|."},
+{s:"Ai|INT|, m'|PRO ^he|VER tallat|VER el|DET dit|NOM mentre|CON pelava|VER aquestes|DET patates|NOM tan|ADV dures|ADJ|!"},
+{s:"Tothom|PRO sap|VER que|CON estudiar|VER cada|DET dia|NOM és|VER la|DET millor|ADJ manera|NOM d'|PRE ^aprendre|VER una|DET llengua|NOM nova|ADJ|."},
+{s:"El|DET gos|NOM negre|ADJ borda|VER cada|DET nit|NOM i|CON no|ADV ens|PRO deixa|VER dormir|VER tranquil·lament|ADV|."},
+{s:"Vaig|VER conèixer|VER aquella|DET noia|NOM simpàtica|ADJ en|PRE una|DET festa|NOM i|CON ara|ADV som|VER molt|ADV bons|ADJ amics|NOM|."},
+{s:"Quantes|DET hores|NOM dediques|VER cada|DET setmana|NOM a|PRE preparar|VER les|DET classes|NOM de|PRE català|NOM|?"},
+{s:"Si|CON no|ADV plou|VER demà|ADV|, anirem|VER a|PRE la|DET muntanya|NOM amb|PRE les|DET bicicletes|NOM noves|ADJ que|PRO vam|VER comprar|VER|."},
+{s:"La|DET professora|NOM de|PRE xinès|NOM ens|PRO va|VER dir|VER que|CON havíem|VER de|PRE practicar|VER la|DET pronunciació|NOM diàriament|ADV|."},
+{s:"Aquell|DET home|NOM alt|ADJ que|PRO porta|VER un|DET abric|NOM gris|ADJ és|VER el|DET director|NOM de|PRE la|DET nostra|DET empresa|NOM|."},
+{s:"No|ADV hi|PRO ha|VER ningú|PRO a|PRE l'|DET ^oficina|NOM perquè|CON avui|ADV és|VER festa|NOM i|CON tothom|PRO descansa|VER|."},
+{s:"Les|DET meves|DET amigues|NOM han|VER viatjat|VER a|PRE Xina|NOM tres|DET vegades|NOM i|CON sempre|ADV tornen|VER molt|ADV contentes|ADJ|."},
+{s:"Ho|PRO vaig|VER entendre|VER tot|PRO perfectament|ADV quan|CON em|PRO van|VER explicar|VER el|DET problema|NOM una|DET altra|DET vegada|NOM|."},
+{s:"Malauradament|ADV|, el|DET tren|NOM va|VER arribar|VER molt|ADV tard|ADV i|CON vam|VER perdre|VER la|DET connexió|NOM de|PRE Girona|NOM|."},
+{s:"Aquests|DET exercicis|NOM són|VER difícils|ADJ|, però|CON si|CON els|PRO fas|VER amb|PRE calma|NOM els|PRO entendràs|VER ràpidament|ADV|."},
+{s:"El|DET nen|NOM petit|ADJ va|VER caure|VER de|PRE la|DET bicicleta|NOM|, però|CON no|ADV es|PRO va|VER fer|VER mal|NOM i|CON ara|ADV ja|ADV està|VER bé|ADV|."},
+{s:"Quan|CON acabis|VER de|PRE llegir|VER aquest|DET capítol|NOM|, escriu|VER un|DET resum|NOM breu|ADJ amb|PRE les|DET teves|DET paraules|NOM|."},
+{s:"Hi|PRO havia|VER molta|DET gent|NOM a|PRE la|DET plaça|NOM esperant|VER que|CON comencés|VER el|DET concert|NOM gratuït|ADJ|."},
+{s:"Aquesta|PRO és|VER la|DET meva|DET ciutat|NOM preferida|ADJ perquè|CON aquí|ADV vaig|VER passar|VER tota|DET la|DET meva|DET infància|NOM|."},
+{s:"Els|DET alumnes|NOM xinesos|ADJ aprenen|VER català|NOM ràpidament|ADV quan|CON practiquen|VER amb|PRE parlants|NOM nadius|ADJ|."},
+{s:"No|ADV em|PRO van|VER avisar|VER que|CON la|DET reunió|NOM s'|PRO ^havia|VER ajornat|VER fins|PRE la|DET setmana|NOM vinent|ADJ|."},
+{s:"Compra|VER tres|DET pomes|NOM vermelles|ADJ|, quatre|DET plàtans|NOM madurs|ADJ i|CON dos|DET pans|NOM integrals|ADJ|."},
+{s:"Quan|CON viatjo|VER sol|ADJ|, sempre|ADV porto|VER una|DET llibreta|NOM petita|ADJ per|PRE escriure|VER les|DET meves|DET impressions|NOM|."},
+{s:"El|DET restaurant|NOM on|ADV vam|VER sopar|VER ahir|ADV servia|VER un|DET peix|NOM boníssim|ADJ a|PRE un|DET preu|NOM molt|ADV raonable|ADJ|."},
+{s:"Tots|DET els|DET meus|DET companys|NOM em|PRO van|VER felicitar|VER quan|CON van|VER saber|VER la|DET bona|ADJ notícia|NOM|."},
+{s:"Aquell|DET dia|NOM feia|VER fred|NOM i|CON ningú|PRO no|ADV volia|VER sortir|VER de|PRE casa|NOM|."},
+{s:"La|DET nova|ADJ exposició|NOM de|PRE fotografia|NOM s'|PRO ^inaugurarà|VER divendres|NOM a|PRE la|DET tarda|NOM amb|PRE música|NOM i|CON pastissos|NOM|."},
+{s:"Vosaltres|PRO heu|VER treballat|VER molt|ADV bé|ADV aquest|DET trimestre|NOM|, però|CON encara|ADV podeu|VER millorar|VER la|DET pronunciació|NOM|."},
+{s:"Em|PRO vaig|VER llevar|VER molt|ADV aviat|ADV perquè|CON volia|VER veure|VER sortir|VER el|DET sol|NOM darrere|PRE les|DET muntanyes|NOM blaves|ADJ|."},
+{s:"Aquest|DET cap|NOM de|PRE setmana|NOM anirem|VER a|PRE Saragossa|NOM amb|PRE uns|DET amics|NOM catalans|ADJ que|PRO viuen|VER allà|ADV|."},
+{s:"Ningú|PRO no|ADV sabia|VER que|CON aquella|DET senyora|NOM gran|ADJ havia|VER estat|VER una|DET cantant|NOM molt|ADV famosa|ADJ|."},
+{s:"Renta|VER ^'t|PRO les|DET mans|NOM i|CON seu|VER a|PRE taula|NOM amb|PRE els|DET altres|DET convidats|NOM|."},
+{s:"Quan|CON vaig|VER arribar|VER a|PRE Barcelona|NOM no|ADV coneixia|VER ningú|PRO|, però|CON ara|ADV tinc|VER molts|DET amics|NOM aquí|ADV|."}
+];
+
+/* ================= PER QUÈ (explicacions) =================
+   LEX: casos concrets, clau "paraula|CAT" (en minúscules).
+   Si no n'hi ha cap, s'aplica una explicació general segons el context. */
+const AUX_HAVER=["he","has","ha","hem","heu","han","havia","havies","havíem","havien","hagi","hagués"];
+const AUX_ANAR=["vaig","vas","va","vam","vau","van","vàrem","vàreu"];
+const FEBLES=["em","et","es","ens","us","el","la","els","les","li","hi","ho","en","m'","t'","s'","l'","n'","'t","'m","'s","'l","'n","me","te","se","ne"];
+const TONICS=["jo","tu","ell","ella","ells","elles","nosaltres","vosaltres","vostè","mi"];
+const INDEF=["ningú","algú","tothom","res","tot","tots","tota","totes"];
+const DEMOS=["aquest","aquesta","aquests","aquestes","aquell","aquella","aquells","aquelles","això","allò"];
+const POSS=["meu","meva","meus","meves","teu","teva","teus","teves","seu","seva","seus","seves","nostre","nostra","nostres","vostre","vostra","vostres"];
+const ARTS=["el","la","els","les","l'","un","una","uns","unes"];
+const NUMS=["un","dos","dues","tres","quatre","cinc","sis","set","vuit","nou","deu"];
+const COORD=["i","o","ni","però","sinó"];
+
+const norm=w=>w.toLowerCase().replace(/[’´]/g,"'");
+const q=x=>'«'+x+'»';
+/* nucli que ve després (saltant determinants, adjectius i adverbis) */
+function nextHead(c){for(var j=c.i+1;j<c.tokens.length;j++){var k=c.tokens[j].cat;
+  if(k==='NOM'||k==='PRO'||k==='VER')return c.tokens[j].w;
+  if(k==='DET'||k==='ADJ'||k==='ADV')continue;break}return c.nextW}
+function detNoun(c){for(var j=c.i+1;j<c.tokens.length;j++){var k=c.tokens[j].cat;
+  if(k==='NOM')return c.tokens[j].w;
+  if(k==='DET'||k==='ADJ'||k==='ADV')continue;return ''}return ''}
+
+const haver=c=>{
+  if(c.prev&&norm(c.prev.w)==='hi') return "Verb «haver-hi»: amb «hi» al davant vol dir que una cosa existeix ("+q('hi '+c.w)+" = «n'hi havia»). Aquí és el verb principal de la frase.";
+  if(c.next&&c.next.cat==='VER') return "Verb auxiliar «haver»: hi posa el temps i la persona. Amb "+q(c.next.w)+" fan un temps compost, i els dos són verbs.";
+  return "Verb auxiliar «haver»: acompanya un participi per fer un temps compost.";
+};
+const anar=c=>"En català el passat es fa amb «anar + infinitiu»: "+q(c.w+(c.next?' '+c.next.w:''))+" vol dir que la cosa ja ha passat. Aquí "+q(c.w)+" no vol dir moviment, només indica el temps.";
+const cop=c=>"Verb ser/estar ("+c.w+"): uneix el subjecte amb allò que en diem. Va conjugat, i això és el que el fa verb.";
+
+const LEX={
+/* ---------- conjuncions ---------- */
+"que|CON":"Conjunció: enganxa una frase sencera a l'altra. Aquí no substitueix cap paraula d'abans; per això no el pots canviar per «el qual».",
+"i|CON":"Conjunció: uneix dues coses del mateix nivell, sense que cap depengui de l'altra.",
+"però|CON":"Conjunció: uneix dues frases i hi indica un contrast.",
+"perquè|CON":"Conjunció: introdueix la causa. Respon a la pregunta «per què?».",
+"si|CON":"Conjunció: posa una condició. Allò que ve després només passa si es compleix.",
+"quan|CON":"Conjunció: lliga les dues frases i diu en quin moment passa l'acció. En una pregunta («Quan véns?») seria adverbi.",
+"mentre|CON":"Conjunció: diu que les dues accions passen alhora.",
+
+/* ---------- pronoms ---------- */
+"que|PRO":"Pronom relatiu: es refereix al nom que té just abans i el substitueix dins de la frase que ve. La prova és que el pots canviar per «el qual / la qual».",
+"hi|PRO":"Pronom feble «hi»: substitueix un lloc o un complement i va sempre amb el verb, mai amb un nom.",
+"ho|PRO":"Pronom feble: substitueix tota una idea, no una paraula sola.",
+"ningú|PRO":"Pronom: parla de persones sense dir qui són i fa de subjecte, com faria un nom. No acompanya cap paraula, per això no és determinant.",
+"algú|PRO":"Pronom: ocupa el lloc d'un nom (aquí, el subjecte) sense dir de qui es tracta.",
+"tothom|PRO":"Pronom: vol dir «tota la gent» i va sol, sense acompanyar cap nom.",
+"tot|PRO":"Pronom: aquí «tot» va sol i substitueix la cosa entesa («ho vaig entendre tot»). Si digués «tot el problema» seria determinant.",
+"totes|PRO":"Pronom: aquí «totes» no acompanya cap nom, el substitueix («de totes» = de totes les virtuts). Davant d'un nom («totes les regles») seria determinant.",
+"aquesta|PRO":"Aquí «aquesta» va sola i fa de subjecte: substitueix el nom en comptes d'acompanyar-lo. Si digués «aquesta ciutat» seria determinant.",
+"'t|PRO":"Pronom feble enganxat darrere l'ordre («renta't»): diu que l'acció recau sobre qui la fa.",
+"jo|PRO":"Pronom personal fort: fa de subjecte i pot anar sol, cosa que els pronoms febles no poden fer.",
+"ell|PRO":"Pronom personal fort: substitueix el nom d'una persona i fa de subjecte.",
+"ella|PRO":"Pronom personal fort: substitueix el nom d'una persona i fa de subjecte.",
+"nosaltres|PRO":"Pronom personal fort: aquí va darrere d'una preposició («amb nosaltres»), lloc on només poden anar els pronoms forts.",
+"vosaltres|PRO":"Pronom personal fort: fa de subjecte de la frase.",
+"el|PRO":c=>"Aquí "+q(c.w)+" no acompanya cap nom: va davant del verb i substitueix el complement. Per això és pronom feble i no article.",
+"la|PRO":c=>"Aquí "+q(c.w)+" no acompanya cap nom: va davant del verb "+q(c.next?c.next.w:'')+" i substitueix una persona ja esmentada. És pronom feble, no article.",
+"l'|PRO":c=>"Pronom feble: substitueix el complement i va davant del verb "+q(c.next?c.next.w:'')+". L'article «l'» sempre va seguit d'un nom; aquí el que ve és un verb.",
+"els|PRO":"Aquí «els» no va davant d'un nom sinó del verb: substitueix les persones o coses ja esmentades. Per això és pronom feble.",
+"es|PRO":"Pronom feble: diu que l'acció recau sobre el mateix subjecte («es va adonar»).",
+"s'|PRO":"Pronom feble davant de vocal: l'acció recau sobre el mateix subjecte.",
+"em|PRO":"Pronom feble de 1a persona: vol dir «a mi» i va sempre amb un verb.",
+"m'|PRO":"Pronom feble de 1a persona davant de vocal: vol dir «a mi» i va sempre amb un verb.",
+"ens|PRO":"Pronom feble: vol dir «a nosaltres» i acompanya el verb.",
+"li|PRO":"Pronom feble: vol dir «a ell» o «a ella».",
+
+/* ---------- determinants ---------- */
+"més|DET":c=>"Aquí «més» diu quanta quantitat de "+q(detNoun(c)||c.nextW)+" hi ha: acompanya el nom, i per això és determinant. Davant d'un adjectiu («més important») seria adverbi.",
+"cada|DET":"Determinant: va agafant els elements un per un. Sempre acompanya un nom, mai va sol.",
+"quina|DET":"Determinant d'exclamació: acompanya el nom i s'hi adapta («quin fred», «quina calor»).",
+"quantes|DET":"Determinant de pregunta: demana la quantitat i s'adapta al nom (quantes = femení plural).",
+"altra|DET":"Determinant: presenta una cosa diferent de la ja dita i s'adapta al nom («una altra vegada»).",
+"altres|DET":"Determinant: acompanya el nom i el distingeix dels que ja hem dit.",
+"mateixa|DET":"Determinant: reforça el nom i s'hi adapta («aquella mateixa tarda»).",
+"molta|DET":"Determinant: diu quantitat i canvia segons el nom (molta, molts, moltes). Aquest canvi és la pista: l'adverbi «molt» no canvia mai.",
+"moltes|DET":"Determinant: acompanya el nom i s'hi adapta (femení plural). L'adverbi «molt» no canviaria mai de forma.",
+"molts|DET":"Determinant: acompanya el nom i s'hi adapta (masculí plural). L'adverbi «molt» sempre és igual.",
+
+/* ---------- verbs ---------- */
+"és|VER":cop,"era|VER":cop,"són|VER":cop,"està|VER":cop,"som|VER":cop,"siguis|VER":cop,"eren|VER":cop,
+"he|VER":haver,"ha|VER":haver,"hem|VER":haver,"heu|VER":haver,"han|VER":haver,"havia|VER":haver,"havíem|VER":haver,
+"va|VER":anar,"vaig|VER":anar,"vam|VER":anar,"van|VER":anar,"vas|VER":anar,
+"seu|VER":"Aquí «seu» és una ordre del verb «seure» (asseu-te), no el possessiu «el seu»: va darrere d'una altra ordre («Renta't… i seu…») i no acompanya cap nom.",
+"porta|VER":"Verb conjugat: té subjecte («que») i complement («un abric»). No és el nom «porta», que portaria article al davant.",
+"compra|VER":"Verb: és una ordre. No hi ha subjecte escrit, però és el verb de la frase.",
+"escriu|VER":"Verb: és una ordre a la persona amb qui parlem.",
+"renta|VER":"Verb: és una ordre, amb el pronom feble enganxat al darrere («renta't»).",
+"esperant|VER":"Gerundi (-ant, -ent): forma del verb que diu què es feia al mateix temps.",
+"sopar|VER":"Aquí «sopar» és l'acció («vam sopar»), o sigui un verb. Amb article («el sopar») seria un nom: la mateixa paraula canvia segons el context.",
+"estat|VER":"Participi del verb «ser»: amb «havia» al davant fan un temps compost.",
+
+/* ---------- adverbis ---------- */
+"no|ADV":"Adverbi: nega el verb i sempre té la mateixa forma. No acompanya mai un nom.",
+"on|ADV":"Adverbi de lloc: vol dir «en aquell lloc». Com que diu lloc, és adverbi i no conjunció.",
+"molt|ADV":c=>"Adverbi: acompanya "+q(c.next?c.next.w:'el verb')+" i sempre té la mateixa forma. Si canviés segons la paraula («molta gent») seria determinant.",
+"massa|ADV":"Adverbi: diu el grau («massa car») i aquí no canvia de forma.",
+"més|ADV":"Adverbi: forma el comparatiu o el superlatiu de l'adjectiu que ve després («la més important»).",
+"tan|ADV":"Adverbi: diu el grau d'un adjectiu. Amb un nom diríem «tant de», i llavors seria determinant.",
+"bé|ADV":"Adverbi: diu com es fa l'acció i sempre és igual. L'adjectiu «bo/bona» sí que canvia segons el nom; «bé» no.",
+"ja|ADV":"Adverbi de temps: situa l'acció en el temps i sempre té la mateixa forma.",
+"encara|ADV":"Adverbi de temps: diu que la cosa continua (o, amb negació, que no ha passat).",
+"només|ADV":"Adverbi: limita el que diu la frase («sols»). Sempre és igual.",
+"sempre|ADV":"Adverbi de temps: diu cada quan passa l'acció.",
+"fort|ADV":"Aquí «fort» diu com plou, no com és una cosa: acompanya el verb, i per això funciona com a adverbi.",
+"tard|ADV":"Adverbi de temps: acompanya el verb i sempre té la mateixa forma.",
+"lluny|ADV":"Adverbi de lloc: diu a quina distància, i acompanya el verb.",
+"aquí|ADV":"Adverbi de lloc: diu on passa la cosa, sense acompanyar cap nom.",
+"allà|ADV":"Adverbi de lloc: assenyala un lloc lluny de qui parla.",
+"ara|ADV":"Adverbi de temps: situa l'acció en aquest moment.",
+
+/* ---------- preposicions ---------- */
+"a|PRE":c=>"Preposició: va davant del complement "+q(nextHead(c))+" i indica direcció, lloc o a qui va dirigit. Sempre és igual i mai va sola.",
+"de|PRE":c=>"Preposició: lliga "+q(c.prevW)+" amb "+q(nextHead(c))+" (de qui és, de què és, d'on ve o de què parla).",
+"d'|PRE":"És la preposició «de» davant de vocal. Segueix sent preposició i va davant d'un complement.",
+"amb|PRE":c=>"Preposició: indica companyia, instrument o manera ("+q(nextHead(c))+").",
+"en|PRE":c=>"Preposició: diu on o quan passa la cosa ("+q(nextHead(c))+"). No és el pronom feble «en», que aniria amb el verb.",
+"per|PRE":c=>"Preposició: va davant de "+q(nextHead(c))+" i indica lloc, causa o finalitat segons el context.",
+"sota|PRE":"Preposició de lloc: diu on és una cosa respecte d'una altra.",
+"dins|PRE":"Preposició de lloc: diu que una cosa és a l'interior d'una altra.",
+"durant|PRE":"Preposició de temps: diu en quin període passa l'acció.",
+"fins|PRE":"Preposició: indica fins on arriba la cosa, en temps o en espai.",
+"darrere|PRE":"Preposició de lloc: diu que una cosa és al darrere d'una altra.",
+
+/* ---------- interjeccions ---------- */
+"ai|INT":"Interjecció: expressa dolor o sorpresa. Va a part, no fa cap funció dins de la frase.",
+"uf|INT":"Interjecció: expressa cansament, calor o queixa. Va a part de la resta de la frase.",
+"ep|INT":"Interjecció: serveix per cridar l'atenció. Va sola, separada de la frase.",
+
+/* ---------- noms i adjectius que despisten ---------- */
+"fred|NOM":"Aquí «fred» és nom, no adjectiu: «fer fred» funciona com «fer calor». La pista és que pots dir «molt de fred», amb «de», i això només ho fan els noms.",
+"calor|NOM":"Nom: porta un determinant al davant («quina calor»), i això només ho poden fer els noms.",
+"mal|NOM":"Nom dins l'expressió «fer-se mal»: és el complement del verb «fer».",
+"festa|NOM":"Nom: «avui és festa». Darrere del verb «ser» també hi pot anar un nom, no només un adjectiu.",
+"cap|NOM":"Nom: «cap de setmana» és un nom de dues paraules, no el «cap» de «cap llibre».",
+"sol|NOM":"Nom: porta l'article «el» al davant, i aquesta és la pista.",
+"sol|ADJ":"Adjectiu: diu com viatjo i canvia segons qui parla («sola» en femení). Aquest canvi és la pista que no és adverbi.",
+"final|NOM":"Nom: porta article («el final») i és el subjecte. En «examen final» la mateixa paraula seria adjectiu.",
+"final|ADJ":"Adjectiu: acompanya el nom «examen» i s'hi adapta. Amb article («el final») seria un nom.",
+"casa|NOM":"Nom: en «a casa» no hi posem article perquè és una expressió feta, però continua sent un lloc, o sigui un nom.",
+"català|NOM":"Aquí «català» és la llengua, no una qualitat: és un nom. En «un llibre català» seria adjectiu.",
+"xinès|NOM":"Aquí «xinès» és la llengua: és un nom. Quan acompanya un nom («alumnes xinesos») és adjectiu.",
+"diumenge|NOM":"Nom (un dia de la setmana). Diu quan passa la cosa, però continua sent un nom.",
+"divendres|NOM":"Nom (un dia de la setmana). Diu quan passa la cosa, però és un nom.",
+"temps|NOM":"Nom: «més» en diu la quantitat i «lliure» en diu la qualitat. Només un nom pot dur les dues coses alhora.",
+"millor|ADJ":"Adjectiu: és el comparatiu de «bo» i acompanya el nom.",
+"bon|ADJ":"Adjectiu: és «bo» en la forma que fem servir davant del nom («un bon amic»)."
+};
+
+/* ---------- explicacions generals ---------- */
+function gNOM(c){
+  if(/^[A-ZÀ-ÚÇ]/.test(c.w)&&c.i>0) return "Nom propi: és el nom d'una persona o d'un lloc concret, i per això va amb majúscula.";
+  var s="Nom: designa una persona, una cosa o una idea.";
+  if(c.prevCat==='DET') s+=" La pista és el determinant "+q(c.prevW)+" que porta al davant: només els noms el poden dur.";
+  else if(c.prevCat==='PRE') s+=" Va darrere la preposició "+q(c.prevW)+", i tot junt fa de complement.";
+  if(c.nextCat==='ADJ') s+=" L'adjectiu "+q(c.nextW)+" diu com és.";
+  return s;
+}
+function gADJ(c){
+  var s="Adjectiu: diu com és una cosa i s'adapta al nom en masculí/femení i singular/plural.";
+  var j=c.i-1;
+  while(j>=0&&(c.tokens[j].cat==='ADV'||c.tokens[j].cat==='DET')) j--;
+  if(j>=0&&c.tokens[j].cat==='NOM') s+=" Aquí acompanya "+q(c.tokens[j].w)+".";
+  else if(j>=0&&c.tokens[j].cat==='VER') s+=" Aquí va darrere el verb "+q(c.tokens[j].w)+" i diu com és el subjecte.";
+  else if(c.nextCat==='NOM') s+=" Aquí va davant del nom "+q(c.nextW)+".";
+  return s;
+}
+function gVER(c){
+  var p=c.prev?norm(c.prev.w):'';
+  if(AUX_HAVER.indexOf(p)>-1) return "Participi: amb l'auxiliar "+q(c.prev.w)+" fan un temps compost. Aquesta és la part que porta el significat de l'acció.";
+  if(AUX_ANAR.indexOf(p)>-1) return "Infinitiu dins del passat «anar + infinitiu»: "+q(c.prev.w+' '+c.w)+". Aquesta és la part que porta el significat; «"+c.prev.w+"» només indica el temps.";
+  if(/(ar|er|ir|re)$/.test(norm(c.w))&&(c.prevCat==='PRE'||c.prevCat==='VER'))
+    return "Infinitiu: la forma bàsica del verb, aquí darrere de "+q(c.prevW)+". Encara que sembli un nom, continua sent un verb.";
+  return "Verb: és el centre de la frase i està conjugat (persona i temps). Diu què fa o com està el subjecte.";
+}
+function gADV(c){
+  if(/ment$/.test(norm(c.w))) return "Adverbi acabat en -ment: diu com es fa l'acció i sempre té la mateixa forma.";
+  if(c.nextCat==='ADJ'||c.nextCat==='ADV') return "Adverbi: acompanya "+q(c.nextW)+" i en diu el grau. No canvia de forma, i per això no és adjectiu.";
+  var v='';
+  for(var j=c.i+1;j<c.tokens.length;j++){if(c.tokens[j].cat==='VER'){v=c.tokens[j].w;break}}
+  if(!v)for(var k=c.i-1;k>=0;k--){if(c.tokens[k].cat==='VER'){v=c.tokens[k].w;break}}
+  return "Adverbi: acompanya el verb "+(v?q(v):'')+" i hi afegeix temps, lloc, manera o negació. Sempre té la mateixa forma.";
+}
+function gPRO(c){
+  var w=norm(c.w);
+  if(FEBLES.indexOf(w)>-1) return "Pronom feble: substitueix un complement que ja sabem i va sempre amb un verb. Els pronoms febles no acompanyen mai un nom.";
+  if(TONICS.indexOf(w)>-1) return "Pronom personal fort: substitueix el nom d'una persona i pot anar sol o darrere d'una preposició.";
+  if(INDEF.indexOf(w)>-1) return "Pronom: parla de persones o coses sense dir quines i ocupa el lloc d'un nom.";
+  if(DEMOS.indexOf(w)>-1) return "Aquí el demostratiu va sol: en comptes d'acompanyar un nom, el substitueix.";
+  return "Pronom: ocupa el lloc d'un nom que ja sabem, en comptes d'acompanyar-lo.";
+}
+function gPRE(c){
+  return "Preposició: lliga "+(c.prev?q(c.prevW)+" amb ":"")+q(nextHead(c))+". Sempre té la mateixa forma i mai va sola: darrere hi ha d'anar un complement.";
+}
+function gCON(c){
+  if(COORD.indexOf(norm(c.w))>-1) return "Conjunció: uneix dues coses del mateix nivell, sense que cap depengui de l'altra.";
+  return "Conjunció: enganxa una frase a l'altra i la hi fa dependre. No substitueix cap nom; això ho farien els pronoms.";
+}
+function gDET(c){
+  var w=norm(c.w),dn=detNoun(c),n=dn?" "+q(dn):"";
+  if(ARTS.indexOf(w)>-1) return "Article: presenta el nom"+n+" i n'indica el masculí/femení i el singular/plural.";
+  if(DEMOS.indexOf(w)>-1) return "Determinant demostratiu: acompanya el nom"+n+" i diu si és a prop o lluny de qui parla.";
+  if(POSS.indexOf(w)>-1) return "Determinant possessiu: diu de qui és"+n+". En català va darrere de l'article: «la meva germana».";
+  if(NUMS.indexOf(w)>-1) return "Determinant numeral: diu quants"+n+" hi ha.";
+  return "Determinant: acompanya el nom"+n+", s'hi adapta i en diu la quantitat o de quin parlem. Mai va sol.";
+}
+function gINT(c){
+  return "Interjecció: expressa una reacció o una emoció. Va a part i no fa cap funció dins de la frase.";
+}
+const GEN={NOM:gNOM,ADJ:gADJ,VER:gVER,ADV:gADV,PRO:gPRO,PRE:gPRE,CON:gCON,DET:gDET,INT:gINT};
+
+function whyFor(it,ti){
+  const t=it.tokens[ti],prev=it.tokens[ti-1],next=it.tokens[ti+1];
+  const c={w:t.w,cat:t.cat,i:ti,tokens:it.tokens,prev:prev,next:next,
+           prevW:prev?prev.w:'',nextW:next?next.w:'',
+           prevCat:prev?prev.cat:'',nextCat:next?next.cat:''};
+  const e=LEX[norm(t.w)+'|'+t.cat];
+  if(e) return (typeof e==='function')?e(c):e;
+  return GEN[t.cat](c);
+}
+
+function renderWhy(si){
+  const it=items[si],box=it.row.querySelector('.why');
+  box.innerHTML='<div class="why-h">Per què</div>'+it.tokens.map((t,ti)=>{
+    const cat=CATS.find(c=>c.id===t.cat);
+    const bad=(!it.revealed&&it.answers[ti]&&it.answers[ti]!==t.cat)
+      ?'<span class="why-miss">Havies marcat '+it.answers[ti]+'</span>':'';
+    return '<div class="why-item" data-ti="'+ti+'" style="--c:var(--'+t.cat+')">'+
+      '<div class="why-key"><span class="why-w">'+t.w+'</span><span class="why-cat">'+cat.name+'</span></div>'+
+      '<div class="why-tx">'+whyFor(it,ti)+bad+'</div></div>';
+  }).join('');
+  box.classList.add('show');
+  const b=it.row.querySelector('.act-why');
+  b.hidden=false;b.textContent='Amaga el perquè';
+}
+
+function toggleWhy(si){
+  const it=items[si],box=it.row.querySelector('.why'),b=it.row.querySelector('.act-why');
+  const on=box.classList.toggle('show');
+  b.textContent=on?'Amaga el perquè':'Mostra el perquè';
+}
+
+function highlightWhy(si,ti){
+  const it=items[si],box=it.row.querySelector('.why');
+  if(!box.classList.contains('show'))toggleWhy(si);
+  box.querySelectorAll('.why-item').forEach(el=>el.classList.toggle('hit',el.dataset.ti==String(ti)));
+  const el=box.querySelector('.why-item[data-ti="'+ti+'"]');
+  if(el){const r=el.getBoundingClientRect();if(r.top<80||r.bottom>window.innerHeight-110)el.scrollIntoView({block:'center',behavior:'smooth'})}
+}
+
+/* ================= ESTAT ================= */
+const $=id=>document.getElementById(id);
+const listEl=$('list');
+let items=[],flat=[],brush=null,focus=0,stats={},source=DATA;
+
+function parse(d){
+  return{
+    tokens:d.s.split(' ').map(t=>{
+      const p=t.split('|');
+      let w=p[0],join=false;
+      if(w[0]==='^'){join=true;w=w.slice(1)}
+      return{w,cat:p[1],punct:p[2]||'',join};
+    })
+  };
+}
+
+function build(list){
+  source=list;
+  items=list.map(parse);
+  flat=[];brush=null;focus=0;
+  stats={};CATS.forEach(c=>stats[c.id]={ok:0,n:0});
+  listEl.innerHTML='';
+  $('results').classList.remove('show');
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+
+  items.forEach((it,si)=>{
+    it.answers=it.tokens.map(()=>null);
+    it.checked=false;it.revealed=false;it.ok=0;
+    const row=document.createElement('div');
+    row.className='row';
+    row.innerHTML='<div class="num">'+String(si+1).padStart(2,'0')+'</div><div class="body"><div class="sentence"></div><div class="foot"><button class="mini act-check">Comprova</button><button class="mini solve act-solve">Mostra la solució</button><button class="mini act-again" hidden>Torna a fer</button><button class="mini act-why" hidden>Amaga el perquè</button><span class="tally"></span></div><div class="why"></div></div>';
+    const sen=row.querySelector('.sentence');
+    let grp=null;
+    it.tokens.forEach((t,ti)=>{
+      if(!t.join||!grp){grp=document.createElement('div');grp.className='grp';sen.appendChild(grp)}
+      const b=document.createElement('button');
+      b.className='w';b.type='button';
+      b.innerHTML='<span class="txt">'+t.w+'</span><span class="tag"></span><span class="fix"></span>';
+      const idx=flat.length;
+      flat.push({si,ti,el:b});
+      b.addEventListener('click',()=>{if(items[si].checked){highlightWhy(si,ti);return}focus=idx;if(brush)assign(idx,brush);else paintFocus()});
+      grp.appendChild(b);
+      if(t.punct){const p=document.createElement('span');p.className='punct';p.textContent=t.punct;grp.appendChild(p)}
+    });
+    row.querySelector('.act-check').addEventListener('click',()=>check(si));
+    row.querySelector('.act-solve').addEventListener('click',()=>reveal(si));
+    row.querySelector('.act-again').addEventListener('click',()=>redo(si));
+    row.querySelector('.act-why').addEventListener('click',()=>toggleWhy(si));
+    it.row=row;
+    listEl.appendChild(row);
+  });
+  paintFocus(false);
+  updateHeader();
+}
+
+function assign(idx,cat){
+  const f=flat[idx],it=items[f.si];
+  if(it.checked)return;
+  if(it.answers[f.ti]===cat){
+    it.answers[f.ti]=null;f.el.removeAttribute('data-cat');f.el.style.removeProperty('--c');f.el.querySelector('.tag').textContent='';
+  }else{
+    it.answers[f.ti]=cat;
+    f.el.dataset.cat=cat;f.el.style.setProperty('--c','var(--'+cat+')');
+    f.el.querySelector('.tag').textContent=cat;
+    let n=flat.findIndex((g,x)=>x>idx&&!items[g.si].checked&&items[g.si].answers[g.ti]===null);
+    if(n===-1)n=Math.min(idx+1,flat.length-1);
+    focus=n;
+  }
+  paintFocus();
+}
+
+function paintFocus(scroll=true){
+  flat.forEach((f,x)=>f.el.classList.toggle('focus',x===focus&&!items[f.si].checked));
+  const f=flat[focus];
+  if(scroll&&f){
+    const r=f.el.getBoundingClientRect();
+    if(r.top<80||r.bottom>window.innerHeight-110)f.el.scrollIntoView({block:'center',behavior:'smooth'});
+  }
+}
+
+function check(si){
+  const it=items[si];
+  if(it.checked)return;
+  let ok=0;
+  it.tokens.forEach((t,ti)=>{
+    const el=flat.find(f=>f.si===si&&f.ti===ti).el;
+    el.classList.add('checked');
+    el.style.setProperty('--c','var(--'+t.cat+')');
+    stats[t.cat].n++;
+    if(it.answers[ti]===t.cat){ok++;stats[t.cat].ok++;el.dataset.cat=t.cat;el.querySelector('.tag').textContent=t.cat}
+    else{el.classList.add('ko');el.querySelector('.tag').textContent=it.answers[ti]||'?';el.querySelector('.fix').textContent=t.cat}
+  });
+  it.checked=true;it.ok=ok;
+  lock(it);
+  const tally=it.row.querySelector('.tally');
+  tally.textContent=(ok===it.tokens.length)?'Tot correcte':ok+' / '+it.tokens.length+' correctes';
+  tally.className='tally '+(ok===it.tokens.length?'perfect':'some');
+  renderWhy(si);
+  if(items[flat[focus].si].checked){
+    const n=flat.findIndex(f=>!items[f.si].checked);
+    if(n>-1)focus=n;
+  }
+  paintFocus(false);
+  updateHeader();
+}
+
+function lock(it){
+  it.row.classList.add('done');
+  it.row.querySelector('.act-check').hidden=true;
+  it.row.querySelector('.act-solve').hidden=true;
+  it.row.querySelector('.act-again').hidden=false;
+}
+
+function recalcStats(){
+  CATS.forEach(c=>stats[c.id]={ok:0,n:0});
+  items.forEach(it=>{
+    if(!it.checked||it.revealed)return;
+    it.tokens.forEach((t,ti)=>{stats[t.cat].n++;if(it.answers[ti]===t.cat)stats[t.cat].ok++});
+  });
+}
+
+function redo(si){
+  const it=items[si];
+  it.checked=false;it.revealed=false;it.ok=0;
+  it.answers=it.tokens.map(()=>null);
+  it.tokens.forEach((t,ti)=>{
+    const el=flat.find(f=>f.si===si&&f.ti===ti).el;
+    el.className='w';
+    el.removeAttribute('data-cat');
+    el.style.removeProperty('--c');
+    el.querySelector('.tag').textContent='';
+    el.querySelector('.fix').textContent='';
+  });
+  it.row.classList.remove('done');
+  it.row.querySelector('.act-check').hidden=false;
+  it.row.querySelector('.act-solve').hidden=false;
+  it.row.querySelector('.act-again').hidden=true;
+  const whyBtn=it.row.querySelector('.act-why');
+  whyBtn.hidden=true;whyBtn.textContent='Amaga el perquè';
+  const whyBox=it.row.querySelector('.why');
+  whyBox.classList.remove('show');whyBox.innerHTML='';
+  const tally=it.row.querySelector('.tally');
+  tally.textContent='';tally.className='tally';
+  $('results').classList.remove('show');
+  focus=flat.findIndex(f=>f.si===si);
+  recalcStats();
+  paintFocus();
+  updateHeader();
+}
+
+function reveal(si){
+  const it=items[si];
+  if(it.checked)return;
+  it.tokens.forEach((t,ti)=>{
+    const el=flat.find(f=>f.si===si&&f.ti===ti).el;
+    el.classList.add('checked');
+    el.dataset.cat=t.cat;
+    el.style.setProperty('--c','var(--'+t.cat+')');
+    el.querySelector('.tag').textContent=t.cat;
+  });
+  it.checked=true;it.revealed=true;it.ok=0;
+  lock(it);
+  const tally=it.row.querySelector('.tally');
+  tally.textContent='Solució mostrada';
+  tally.className='tally shown';
+  renderWhy(si);
+  if(items[flat[focus].si].checked){
+    const n=flat.findIndex(f=>!items[f.si].checked);
+    if(n>-1)focus=n;
+  }
+  paintFocus(false);
+  updateHeader();
+}
+
+function updateHeader(){
+  const done=items.filter(i=>i.checked);
+  const scored=done.filter(i=>!i.revealed);
+  const ok=scored.reduce((a,i)=>a+i.ok,0);
+  const tot=scored.reduce((a,i)=>a+i.tokens.length,0);
+  $('counter').innerHTML='<b>'+done.length+'</b> / '+items.length+' frases'+(tot?' · <b>'+ok+'</b> / '+tot+' encerts':'');
+  $('prog').style.width=(done.length/items.length*100)+'%';
+  if(done.length===items.length&&items.length)showResults(ok,tot);
+}
+
+function showResults(ok,tot){
+  const pct=tot?Math.round(ok/tot*100):0;
+  $('resNum').innerHTML=pct+'<span>%</span>';
+  const shown=items.filter(i=>i.revealed).length;
+  $('resSub').textContent=ok+' paraules ben classificades de '+tot+(shown?' · '+shown+' frases amb la solució mostrada':'');
+  const bars=$('bars');bars.innerHTML='';
+  CATS.slice().sort((a,b)=>{
+    const pa=stats[a.id].n?stats[a.id].ok/stats[a.id].n:1,pb=stats[b.id].n?stats[b.id].ok/stats[b.id].n:1;
+    return pa-pb;
+  }).forEach(c=>{
+    const st=stats[c.id];if(!st.n)return;
+    const p=Math.round(st.ok/st.n*100);
+    const row=document.createElement('div');
+    row.className='bar-row';row.style.setProperty('--c','var(--'+c.id+')');
+    row.innerHTML='<div class="bar-lbl">'+c.name+'</div><div class="bar-track"><div class="bar-fill"></div></div><div class="bar-val">'+p+'%</div>';
+    bars.appendChild(row);
+    requestAnimationFrame(()=>row.querySelector('.bar-fill').style.width=p+'%');
+  });
+  const wrong=items.map((it,x)=>(it.revealed||it.ok<it.tokens.length)?x:-1).filter(x=>x>-1);
+  const src=source;
+  $('btnRedo').style.display=wrong.length?'':'none';
+  $('btnRedo').onclick=()=>{build(wrong.map(x=>src[x]));window.scrollTo({top:0,behavior:'smooth'})};
+  $('results').classList.add('show');
+  $('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ================= PALETA ================= */
+const pal=$('paletteInner');
+CATS.forEach((c,n)=>{
+  const b=document.createElement('button');
+  b.className='chip';b.type='button';b.dataset.cat=c.id;
+  b.style.setProperty('--c','var(--'+c.id+')');
+  b.innerHTML='<span class="k">'+KEYS[n]+'</span><span class="lbl">'+c.name+'</span>';
+  b.addEventListener('click',()=>pick(c.id));
+  pal.appendChild(b);
+});
+function pick(cat){
+  brush=cat;
+  pal.querySelectorAll('.chip').forEach(el=>el.classList.toggle('on',el.dataset.cat===cat));
+  const f=flat[focus];
+  if(f&&!items[f.si].checked)assign(focus,cat);
+}
+
+/* ================= LLEGENDA ================= */
+$('legend').innerHTML=CATS.map((c,n)=>
+ '<tr style="--c:var(--'+c.id+')"><td class="lg-name">'+KEYS[n]+' · '+c.name+'</td><td class="lg-cjk">'+c.cjk+'</td><td class="lg-ex">'+c.ex+'</td></tr>').join('');
+
+/* ================= CONTROLS ================= */
+function restart(){build(DATA);window.scrollTo({top:0,behavior:'smooth'})}
+$('btnReset').addEventListener('click',restart);
+$('btnAgain').addEventListener('click',restart);
+$('btnHelp').addEventListener('click',()=>$('overlay').classList.add('show'));
+$('btnCloseHelp').addEventListener('click',()=>$('overlay').classList.remove('show'));
+$('overlay').addEventListener('click',e=>{if(e.target===$('overlay'))$('overlay').classList.remove('show')});
+
+document.addEventListener('keydown',e=>{
+  if($('overlay').classList.contains('show')){if(e.key==='Escape')$('overlay').classList.remove('show');return}
+  const f=flat[focus];if(!f)return;
+  if(e.key==='ArrowRight'){e.preventDefault();focus=Math.min(focus+1,flat.length-1);paintFocus();return}
+  if(e.key==='ArrowLeft'){e.preventDefault();focus=Math.max(focus-1,0);paintFocus();return}
+  if(e.key==='Enter'){e.preventDefault();const it=items[f.si];if(!it.checked&&it.answers.every(a=>a!==null))check(f.si);return}
+  if(items[f.si].checked)return;
+  const n=KEYS.indexOf(e.key);
+  if(n>-1){e.preventDefault();pick(CATS[n].id);return}
+  if(e.key==='Backspace'||e.key==='Delete'){e.preventDefault();const a=items[f.si].answers[f.ti];if(a)assign(focus,a)}
+});
+
+build(DATA);
+</script>
+</body>
+</html>
