@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Els temps verbals catalans — a fons</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,450;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14181c;
+    --panel:#1d2329;
+    --panel-2:#252c33;
+    --text:#ece7dd;
+    --text-muted:#8d969d;
+    --hairline:rgba(236,231,221,0.09);
+    --indicatiu:#d6a833;
+    --subjuntiu:#4e8fa6;
+    --imperatiu:#c1543a;
+    --accent: var(--indicatiu);
+    --serif: "Fraunces", serif;
+    --sans: "Inter", sans-serif;
+    --zh: "Noto Sans SC", sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  [lang="zh"]{font-family:var(--zh); font-weight:400;}
+  a{color:inherit;}
+
+  /* -------- header -------- */
+  .site-header{
+    padding: clamp(2rem,5vw,3.5rem) clamp(1.25rem,4vw,3rem) 2rem;
+    border-bottom:1px solid var(--hairline);
+    max-width:1180px;
+    margin:0 auto;
+  }
+  .site-header h1{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(2.1rem,4.5vw,3.4rem);
+    letter-spacing:-0.01em;
+    margin:0 0 .8rem;
+  }
+  .site-header .lede{
+    max-width:62ch;
+    color:#c9c3b6;
+    font-size:1.02rem;
+    margin:0 0 1.4rem;
+  }
+  .legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:.6rem 1.4rem;
+    align-items:center;
+    font-size:.88rem;
+    color:var(--text-muted);
+  }
+  .legend .dot{display:inline-flex;align-items:center;gap:.45rem;}
+  .legend .dot::before{
+    content:"";
+    width:9px;height:9px;border-radius:50%;
+    background:var(--dot-color);
+    display:inline-block;
+  }
+  .legend .dot.i::before{--dot-color:var(--indicatiu);}
+  .legend .dot.s::before{--dot-color:var(--subjuntiu);}
+  .legend .dot.m::before{--dot-color:var(--imperatiu);}
+
+  .zh-toggle{
+    margin-left:auto;
+    background:var(--panel);
+    border:1px solid var(--hairline);
+    color:var(--text);
+    font-family:var(--sans);
+    font-size:.85rem;
+    padding:.5rem .9rem;
+    border-radius:999px;
+    cursor:pointer;
+  }
+  .zh-toggle:hover{background:var(--panel-2);}
+  .zh-toggle:focus-visible, a:focus-visible, button:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:2px;
+  }
+
+  /* -------- layout -------- */
+  .layout{
+    max-width:1180px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:250px 1fr;
+    gap:clamp(1.5rem,3vw,3rem);
+    padding: 2rem clamp(1.25rem,4vw,3rem) 5rem;
+    align-items:start;
+  }
+
+  nav.toc{
+    position:sticky;
+    top:1.5rem;
+    display:flex;
+    flex-direction:column;
+    gap:1.5rem;
+    font-size:.86rem;
+    max-height:calc(100vh - 3rem);
+    overflow-y:auto;
+  }
+  nav.toc .toc-group h5{
+    font-size:.78rem;
+    letter-spacing:.02em;
+    color:var(--group-color);
+    margin:0 0 .55rem;
+    font-weight:600;
+    border-left:3px solid var(--group-color);
+    padding-left:.55rem;
+  }
+  nav.toc .toc-group[data-mood="indicatiu"]{--group-color:var(--indicatiu);--group-dim:#a3842d;--group-rule:rgba(214,168,51,.22);}
+  nav.toc .toc-group[data-mood="subjuntiu"]{--group-color:var(--subjuntiu);--group-dim:#43758a;--group-rule:rgba(78,143,166,.22);}
+  nav.toc .toc-group[data-mood="imperatiu"]{--group-color:var(--imperatiu);--group-dim:#9a4835;--group-rule:rgba(193,84,58,.22);}
+
+  nav.toc .toc-time{margin:0 0 .55rem;}
+  nav.toc .toc-time:last-child{margin-bottom:0;}
+  nav.toc .toc-time > span{
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+    font-size:.72rem;
+    font-weight:500;
+    letter-spacing:.02em;
+    color:var(--group-dim);
+    margin:0 0 .25rem .8rem;
+  }
+  nav.toc .toc-time > span::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--group-rule);
+  }
+  nav.toc ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.1rem;}
+  nav.toc a{
+    display:block;
+    text-decoration:none;
+    color:var(--text-muted);
+    padding:.26rem .55rem .26rem .8rem;
+    border-radius:6px;
+    transition:color .15s ease, background .15s ease;
+  }
+  nav.toc a:hover{color:var(--text); background:var(--panel);}
+  nav.toc a.active{color:var(--text); background:var(--panel-2); font-weight:600;}
+
+  main{min-width:0;}
+
+  /* -------- mood intro -------- */
+  .mood-group{margin-bottom:3.4rem;}
+  .mood-group[data-mood="indicatiu"]{--mood-color:var(--indicatiu);--mood-soft:rgba(214,168,51,.32);}
+  .mood-group[data-mood="subjuntiu"]{--mood-color:var(--subjuntiu);--mood-soft:rgba(78,143,166,.32);}
+  .mood-group[data-mood="imperatiu"]{--mood-color:var(--imperatiu);--mood-soft:rgba(193,84,58,.32);}
+
+  .mood-intro{
+    border-top:2px solid var(--mood-color);
+    padding-top:1.1rem;
+    margin-bottom:1.6rem;
+  }
+  .mood-intro h2{
+    font-family:var(--serif);
+    font-style:italic;
+    font-weight:500;
+    font-size:clamp(1.5rem,2.6vw,2rem);
+    color:var(--mood-color);
+    margin:0 0 .1rem;
+  }
+  .mood-intro .mood-zh{
+    font-family:var(--zh);
+    color:var(--text-muted);
+    font-size:.9rem;
+    margin:0 0 .8rem;
+  }
+  .mood-intro p.mood-desc{
+    max-width:70ch;
+    color:#c9c3b6;
+    font-size:.96rem;
+    margin:0 0 .7rem;
+  }
+  .mood-intro p.mood-desc:last-child{margin-bottom:0;}
+  .mood-intro strong{color:var(--text);font-weight:600;}
+
+  .contrast{
+    display:flex;
+    flex-wrap:wrap;
+    gap:.6rem;
+    margin-top:1rem;
+  }
+  .contrast div{
+    flex:1 1 200px;
+    background:var(--panel);
+    border:1px solid var(--hairline);
+    border-radius:8px;
+    padding:.7rem .85rem;
+  }
+  .contrast b{
+    display:block;
+    font-size:.72rem;
+    font-weight:600;
+    color:var(--c-color);
+    margin-bottom:.25rem;
+  }
+  .contrast div:nth-child(1){--c-color:var(--indicatiu);}
+  .contrast div:nth-child(2){--c-color:var(--subjuntiu);}
+  .contrast div:nth-child(3){--c-color:var(--imperatiu);}
+  .contrast span.ca{font-size:.93rem;}
+  .contrast span.zh{display:block;font-family:var(--zh);font-size:.8rem;color:var(--text-muted);}
+
+  /* -------- tense card -------- */
+  .tense{
+    scroll-margin-top:1.5rem;
+    background:var(--panel);
+    border:1px solid var(--hairline);
+    border-left:3px solid var(--mood-color);
+    border-radius:10px;
+    padding:1.5rem 1.6rem 1.7rem;
+    margin-bottom:1.4rem;
+  }
+  .tense-head{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    gap:.15rem 1rem;
+  }
+  .tense-name{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:1.4rem;
+    margin:0;
+  }
+  .tense-zh{font-family:var(--zh);color:var(--text-muted);font-size:.92rem;}
+  .tense-formation{
+    width:100%;
+    color:var(--text-muted);
+    font-size:.87rem;
+    margin:.25rem 0 1.1rem;
+    font-style:italic;
+  }
+  .tense h4{
+    font-size:.76rem;
+    letter-spacing:.03em;
+    color:var(--mood-color);
+    margin:1.4rem 0 .8rem;
+    font-weight:600;
+  }
+  .tense h4:first-of-type{margin-top:0;}
+
+  ul.uses{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.6rem;}
+  ul.uses li{position:relative;padding-left:1.5rem;}
+  ul.uses li::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:.5em;
+    width:8px;
+    height:8px;
+    background:var(--mood-color);
+    transform:rotate(45deg);
+  }
+  .use-title{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:1.05rem;
+    line-height:1.35;
+    color:var(--text);
+    margin:0;
+  }
+  .use-note{
+    margin:.15rem 0 0;
+    font-size:.87rem;
+    color:var(--text-muted);
+    max-width:60ch;
+  }
+  .ex-group{
+    margin-top:.75rem;
+    padding-left:.9rem;
+    border-left:2px solid var(--mood-soft);
+    display:flex;
+    flex-direction:column;
+    gap:.5rem;
+  }
+
+  .ex{margin:0;display:flex;flex-direction:column;gap:.1rem;}
+  .ex-ca{font-size:.94rem;color:#dcd6c8;}
+  .combo .ex-ca::before{content:"— ";color:var(--text-muted);}
+  .combo .ex{margin-bottom:.35rem;}
+  .combo .ex:last-child{margin-bottom:0;}
+  .ex-zh{font-family:var(--zh);font-size:.84rem;color:var(--text-muted);}
+  html.hide-zh .ex-zh,
+  html.hide-zh .tense-zh,
+  html.hide-zh .mood-zh,
+  html.hide-zh .contrast span.zh{display:none;}
+
+  .combos{display:flex;flex-direction:column;gap:.85rem;}
+  .combo{background:var(--panel-2);border-radius:8px;padding:.75rem .9rem .85rem;}
+  .chip{
+    display:inline-block;
+    font-size:.78rem;
+    font-weight:600;
+    color:var(--bg);
+    background:var(--mood-color);
+    padding:.18rem .6rem;
+    border-radius:999px;
+    margin-bottom:.55rem;
+  }
+
+  .note{
+    margin-top:1.2rem;
+    padding:.7rem .9rem;
+    border-left:2px solid var(--mood-color);
+    background:var(--panel-2);
+    border-radius:0 8px 8px 0;
+    font-size:.87rem;
+    color:#c9c3b6;
+  }
+  .note a{color:var(--mood-color);text-decoration:underline;}
+
+  footer{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 clamp(1.25rem,4vw,3rem) 3rem;
+    color:var(--text-muted);
+    font-size:.82rem;
+  }
+
+  @media (max-width:900px){
+    .layout{grid-template-columns:1fr;}
+    nav.toc{
+      position:sticky;
+      top:0;
+      z-index:20;
+      background:var(--bg);
+      flex-direction:row;
+      overflow-x:auto;
+      max-height:none;
+      gap:1.2rem;
+      padding:.9rem 0 1rem;
+      border-bottom:1px solid var(--hairline);
+      scrollbar-width:none;
+    }
+    nav.toc::-webkit-scrollbar{display:none;}
+    nav.toc .toc-group{flex:0 0 auto;}
+    nav.toc .toc-time > span::after{display:none;}
+    nav.toc ul{flex-direction:row;}
+    .tense{scroll-margin-top:6rem;}
+  }
+
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <h1>Els temps verbals catalans</h1>
+  <p class="lede">Un repàs a fons: què és cada mode, quan s'usa cada temps i, sobretot, amb quines paraules i estructures sol aparèixer a la pràctica. No hi ha el passat simple, ni el passat anterior, ni el passat anterior perifràstic — pràcticament no s'utilitzen en el català d'avui.</p>
+  <div class="legend">
+    <span class="dot i">Indicatiu</span>
+    <span class="dot s">Subjuntiu</span>
+    <span class="dot m">Imperatiu</span>
+    <button class="zh-toggle" id="zhToggle" type="button">Amaga el xinès</button>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="toc" aria-label="Índex de temps verbals">
+    <div class="toc-group" data-mood="indicatiu">
+      <h5>Indicatiu</h5>
+      <div class="toc-time">
+        <span>Present</span>
+        <ul><li><a href="#ind-present">Present</a></li></ul>
+      </div>
+      <div class="toc-time">
+        <span>Passat</span>
+        <ul>
+          <li><a href="#ind-imperfet">Imperfet</a></li>
+          <li><a href="#ind-perifrastic">Passat perifràstic</a></li>
+          <li><a href="#ind-perfet">Pretèrit perfet</a></li>
+          <li><a href="#ind-plusquamperfet">Plusquamperfet</a></li>
+        </ul>
+      </div>
+      <div class="toc-time">
+        <span>Futur</span>
+        <ul>
+          <li><a href="#ind-futur">Futur simple</a></li>
+          <li><a href="#ind-futur-perfet">Futur perfet</a></li>
+        </ul>
+      </div>
+      <div class="toc-time">
+        <span>Hipotètic</span>
+        <ul>
+          <li><a href="#ind-condicional">Condicional simple</a></li>
+          <li><a href="#ind-condicional-perfet">Condicional perfet</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="toc-group" data-mood="subjuntiu">
+      <h5>Subjuntiu</h5>
+      <div class="toc-time">
+        <span>Present i futur</span>
+        <ul><li><a href="#subj-present">Present</a></li></ul>
+      </div>
+      <div class="toc-time">
+        <span>Passat</span>
+        <ul>
+          <li><a href="#subj-imperfet">Imperfet</a></li>
+          <li><a href="#subj-perfet">Perfet</a></li>
+          <li><a href="#subj-plusquamperfet">Plusquamperfet</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="toc-group" data-mood="imperatiu">
+      <h5>Imperatiu</h5>
+      <div class="toc-time">
+        <span>Sense temps</span>
+        <ul><li><a href="#imp-imperatiu">Imperatiu</a></li></ul>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ============ INDICATIU ============ -->
+    <section class="mood-group" data-mood="indicatiu">
+      <div class="mood-intro">
+        <h2>Indicatiu</h2>
+        <p class="mood-zh" lang="zh">陈述式 — 用来陈述真实的事实</p>
+        <p class="mood-desc">L'indicatiu és el <strong>mode de la realitat</strong>. El fem servir quan presentem una cosa com un fet: el que passa, el que ha passat, el que passarà. El parlant no dubta, no desitja, no valora — informa.</p>
+        <p class="mood-desc">És el mode més freqüent i el que té més temps: nou en total. Sol aparèixer a la frase principal (<em>Avui plou</em>) i també a les subordinades on hi ha certesa (<em>Sé que plou</em>, <em>Diu que plou</em>).</p>
+      </div>
+
+      <article class="tense" id="ind-present">
+        <div class="tense-head">
+          <h3 class="tense-name">Present d'indicatiu</h3>
+          <span class="tense-zh" lang="zh">现在时</span>
+        </div>
+        <p class="tense-formation">arrel + -o / -es / -a / -em / -eu / -en (parlar → parlo, parles, parla…)</p>
+
+        <h4>Usos</h4>
+        <ul class="uses">
+          <li>
+            <p class="use-title">Rutines i hàbits</p>
+            <p class="use-note">Accions que es repeteixen.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Cada matí em llevo a les set.</span><span class="ex-zh" lang="zh">我每天早上七点起床。</span></p>
+              <p class="ex"><span class="ex-ca">Els dilluns fem classe de català.</span><span class="ex-zh" lang="zh">我们每周一上加泰罗尼亚语课。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Veritats generals</p>
+            <p class="use-note">Fets sempre certs.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">L'aigua bull a cent graus.</span><span class="ex-zh" lang="zh">水在一百度沸腾。</span></p>
+              <p class="ex"><span class="ex-ca">A l'estiu fa molta calor a Barcelona.</span><span class="ex-zh" lang="zh">夏天巴塞罗那很热。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Accions que passen ara mateix</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Ara plou molt fort.</span><span class="ex-zh" lang="zh">现在雨下得很大。</span></p>
+              <p class="ex"><span class="ex-ca">Què fas? — Estudio per a l'examen.</span><span class="ex-zh" lang="zh">你在干什么?——我在准备考试。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Futur pròxim ja planificat</p>
+            <p class="use-note">Sobretot amb horaris i plans ja fixats.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Demà vaig a Barcelona.</span><span class="ex-zh" lang="zh">明天我去巴塞罗那。</span></p>
+              <p class="ex"><span class="ex-ca">El tren surt a les vuit i deu.</span><span class="ex-zh" lang="zh">火车八点十分出发。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Present històric</p>
+            <p class="use-note">Narrar el passat com si fos ara, per fer-ho més viu.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">L'any 1492, Colom arriba a Amèrica.</span><span class="ex-zh" lang="zh">1492年,哥伦布到达美洲。</span></p>
+              <p class="ex"><span class="ex-ca">Gaudí comença la Sagrada Família el 1882.</span><span class="ex-zh" lang="zh">高迪1882年开始建造圣家堂。</span></p>
+            </div>
+          </li>
+        </ul>
+
+        <h4>Combinacions típiques</h4>
+        <div class="combos">
+          <div class="combo">
+            <span class="chip">cada dia · sempre · normalment · sovint · mai</span>
+            <p class="ex"><span class="ex-ca">Normalment dino a la una.</span><span class="ex-zh" lang="zh">我通常一点吃午饭。</span></p>
+            <p class="ex"><span class="ex-ca">Sempre arriba tard a les reunions.</span><span class="ex-zh" lang="zh">他开会总是迟到。</span></p>
+            <p class="ex"><span class="ex-ca">No menjo mai carn.</span><span class="ex-zh" lang="zh">我从来不吃肉。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">si + present, → present o futur</span>
+            <p class="ex"><span class="ex-ca">Si estudies, aproves.</span><span class="ex-zh" lang="zh">如果你学习,你就会通过。</span></p>
+            <p class="ex"><span class="ex-ca">Si vols, t'ajudo.</span><span class="ex-zh" lang="zh">你要是想的话,我来帮你。</span></p>
+            <p class="ex"><span class="ex-ca">Si no plou, anirem a la platja.</span><span class="ex-zh" lang="zh">如果不下雨,我们就去海边。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">quan + present (acció habitual)</span>
+            <p class="ex"><span class="ex-ca">Quan tinc temps, llegeixo.</span><span class="ex-zh" lang="zh">我有时间的时候就看书。</span></p>
+            <p class="ex"><span class="ex-ca">Quan surto de la feina, vaig al gimnàs.</span><span class="ex-zh" lang="zh">我下班后就去健身房。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">estar + gerundi (acció en curs)</span>
+            <p class="ex"><span class="ex-ca">Estic estudiant català.</span><span class="ex-zh" lang="zh">我在学加泰罗尼亚语。</span></p>
+            <p class="ex"><span class="ex-ca">Què estàs fent ara mateix?</span><span class="ex-zh" lang="zh">你现在在做什么?</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">fa + [temps] + que + present</span>
+            <p class="ex"><span class="ex-ca">Fa dos anys que visc aquí.</span><span class="ex-zh" lang="zh">我住在这里两年了。</span></p>
+            <p class="ex"><span class="ex-ca">Fa una hora que t'espero.</span><span class="ex-zh" lang="zh">我等你一个小时了。</span></p>
+          </div>
+        </div>
+      </article>
+
+      <article class="tense" id="ind-imperfet">
+        <div class="tense-head">
+          <h3 class="tense-name">Imperfet d'indicatiu</h3>
+          <span class="tense-zh" lang="zh">未完成过去时</span>
+        </div>
+        <p class="tense-formation">arrel + -ava / -aves… (1a conj.) o -ia / -ies… (2a i 3a conj.)</p>
+
+        <h4>Usos</h4>
+        <ul class="uses">
+          <li>
+            <p class="use-title">Hàbits en el passat</p>
+            <p class="use-note">El que es feia sovint, sense dir quan va acabar.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">De petit, jugava al carrer cada tarda.</span><span class="ex-zh" lang="zh">小时候,我每天下午在街上玩。</span></p>
+              <p class="ex"><span class="ex-ca">Els estius anàvem sempre al poble.</span><span class="ex-zh" lang="zh">每年夏天我们都回老家村子。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Descripcions en el passat</p>
+            <p class="use-note">(Persones, llocs, temps, estats d'ànim).</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">La casa era gran i tenia un jardí.</span><span class="ex-zh" lang="zh">那栋房子很大,还有一个花园。</span></p>
+              <p class="ex"><span class="ex-ca">Feia fred i el cel estava gris.</span><span class="ex-zh" lang="zh">天很冷,天空灰蒙蒙的。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Acció en curs interrompuda</p>
+            <p class="use-note">Per una altra acció puntual.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Mirava la tele quan va trucar.</span><span class="ex-zh" lang="zh">他打电话来的时候,我正在看电视。</span></p>
+              <p class="ex"><span class="ex-ca">Sortíem de casa quan va començar a ploure.</span><span class="ex-zh" lang="zh">我们正要出门的时候,开始下雨了。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Cortesia</p>
+            <p class="use-note">Per suavitzar una petició o una pregunta.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Volia demanar-te un favor.</span><span class="ex-zh" lang="zh">我想请你帮个忙。</span></p>
+              <p class="ex"><span class="ex-ca">Que buscaves alguna cosa?</span><span class="ex-zh" lang="zh">您在找什么东西吗?</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Estil indirecte</p>
+            <p class="use-note">El present es converteix en imperfet.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Va dir que vivia a Girona.</span><span class="ex-zh" lang="zh">他说他住在赫罗纳。</span></p>
+              <p class="ex"><span class="ex-ca">Em va explicar que no es trobava bé.</span><span class="ex-zh" lang="zh">他跟我说他不舒服。</span></p>
+            </div>
+          </li>
+        </ul>
+
+        <h4>Combinacions típiques</h4>
+        <div class="combos">
+          <div class="combo">
+            <span class="chip">abans · de petit · quan era jove · en aquella època</span>
+            <p class="ex"><span class="ex-ca">Abans no hi havia mòbils.</span><span class="ex-zh" lang="zh">以前没有手机。</span></p>
+            <p class="ex"><span class="ex-ca">De petita tenia el cabell molt llarg.</span><span class="ex-zh" lang="zh">她小时候头发很长。</span></p>
+            <p class="ex"><span class="ex-ca">En aquella època vivíem al centre.</span><span class="ex-zh" lang="zh">那时候我们住在市中心。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">mentre + imperfet (dues accions paral·leles)</span>
+            <p class="ex"><span class="ex-ca">Mentre cuinava, escoltava música.</span><span class="ex-zh" lang="zh">做饭的时候,我在听音乐。</span></p>
+            <p class="ex"><span class="ex-ca">Ell llegia mentre jo estudiava.</span><span class="ex-zh" lang="zh">我学习的时候他在看书。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">imperfet … quan + passat perifràstic</span>
+            <p class="ex"><span class="ex-ca">Dormia quan va sonar l'alarma.</span><span class="ex-zh" lang="zh">闹钟响的时候,我正在睡觉。</span></p>
+            <p class="ex"><span class="ex-ca">Caminava pel carrer quan la vaig veure.</span><span class="ex-zh" lang="zh">我在街上走的时候看见了她。</span></p>
+            <p class="ex"><span class="ex-ca">Esperàvem el tren quan va arribar el teu missatge.</span><span class="ex-zh" lang="zh">我们在等火车的时候收到了你的消息。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">sempre · cada dia · normalment + imperfet (hàbit passat)</span>
+            <p class="ex"><span class="ex-ca">Cada diumenge dinàvem a casa de l'àvia.</span><span class="ex-zh" lang="zh">每个星期天我们都在奶奶家吃午饭。</span></p>
+            <p class="ex"><span class="ex-ca">Sempre em portava un llibre.</span><span class="ex-zh" lang="zh">他总是给我带一本书。</span></p>
+          </div>
+        </div>
+      </article>
+
+      <article class="tense" id="ind-perifrastic">
+        <div class="tense-head">
+          <h3 class="tense-name">Passat perifràstic</h3>
+          <span class="tense-zh" lang="zh">迂说式简单过去时</span>
+        </div>
+        <p class="tense-formation">vaig / vas / va / vam / vau / van + infinitiu — la manera normal de parlar del passat puntual en català d'avui</p>
+
+        <h4>Usos</h4>
+        <ul class="uses">
+          <li>
+            <p class="use-title">Acció puntual i acabada</p>
+            <p class="use-note">En un moment concret del passat.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Ahir vaig anar al cinema.</span><span class="ex-zh" lang="zh">昨天我去看电影了。</span></p>
+              <p class="ex"><span class="ex-ca">Va néixer a Lleida el 1998.</span><span class="ex-zh" lang="zh">他1998年在莱里达出生。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Narrar una seqüència d'accions</p>
+            <p class="use-note">Una darrere l'altra.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Vaig arribar, vaig deixar les bosses i vaig seure.</span><span class="ex-zh" lang="zh">我到了,放下包,坐下了。</span></p>
+              <p class="ex"><span class="ex-ca">Es va aixecar, va obrir la finestra i va sortir.</span><span class="ex-zh" lang="zh">他站起来,打开窗户,出去了。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Fets històrics puntuals</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">La guerra va acabar el 1939.</span><span class="ex-zh" lang="zh">战争1939年结束。</span></p>
+              <p class="ex"><span class="ex-ca">Els Jocs Olímpics es van celebrar a Barcelona el 1992.</span><span class="ex-zh" lang="zh">1992年奥运会在巴塞罗那举办。</span></p>
+            </div>
+          </li>
+        </ul>
+
+        <h4>Combinacions típiques</h4>
+        <div class="combos">
+          <div class="combo">
+            <span class="chip">ahir · l'altre dia · fa [temps] · l'any passat · el 2020</span>
+            <p class="ex"><span class="ex-ca">Fa tres anys vam viatjar a Itàlia.</span><span class="ex-zh" lang="zh">三年前我们去意大利旅行了。</span></p>
+            <p class="ex"><span class="ex-ca">L'altre dia et vaig veure al mercat.</span><span class="ex-zh" lang="zh">前几天我在市场看见你了。</span></p>
+            <p class="ex"><span class="ex-ca">L'any passat van canviar de pis.</span><span class="ex-zh" lang="zh">去年他们搬家了。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">de sobte · tot d'una · de cop</span>
+            <p class="ex"><span class="ex-ca">De sobte va començar a ploure.</span><span class="ex-zh" lang="zh">突然下起雨来了。</span></p>
+            <p class="ex"><span class="ex-ca">Tot d'una es va apagar la llum.</span><span class="ex-zh" lang="zh">灯突然灭了。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">primer… després… llavors… finalment…</span>
+            <p class="ex"><span class="ex-ca">Primer va trucar i després va escriure un correu.</span><span class="ex-zh" lang="zh">他先打了电话,然后写了邮件。</span></p>
+            <p class="ex"><span class="ex-ca">Vam sopar, llavors vam sortir a passejar i finalment vam tornar a casa.</span><span class="ex-zh" lang="zh">我们吃了晚饭,然后去散步,最后回家了。</span></p>
+          </div>
+        </div>
+      </article>
+
+      <article class="tense" id="ind-perfet">
+        <div class="tense-head">
+          <h3 class="tense-name">Pretèrit perfet</h3>
+          <span class="tense-zh" lang="zh">现在完成时</span>
+        </div>
+        <p class="tense-formation">present d'haver + participi: he fet, has fet, ha fet, hem fet, heu fet, han fet</p>
+
+        <h4>Usos</h4>
+        <ul class="uses">
+          <li>
+            <p class="use-title">Acció passada dins un període que encara no s'ha acabat</p>
+            <p class="use-note">(Avui, aquesta setmana, aquest any…).</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Aquest matí he esmorzat tard.</span><span class="ex-zh" lang="zh">今天早上我很晚才吃早饭。</span></p>
+              <p class="ex"><span class="ex-ca">Aquesta setmana hem tingut molta feina.</span><span class="ex-zh" lang="zh">这周我们工作特别多。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Experiència de vida</p>
+            <p class="use-note">Sense dir quan.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Mai he estat a la Xina.</span><span class="ex-zh" lang="zh">我从来没去过中国。</span></p>
+              <p class="ex"><span class="ex-ca">Has provat mai el pa amb tomàquet?</span><span class="ex-zh" lang="zh">你尝过番茄面包吗?</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Notícies i fets recents</p>
+            <p class="use-note">Amb conseqüències en el present.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">El govern ha anunciat noves mesures.</span><span class="ex-zh" lang="zh">政府宣布了新措施。</span></p>
+              <p class="ex"><span class="ex-ca">Han obert una botiga nova al barri.</span><span class="ex-zh" lang="zh">街区里新开了一家店。</span></p>
+            </div>
+          </li>
+        </ul>
+
+        <h4>Combinacions típiques</h4>
+        <div class="combos">
+          <div class="combo">
+            <span class="chip">avui · aquest matí · aquesta setmana · aquest any · últimament</span>
+            <p class="ex"><span class="ex-ca">Aquesta setmana he treballat molt.</span><span class="ex-zh" lang="zh">这周我工作很努力。</span></p>
+            <p class="ex"><span class="ex-ca">Últimament he dormit malament.</span><span class="ex-zh" lang="zh">最近我睡得不好。</span></p>
+            <p class="ex"><span class="ex-ca">Avui no he vist ningú.</span><span class="ex-zh" lang="zh">今天我谁都没见到。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">ja · encara no · mai · alguna vegada</span>
+            <p class="ex"><span class="ex-ca">Ja he acabat els deures.</span><span class="ex-zh" lang="zh">我已经做完作业了。</span></p>
+            <p class="ex"><span class="ex-ca">Encara no ha arribat el paquet.</span><span class="ex-zh" lang="zh">包裹还没到。</span></p>
+            <p class="ex"><span class="ex-ca">Alguna vegada has anat a Menorca?</span><span class="ex-zh" lang="zh">你去过梅诺卡岛吗?</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">acabar de + infinitiu (acció molt recent)</span>
+            <p class="ex"><span class="ex-ca">Acabo d'arribar a casa.</span><span class="ex-zh" lang="zh">我刚到家。</span></p>
+            <p class="ex"><span class="ex-ca">Acaben de marxar ara mateix.</span><span class="ex-zh" lang="zh">他们刚刚走。</span></p>
+          </div>
+        </div>
+      </article>
+
+      <article class="tense" id="ind-plusquamperfet">
+        <div class="tense-head">
+          <h3 class="tense-name">Plusquamperfet d'indicatiu</h3>
+          <span class="tense-zh" lang="zh">过去完成时</span>
+        </div>
+        <p class="tense-formation">imperfet d'haver + participi: havia fet, havies fet, havia fet…</p>
+
+        <h4>Usos</h4>
+        <ul class="uses">
+          <li>
+            <p class="use-title">Acció anterior a una altra acció passada</p>
+            <p class="use-note">El "passat del passat".</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Quan vaig arribar, ja havia marxat.</span><span class="ex-zh" lang="zh">我到的时候,他已经走了。</span></p>
+              <p class="ex"><span class="ex-ca">No va poder entrar perquè havia perdut les claus.</span><span class="ex-zh" lang="zh">他进不去,因为他把钥匙弄丢了。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Experiència prèvia a un punt del passat</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Mai havia vist un lloc tan bonic.</span><span class="ex-zh" lang="zh">他以前从没见过这么美的地方。</span></p>
+              <p class="ex"><span class="ex-ca">Fins llavors no havia menjat mai calçots.</span><span class="ex-zh" lang="zh">在那之前我从没吃过烤大葱。</span></p>
+            </div>
+          </li>
+        </ul>
+
+        <h4>Combinacions típiques</h4>
+        <div class="combos">
+          <div class="combo">
+            <span class="chip">quan + passat perifràstic, ja havia + participi</span>
+            <p class="ex"><span class="ex-ca">Quan van trucar, ja havíem sopat.</span><span class="ex-zh" lang="zh">他们打电话来的时候,我们已经吃过晚饭了。</span></p>
+            <p class="ex"><span class="ex-ca">Quan vam entrar, la pel·lícula ja havia començat.</span><span class="ex-zh" lang="zh">我们进去的时候,电影已经开始了。</span></p>
+            <p class="ex"><span class="ex-ca">Quan em vaig despertar, tothom ja havia marxat.</span><span class="ex-zh" lang="zh">我醒来的时候,大家都已经走了。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">encara no havia… quan…</span>
+            <p class="ex"><span class="ex-ca">Encara no havia acabat quan van arribar.</span><span class="ex-zh" lang="zh">他还没做完,他们就到了。</span></p>
+            <p class="ex"><span class="ex-ca">Encara no havíem sortit quan va començar a nevar.</span><span class="ex-zh" lang="zh">我们还没出门就开始下雪了。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">perquè · com que + plusquamperfet (causa anterior)</span>
+            <p class="ex"><span class="ex-ca">Estava cansat perquè no havia dormit gens.</span><span class="ex-zh" lang="zh">他很累,因为他完全没睡。</span></p>
+            <p class="ex"><span class="ex-ca">Com que havia plogut, el terra estava moll.</span><span class="ex-zh" lang="zh">因为下过雨,地是湿的。</span></p>
+          </div>
+        </div>
+      </article>
+
+      <article class="tense" id="ind-futur">
+        <div class="tense-head">
+          <h3 class="tense-name">Futur simple</h3>
+          <span class="tense-zh" lang="zh">将来时</span>
+        </div>
+        <p class="tense-formation">infinitiu + -é / -às / -à / -em / -eu / -an (parlaré, parlaràs, parlarà…)</p>
+
+        <h4>Usos</h4>
+        <ul class="uses">
+          <li>
+            <p class="use-title">Predicció</p>
+            <p class="use-note">Sobre el que passarà.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Demà farà sol.</span><span class="ex-zh" lang="zh">明天会是晴天。</span></p>
+              <p class="ex"><span class="ex-ca">Crec que aquesta pel·lícula t'agradarà.</span><span class="ex-zh" lang="zh">我觉得这部电影你会喜欢。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Promeses i decisions</p>
+            <p class="use-note">Preses en el moment de parlar.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">T'ajudaré demà, t'ho prometo.</span><span class="ex-zh" lang="zh">我保证明天帮你。</span></p>
+              <p class="ex"><span class="ex-ca">No ho tornaré a fer.</span><span class="ex-zh" lang="zh">我不会再这样做了。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Probabilitat sobre el present</p>
+            <p class="use-note">(Una suposició, no un futur real).</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Seran les tres, més o menys.</span><span class="ex-zh" lang="zh">现在大概三点吧。</span></p>
+              <p class="ex"><span class="ex-ca">On és la Marta? — Estarà a la feina.</span><span class="ex-zh" lang="zh">玛尔塔在哪儿?——大概在上班吧。</span></p>
+            </div>
+          </li>
+        </ul>
+
+        <h4>Combinacions típiques</h4>
+        <div class="combos">
+          <div class="combo">
+            <span class="chip">demà · la setmana que ve · d'aquí a [temps] · l'any que ve</span>
+            <p class="ex"><span class="ex-ca">L'any que ve viurem a Girona.</span><span class="ex-zh" lang="zh">明年我们会住在赫罗纳。</span></p>
+            <p class="ex"><span class="ex-ca">D'aquí a dues setmanes tindrem els resultats.</span><span class="ex-zh" lang="zh">两周后我们会有结果。</span></p>
+            <p class="ex"><span class="ex-ca">La setmana que ve t'ho explicaré tot.</span><span class="ex-zh" lang="zh">下周我会把一切都告诉你。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">potser · segurament · probablement · suposo que</span>
+            <p class="ex"><span class="ex-ca">Segurament arribarà tard.</span><span class="ex-zh" lang="zh">他大概会迟到。</span></p>
+            <p class="ex"><span class="ex-ca">Potser no vindran a la festa.</span><span class="ex-zh" lang="zh">他们也许不会来聚会。</span></p>
+            <p class="ex"><span class="ex-ca">Suposo que ho entendran.</span><span class="ex-zh" lang="zh">我想他们会理解的。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">si + present, futur</span>
+            <p class="ex"><span class="ex-ca">Si tinc temps, passaré per casa teva.</span><span class="ex-zh" lang="zh">如果我有时间,我会去你家。</span></p>
+            <p class="ex"><span class="ex-ca">Si no menges, tindràs gana després.</span><span class="ex-zh" lang="zh">你不吃的话,一会儿会饿。</span></p>
+          </div>
+        </div>
+        <p class="note">Compte amb un error molt típic: quan <em>quan, fins que, tan aviat com</em> introdueixen una acció futura, el verb va en <strong>present de subjuntiu</strong>, mai en futur. Es diu <em>Quan arribis, truca'm</em> — no <em>"quan arribaràs"</em>. Vegeu el <a href="#subj-present">present de subjuntiu</a>.</p>
+      </article>
+
+      <article class="tense" id="ind-futur-perfet">
+        <div class="tense-head">
+          <h3 class="tense-name">Futur perfet</h3>
+          <span class="tense-zh" lang="zh">将来完成时</span>
+        </div>
+        <p class="tense-formation">futur d'haver + participi: hauré fet, hauràs fet, haurà fet…</p>
+
+        <h4>Usos</h4>
+        <ul class="uses">
+          <li>
+            <p class="use-title">Acció futura acabada abans d'un altre moment futur</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Quan arribis, ja hauré acabat de sopar.</span><span class="ex-zh" lang="zh">你到的时候,我应该已经吃完晚饭了。</span></p>
+              <p class="ex"><span class="ex-ca">D'aquí a un any hauré acabat la carrera.</span><span class="ex-zh" lang="zh">一年后我就毕业了。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Suposició sobre el passat</p>
+            <p class="use-note">(No ho sabem segur, ho imaginem).</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Hauran perdut el tren.</span><span class="ex-zh" lang="zh">他们大概是没赶上火车吧。</span></p>
+              <p class="ex"><span class="ex-ca">No contesta: s'haurà quedat sense bateria.</span><span class="ex-zh" lang="zh">他不回话,大概是手机没电了。</span></p>
+            </div>
+          </li>
+        </ul>
+
+        <h4>Combinacions típiques</h4>
+        <div class="combos">
+          <div class="combo">
+            <span class="chip">quan + present de subjuntiu, futur perfet</span>
+            <p class="ex"><span class="ex-ca">Quan tornis, ja hauré netejat la casa.</span><span class="ex-zh" lang="zh">你回来的时候,我应该已经把家打扫完了。</span></p>
+            <p class="ex"><span class="ex-ca">Quan vinguin, ja haurem marxat.</span><span class="ex-zh" lang="zh">他们来的时候,我们已经走了。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">per [data] · abans de [moment futur]</span>
+            <p class="ex"><span class="ex-ca">Per dilluns ja hauré enviat l'informe.</span><span class="ex-zh" lang="zh">到周一,我应该已经把报告发出去了。</span></p>
+            <p class="ex"><span class="ex-ca">Abans de Nadal ja hauran acabat les obres.</span><span class="ex-zh" lang="zh">圣诞节之前工程就完工了。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">suposició: deu ser que… / potser</span>
+            <p class="ex"><span class="ex-ca">Potser s'haurà oblidat de la reunió.</span><span class="ex-zh" lang="zh">他可能是忘了开会的事。</span></p>
+            <p class="ex"><span class="ex-ca">No ha vingut: s'haurà posat malalt.</span><span class="ex-zh" lang="zh">他没来,大概是病了。</span></p>
+          </div>
+        </div>
+      </article>
+
+      <article class="tense" id="ind-condicional">
+        <div class="tense-head">
+          <h3 class="tense-name">Condicional simple</h3>
+          <span class="tense-zh" lang="zh">条件式</span>
+        </div>
+        <p class="tense-formation">infinitiu + -ia / -ies / -ia / -íem / -íeu / -ien (parlaria, parlaries…)</p>
+
+        <h4>Usos</h4>
+        <ul class="uses">
+          <li>
+            <p class="use-title">Hipòtesi</p>
+            <p class="use-note">Què passaria en una situació imaginària.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Si tingués temps, viatjaria més.</span><span class="ex-zh" lang="zh">如果我有时间,我会多去旅行。</span></p>
+              <p class="ex"><span class="ex-ca">Amb més diners, comprarien una casa més gran.</span><span class="ex-zh" lang="zh">要是钱多一点,他们会买更大的房子。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Consell o suggeriment</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Jo que tu, li trucaria.</span><span class="ex-zh" lang="zh">要是我是你,我会给他打电话。</span></p>
+              <p class="ex"><span class="ex-ca">Hauries de descansar una mica.</span><span class="ex-zh" lang="zh">你应该休息一下。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Cortesia</p>
+            <p class="use-note">Peticions més suaus que amb el present.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Podries obrir la finestra?</span><span class="ex-zh" lang="zh">你能开一下窗户吗?</span></p>
+              <p class="ex"><span class="ex-ca">Em deixaries el bolígraf, si us plau?</span><span class="ex-zh" lang="zh">请问能把笔借我一下吗?</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Futur dins el passat</p>
+            <p class="use-note">(Estil indirecte).</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Va dir que vindria a les sis.</span><span class="ex-zh" lang="zh">他说他六点会来。</span></p>
+              <p class="ex"><span class="ex-ca">Vam pensar que seria més fàcil.</span><span class="ex-zh" lang="zh">我们当时以为会更容易。</span></p>
+            </div>
+          </li>
+        </ul>
+
+        <h4>Combinacions típiques</h4>
+        <div class="combos">
+          <div class="combo">
+            <span class="chip">si + imperfet de subjuntiu, condicional</span>
+            <p class="ex"><span class="ex-ca">Si ho sabés, t'ho diria.</span><span class="ex-zh" lang="zh">如果我知道,我就告诉你。</span></p>
+            <p class="ex"><span class="ex-ca">Si fes bo, aniríem a la muntanya.</span><span class="ex-zh" lang="zh">如果天气好,我们就去山里。</span></p>
+            <p class="ex"><span class="ex-ca">Si visquessis aquí, ens veuríem més.</span><span class="ex-zh" lang="zh">如果你住在这里,我们就能常见面。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">m'agradaria · voldria · podries · series tan amable de…</span>
+            <p class="ex"><span class="ex-ca">M'agradaria parlar amb tu un moment.</span><span class="ex-zh" lang="zh">我想跟你谈一会儿。</span></p>
+            <p class="ex"><span class="ex-ca">Voldria reservar una taula per a dos.</span><span class="ex-zh" lang="zh">我想订一张两人的桌子。</span></p>
+            <p class="ex"><span class="ex-ca">Series tan amable de repetir-ho?</span><span class="ex-zh" lang="zh">您能再说一遍吗?</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">jo que tu · al teu lloc · en el teu cas</span>
+            <p class="ex"><span class="ex-ca">Al teu lloc, no ho faria.</span><span class="ex-zh" lang="zh">要是我是你,我不会这么做。</span></p>
+            <p class="ex"><span class="ex-ca">Jo que tu, hi aniria abans.</span><span class="ex-zh" lang="zh">要是我是你,我会早点去。</span></p>
+          </div>
+        </div>
+      </article>
+
+      <article class="tense" id="ind-condicional-perfet">
+        <div class="tense-head">
+          <h3 class="tense-name">Condicional perfet</h3>
+          <span class="tense-zh" lang="zh">过去将来完成时</span>
+        </div>
+        <p class="tense-formation">condicional d'haver + participi: hauria fet, hauries fet, hauria fet…</p>
+
+        <h4>Usos</h4>
+        <ul class="uses">
+          <li>
+            <p class="use-title">Hipòtesi irreal en el passat</p>
+            <p class="use-note">El que hauria passat, però no va passar.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Si ho hagués sabut, t'hauria trucat.</span><span class="ex-zh" lang="zh">如果我当时知道的话,我会给你打电话的。</span></p>
+              <p class="ex"><span class="ex-ca">Amb més temps ho hauríem fet millor.</span><span class="ex-zh" lang="zh">时间再多一点的话,我们会做得更好。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Penediment o retret</p>
+            <p class="use-note">Sobre alguna cosa ja passada.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Hauries d'haver estudiat més.</span><span class="ex-zh" lang="zh">你本应该多学习一点。</span></p>
+              <p class="ex"><span class="ex-ca">No hauria d'haver dit res.</span><span class="ex-zh" lang="zh">我当时不该说什么的。</span></p>
+            </div>
+          </li>
+        </ul>
+
+        <h4>Combinacions típiques</h4>
+        <div class="combos">
+          <div class="combo">
+            <span class="chip">si + plusquamperfet de subjuntiu, condicional perfet</span>
+            <p class="ex"><span class="ex-ca">Si hagués plogut, no hauríem sortit.</span><span class="ex-zh" lang="zh">如果当时下雨了,我们就不会出门了。</span></p>
+            <p class="ex"><span class="ex-ca">Si m'ho haguessis dit, t'hauria ajudat.</span><span class="ex-zh" lang="zh">你要是告诉我了,我就会帮你。</span></p>
+            <p class="ex"><span class="ex-ca">Si haguéssim sortit abans, hauríem arribat a temps.</span><span class="ex-zh" lang="zh">我们要是早点出门,就能准时到了。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">hauria de + haver + participi (retret)</span>
+            <p class="ex"><span class="ex-ca">Hauries d'haver-m'ho dit abans.</span><span class="ex-zh" lang="zh">你本应该早点告诉我。</span></p>
+            <p class="ex"><span class="ex-ca">Haurien d'haver avisat.</span><span class="ex-zh" lang="zh">他们本该通知一声的。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">estil indirecte: va dir que ja hauria + participi</span>
+            <p class="ex"><span class="ex-ca">Va dir que a les cinc ja hauria acabat.</span><span class="ex-zh" lang="zh">他说五点之前就能做完。</span></p>
+            <p class="ex"><span class="ex-ca">Em van assegurar que ho haurien enviat abans de divendres.</span><span class="ex-zh" lang="zh">他们向我保证周五之前会寄出去。</span></p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ============ SUBJUNTIU ============ -->
+    <section class="mood-group" data-mood="subjuntiu">
+      <div class="mood-intro">
+        <h2>Subjuntiu</h2>
+        <p class="mood-zh" lang="zh">虚拟式 — 用来表达愿望、怀疑、情感和非现实的情况</p>
+        <p class="mood-desc">El subjuntiu és el <strong>mode de la no-realitat</strong>. No diu si una cosa passa o no; diu com el parlant s'hi relaciona: la desitja, la dubta, la valora, la imagina, o encara no ha passat.</p>
+        <p class="mood-desc">Gairebé sempre viu dins una <strong>frase subordinada</strong>, després de <em>que</em> o d'una conjunció (<em>abans que, perquè, encara que, sense que</em>). El verb de la frase principal és el que "demana" el subjuntiu: <em>vull que…, espero que…, no crec que…</em> Per això la clau no és memoritzar formes soltes, sinó reconèixer aquests disparadors.</p>
+        <div class="contrast">
+          <div><b>Indicatiu — fet</b><span class="ca">Sé que ve.</span><span class="zh" lang="zh">我知道他会来。</span></div>
+          <div><b>Subjuntiu — desig</b><span class="ca">Espero que vingui.</span><span class="zh" lang="zh">我希望他来。</span></div>
+          <div><b>Imperatiu — ordre</b><span class="ca">Vine!</span><span class="zh" lang="zh">你来!</span></div>
+        </div>
+      </div>
+
+      <article class="tense" id="subj-present">
+        <div class="tense-head">
+          <h3 class="tense-name">Present de subjuntiu</h3>
+          <span class="tense-zh" lang="zh">虚拟式现在时</span>
+        </div>
+        <p class="tense-formation">arrel + -i / -is / -i / -em / -eu / -in (parlar → parli, parlis, parli, parlem, parleu, parlin)</p>
+
+        <h4>Usos</h4>
+        <ul class="uses">
+          <li>
+            <p class="use-title">Desig, voluntat, petició</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Espero que vinguis a la festa.</span><span class="ex-zh" lang="zh">我希望你来参加聚会。</span></p>
+              <p class="ex"><span class="ex-ca">Vull que siguis feliç.</span><span class="ex-zh" lang="zh">我希望你幸福。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Dubte o negació de certesa</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">No crec que tingui raó.</span><span class="ex-zh" lang="zh">我不认为他有道理。</span></p>
+              <p class="ex"><span class="ex-ca">Dubto que arribin a l'hora.</span><span class="ex-zh" lang="zh">我怀疑他们能准时到。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Sentiment o valoració</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">M'alegro que estiguis bé.</span><span class="ex-zh" lang="zh">我很高兴你身体好。</span></p>
+              <p class="ex"><span class="ex-ca">És una llàstima que no puguis venir.</span><span class="ex-zh" lang="zh">你不能来太可惜了。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Imperatiu negatiu i tractament de vostè</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">No fumis aquí, si us plau.</span><span class="ex-zh" lang="zh">请不要在这里吸烟。</span></p>
+              <p class="ex"><span class="ex-ca">Segui, si us plau.</span><span class="ex-zh" lang="zh">请坐。</span></p>
+            </div>
+          </li>
+        </ul>
+
+        <h4>Combinacions típiques</h4>
+        <div class="combos">
+          <div class="combo">
+            <span class="chip">voler que · esperar que · demanar que · dir que (ordre)</span>
+            <p class="ex"><span class="ex-ca">Vull que ho facis tu.</span><span class="ex-zh" lang="zh">我希望是你来做这件事。</span></p>
+            <p class="ex"><span class="ex-ca">Et demano que m'escoltis.</span><span class="ex-zh" lang="zh">我请你听我说。</span></p>
+            <p class="ex"><span class="ex-ca">Espero que tot vagi bé.</span><span class="ex-zh" lang="zh">希望一切顺利。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">és possible que · és probable que · no crec que · dubto que</span>
+            <p class="ex"><span class="ex-ca">És possible que plogui demà.</span><span class="ex-zh" lang="zh">明天有可能下雨。</span></p>
+            <p class="ex"><span class="ex-ca">No crec que sigui tan difícil.</span><span class="ex-zh" lang="zh">我不觉得有那么难。</span></p>
+            <p class="ex"><span class="ex-ca">És probable que ho sàpiga ja.</span><span class="ex-zh" lang="zh">他很可能已经知道了。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">abans que · sense que · perquè (finalitat) · encara que</span>
+            <p class="ex"><span class="ex-ca">T'ho dic perquè ho sàpigues.</span><span class="ex-zh" lang="zh">我告诉你是为了让你知道。</span></p>
+            <p class="ex"><span class="ex-ca">Va marxar sense que ningú se n'adonés.</span><span class="ex-zh" lang="zh">他走了,没有人察觉。</span></p>
+            <p class="ex"><span class="ex-ca">Truca'm abans que surtis de casa.</span><span class="ex-zh" lang="zh">你出门前给我打个电话。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">quan · fins que · tan aviat com + acció futura</span>
+            <p class="ex"><span class="ex-ca">Quan arribis, avisa'm.</span><span class="ex-zh" lang="zh">你到了就告诉我。</span></p>
+            <p class="ex"><span class="ex-ca">Esperarem fins que acabi la reunió.</span><span class="ex-zh" lang="zh">我们会等到会议结束。</span></p>
+            <p class="ex"><span class="ex-ca">Tan aviat com puguis, envia'm el document.</span><span class="ex-zh" lang="zh">你一有空就把文件发给我。</span></p>
+          </div>
+        </div>
+        <p class="note">Aquest darrer bloc és el que connecta amb el <a href="#ind-futur">futur simple</a>: la conjunció temporal porta subjuntiu quan l'acció encara no ha passat. Compara-ho amb l'ús habitual, que sí que porta indicatiu: <em>Quan arribo a casa, em canvio de roba.</em></p>
+      </article>
+
+      <article class="tense" id="subj-imperfet">
+        <div class="tense-head">
+          <h3 class="tense-name">Imperfet de subjuntiu</h3>
+          <span class="tense-zh" lang="zh">虚拟式未完成过去时</span>
+        </div>
+        <p class="tense-formation">arrel + -és / -essis / -és / -éssim / -éssiu / -essin (parlés, parlessis…)</p>
+
+        <h4>Usos</h4>
+        <ul class="uses">
+          <li>
+            <p class="use-title">Hipòtesi irreal</p>
+            <p class="use-note">En el present o el futur, amb condicional.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Si tingués diners, compraria una casa.</span><span class="ex-zh" lang="zh">如果我有钱,我会买一栋房子。</span></p>
+              <p class="ex"><span class="ex-ca">Si fos tu, no hi aniria.</span><span class="ex-zh" lang="zh">如果我是你,我不会去。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Desig difícil o poc probable</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Tant de bo pogués venir!</span><span class="ex-zh" lang="zh">要是我能来就好了!</span></p>
+              <p class="ex"><span class="ex-ca">Tant de bo fes bon temps aquest cap de setmana.</span><span class="ex-zh" lang="zh">要是这周末天气好就好了。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Estil indirecte</p>
+            <p class="use-note">Desitjos i peticions dites en el passat.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Volia que m'ajudessis.</span><span class="ex-zh" lang="zh">我(那时)想让你帮我。</span></p>
+              <p class="ex"><span class="ex-ca">Em va demanar que li truqués avui.</span><span class="ex-zh" lang="zh">他让我今天给他打电话。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Comparació irreal</p>
+            <p class="use-note">Amb <em>com si</em>.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Parla com si ho sabés tot.</span><span class="ex-zh" lang="zh">他说话就好像什么都知道似的。</span></p>
+              <p class="ex"><span class="ex-ca">Em va mirar com si no em conegués.</span><span class="ex-zh" lang="zh">他看我的样子好像不认识我一样。</span></p>
+            </div>
+          </li>
+        </ul>
+
+        <h4>Combinacions típiques</h4>
+        <div class="combos">
+          <div class="combo">
+            <span class="chip">si + imperfet de subjuntiu, condicional</span>
+            <p class="ex"><span class="ex-ca">Si visquéssim a la platja, nedaríem cada dia.</span><span class="ex-zh" lang="zh">如果我们住在海边,我们每天都会游泳。</span></p>
+            <p class="ex"><span class="ex-ca">Si parlés millor el català, treballaria aquí.</span><span class="ex-zh" lang="zh">如果我加泰罗尼亚语说得更好,我就在这里工作了。</span></p>
+            <p class="ex"><span class="ex-ca">Si no fes tant de fred, sortiríem a passejar.</span><span class="ex-zh" lang="zh">要是没这么冷,我们就出去散步了。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">tant de bo + imperfet de subjuntiu</span>
+            <p class="ex"><span class="ex-ca">Tant de bo tingués més temps lliure.</span><span class="ex-zh" lang="zh">要是我有更多空闲时间就好了。</span></p>
+            <p class="ex"><span class="ex-ca">Tant de bo vinguessin tots.</span><span class="ex-zh" lang="zh">要是他们都能来就好了。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">com si + imperfet de subjuntiu</span>
+            <p class="ex"><span class="ex-ca">Actua com si no passés res.</span><span class="ex-zh" lang="zh">他表现得好像什么都没发生一样。</span></p>
+            <p class="ex"><span class="ex-ca">Va contestar com si fos evident.</span><span class="ex-zh" lang="zh">他回答得好像这是显而易见的事。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">verb principal en passat + que + imperfet de subjuntiu</span>
+            <p class="ex"><span class="ex-ca">No creia que fos tan lluny.</span><span class="ex-zh" lang="zh">我当时不觉得有那么远。</span></p>
+            <p class="ex"><span class="ex-ca">Ens va dir que hi anéssim aviat.</span><span class="ex-zh" lang="zh">他叫我们早点去。</span></p>
+            <p class="ex"><span class="ex-ca">Era important que tothom ho entengués.</span><span class="ex-zh" lang="zh">让大家都理解是很重要的。</span></p>
+          </div>
+        </div>
+      </article>
+
+      <article class="tense" id="subj-perfet">
+        <div class="tense-head">
+          <h3 class="tense-name">Perfet de subjuntiu</h3>
+          <span class="tense-zh" lang="zh">虚拟式现在完成时</span>
+        </div>
+        <p class="tense-formation">present de subjuntiu d'haver + participi: hagi fet, hagis fet, hagi fet…</p>
+
+        <h4>Usos</h4>
+        <ul class="uses">
+          <li>
+            <p class="use-title">Desig o valoració</p>
+            <p class="use-note">Sobre una acció ja passada però connectada amb el present.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Espero que hagi arribat bé.</span><span class="ex-zh" lang="zh">希望他已经平安到达了。</span></p>
+              <p class="ex"><span class="ex-ca">M'alegro que hàgiu vingut.</span><span class="ex-zh" lang="zh">我很高兴你们来了。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Dubte o negació de certesa sobre el passat</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">No crec que hagi acabat encara.</span><span class="ex-zh" lang="zh">我不认为他已经做完了。</span></p>
+              <p class="ex"><span class="ex-ca">Dubto que hagi llegit el correu.</span><span class="ex-zh" lang="zh">我怀疑他还没看邮件。</span></p>
+            </div>
+          </li>
+        </ul>
+
+        <h4>Combinacions típiques</h4>
+        <div class="combos">
+          <div class="combo">
+            <span class="chip">espero que · m'alegro que · és una llàstima que + hagi + participi</span>
+            <p class="ex"><span class="ex-ca">Espero que t'hagi agradat el regal.</span><span class="ex-zh" lang="zh">希望你喜欢这个礼物。</span></p>
+            <p class="ex"><span class="ex-ca">És una llàstima que no hagin pogut venir.</span><span class="ex-zh" lang="zh">很遗憾他们没能来。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">no crec que · dubto que · no és segur que + hagi + participi</span>
+            <p class="ex"><span class="ex-ca">No crec que ho hagi entès.</span><span class="ex-zh" lang="zh">我不认为他听懂了。</span></p>
+            <p class="ex"><span class="ex-ca">No és segur que hagin rebut la carta.</span><span class="ex-zh" lang="zh">不确定他们是否收到了信。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">quan · un cop · després que + hagi + participi (futur acabat)</span>
+            <p class="ex"><span class="ex-ca">Quan hagis acabat, avisa'm.</span><span class="ex-zh" lang="zh">你做完了就告诉我。</span></p>
+            <p class="ex"><span class="ex-ca">Sortirem quan hagi parat de ploure.</span><span class="ex-zh" lang="zh">雨停了我们就出去。</span></p>
+          </div>
+        </div>
+      </article>
+
+      <article class="tense" id="subj-plusquamperfet">
+        <div class="tense-head">
+          <h3 class="tense-name">Plusquamperfet de subjuntiu</h3>
+          <span class="tense-zh" lang="zh">虚拟式过去完成时</span>
+        </div>
+        <p class="tense-formation">imperfet de subjuntiu d'haver + participi: hagués fet, haguessis fet, hagués fet…</p>
+
+        <h4>Usos</h4>
+        <ul class="uses">
+          <li>
+            <p class="use-title">Hipòtesi irreal en el passat</p>
+            <p class="use-note">(Amb condicional perfet).</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Si hagués estudiat, hauria aprovat.</span><span class="ex-zh" lang="zh">如果我当时学习了,就会通过的。</span></p>
+              <p class="ex"><span class="ex-ca">Si no haguéssim sortit tard, no hauríem perdut el tren.</span><span class="ex-zh" lang="zh">如果我们不晚出门,就不会错过火车了。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Desig no complert</p>
+            <p class="use-note">Sobre alguna cosa ja passada.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Tant de bo no ho hagués dit.</span><span class="ex-zh" lang="zh">要是我没说过就好了。</span></p>
+              <p class="ex"><span class="ex-ca">Tant de bo l'haguessis conegut abans.</span><span class="ex-zh" lang="zh">要是你早点认识他就好了。</span></p>
+            </div>
+          </li>
+        </ul>
+
+        <h4>Combinacions típiques</h4>
+        <div class="combos">
+          <div class="combo">
+            <span class="chip">si + plusquamperfet de subjuntiu, condicional perfet</span>
+            <p class="ex"><span class="ex-ca">Si haguéssim sortit abans, no hauríem perdut el tren.</span><span class="ex-zh" lang="zh">如果我们早点出门,就不会错过火车了。</span></p>
+            <p class="ex"><span class="ex-ca">Si m'ho hagués explicat, ho hauria entès.</span><span class="ex-zh" lang="zh">他要是跟我解释了,我就明白了。</span></p>
+            <p class="ex"><span class="ex-ca">Si haguessis vingut, t'ho hauries passat molt bé.</span><span class="ex-zh" lang="zh">你要是来了,一定会玩得很开心。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">tant de bo · com si + plusquamperfet de subjuntiu</span>
+            <p class="ex"><span class="ex-ca">Parla com si mai no hagués marxat.</span><span class="ex-zh" lang="zh">他说话的样子好像从没离开过。</span></p>
+            <p class="ex"><span class="ex-ca">Tant de bo hagués fet cas als teus consells.</span><span class="ex-zh" lang="zh">要是当时听了你的建议就好了。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">m'hauria agradat que · no em pensava que + plusquamperfet de subjuntiu</span>
+            <p class="ex"><span class="ex-ca">M'hauria agradat que hi haguessis vingut.</span><span class="ex-zh" lang="zh">要是你也来了就好了。</span></p>
+            <p class="ex"><span class="ex-ca">No em pensava que hagués passat res.</span><span class="ex-zh" lang="zh">我当时没想到发生了什么事。</span></p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ============ IMPERATIU ============ -->
+    <section class="mood-group" data-mood="imperatiu">
+      <div class="mood-intro">
+        <h2>Imperatiu</h2>
+        <p class="mood-zh" lang="zh">命令式 — 用来发出命令、请求和建议</p>
+        <p class="mood-desc">L'imperatiu és el <strong>mode de l'ordre</strong>. Serveix per dir a algú que faci alguna cosa: ordres, peticions, consells, instruccions. Per això no té temps: sempre mira cap endavant.</p>
+        <p class="mood-desc">Només té formes pròpies per a <em>tu</em> i <em>vosaltres</em> en afirmatiu (<em>parla, parleu</em>). Per a <em>vostè</em> i <em>nosaltres</em>, i per a <strong>totes les formes negatives</strong>, agafa prestat el present de subjuntiu: <em>No parlis</em>, <em>Parli més a poc a poc</em>. Els pronoms febles van al darrere i enganxats: <em>digue-m'ho</em>.</p>
+      </div>
+
+      <article class="tense" id="imp-imperatiu">
+        <div class="tense-head">
+          <h3 class="tense-name">Imperatiu</h3>
+          <span class="tense-zh" lang="zh">命令式</span>
+        </div>
+        <p class="tense-formation">tu i vosaltres afirmatiu: formes pròpies · vostè, nosaltres i tot el negatiu: present de subjuntiu</p>
+
+        <h4>Usos</h4>
+        <ul class="uses">
+          <li>
+            <p class="use-title">Ordres directes</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Vine aquí ara mateix!</span><span class="ex-zh" lang="zh">你马上过来!</span></p>
+              <p class="ex"><span class="ex-ca">Calla un moment, si us plau.</span><span class="ex-zh" lang="zh">请安静一会儿。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Peticions</p>
+            <p class="use-note">Del dia a dia.</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Passa'm la sal, si us plau.</span><span class="ex-zh" lang="zh">请把盐递给我。</span></p>
+              <p class="ex"><span class="ex-ca">Ajuda'm amb aquesta caixa.</span><span class="ex-zh" lang="zh">帮我搬一下这个箱子。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Consells i instruccions</p>
+            <p class="use-note">(Receptes, indicacions, manuals).</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Gira a la dreta al segon carrer.</span><span class="ex-zh" lang="zh">在第二个路口向右转。</span></p>
+              <p class="ex"><span class="ex-ca">Barregeu els ous amb la farina.</span><span class="ex-zh" lang="zh">把鸡蛋和面粉混合。</span></p>
+            </div>
+          </li>
+          <li>
+            <p class="use-title">Permís i oferiment</p>
+            <div class="ex-group">
+              <p class="ex"><span class="ex-ca">Endavant, entra.</span><span class="ex-zh" lang="zh">请进。</span></p>
+              <p class="ex"><span class="ex-ca">Agafa'n una, si en vols.</span><span class="ex-zh" lang="zh">你想要的话就拿一个。</span></p>
+            </div>
+          </li>
+        </ul>
+
+        <h4>Combinacions típiques</h4>
+        <div class="combos">
+          <div class="combo">
+            <span class="chip">si us plau · va · sisplau (per suavitzar)</span>
+            <p class="ex"><span class="ex-ca">Ajuda'm, si us plau.</span><span class="ex-zh" lang="zh">请帮帮我。</span></p>
+            <p class="ex"><span class="ex-ca">Va, explica-m'ho!</span><span class="ex-zh" lang="zh">来嘛,跟我说说!</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">no + present de subjuntiu (imperatiu negatiu)</span>
+            <p class="ex"><span class="ex-ca">No vinguis tard.</span><span class="ex-zh" lang="zh">别迟到。</span></p>
+            <p class="ex"><span class="ex-ca">No obris la finestra, fa fred.</span><span class="ex-zh" lang="zh">别开窗,很冷。</span></p>
+            <p class="ex"><span class="ex-ca">No us preocupeu per això.</span><span class="ex-zh" lang="zh">你们别为这事担心。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">imperatiu + pronoms febles enclítics</span>
+            <p class="ex"><span class="ex-ca">Digue-m'ho ara mateix.</span><span class="ex-zh" lang="zh">现在就告诉我。</span></p>
+            <p class="ex"><span class="ex-ca">Dona-li el llibre.</span><span class="ex-zh" lang="zh">把书给他。</span></p>
+            <p class="ex"><span class="ex-ca">Renta't les mans abans de dinar.</span><span class="ex-zh" lang="zh">吃饭前洗手。</span></p>
+          </div>
+          <div class="combo">
+            <span class="chip">vostè: present de subjuntiu (formal)</span>
+            <p class="ex"><span class="ex-ca">Segui aquí, si us plau.</span><span class="ex-zh" lang="zh">请您坐这里。</span></p>
+            <p class="ex"><span class="ex-ca">Esperi un moment.</span><span class="ex-zh" lang="zh">请您稍等。</span></p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Material de suport per a classes de català — no inclou el passat simple, el passat anterior ni el passat anterior perifràstic, en desús en el català d'avui.
+</footer>
+
+<script>
+  var btn = document.getElementById('zhToggle');
+  btn.addEventListener('click', function(){
+    document.documentElement.classList.toggle('hide-zh');
+    var hidden = document.documentElement.classList.contains('hide-zh');
+    btn.textContent = hidden ? 'Mostra el xinès' : 'Amaga el xinès';
+  });
+
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+  var map = {};
+  links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      var link = map[entry.target.id];
+      if(!link) return;
+      if(entry.isIntersecting){
+        links.forEach(function(l){ l.classList.remove('active'); });
+        link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+
+  document.querySelectorAll('.tense').forEach(function(el){ observer.observe(el); });
+</script>
+
+</body>
+</html>
